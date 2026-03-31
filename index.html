@@ -3,1136 +3,693 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GAME3 Protocol — Play. Earn. Own.</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>CyberGrid — GAME3 Protocol</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <style>
 :root {
-  --neon-green: #00ff88;
-  --neon-blue: #00d4ff;
-  --neon-purple: #b44fff;
-  --neon-orange: #ff6b2b;
-  --dark: #060811;
-  --dark2: #0d1120;
-  --dark3: #131929;
-  --card: #0f1825;
-  --text: #e8f0fe;
-  --text-dim: #7a8aaa;
-  --border: rgba(0,212,255,0.15);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Rajdhani', sans-serif;
-  background: var(--dark);
-  color: var(--text);
-  overflow-x: hidden;
-}
-
-/* ── SCANLINE OVERLAY ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
-  pointer-events: none;
-  z-index: 1000;
-}
-
-/* ── NAV ── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.2rem 4rem;
-  background: rgba(6,8,17,0.85);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-
-.nav-logo {
-  font-family: 'Orbitron', monospace;
-  font-weight: 900;
-  font-size: 1.4rem;
-  letter-spacing: 0.1em;
-  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.nav-links {
-  display: flex;
-  gap: 2.5rem;
-  list-style: none;
-}
-
-.nav-links a {
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.nav-links a:hover { color: var(--neon-green); }
-
-.nav-cta {
-  padding: 0.6rem 1.5rem;
-  background: transparent;
-  border: 1px solid var(--neon-green);
-  color: var(--neon-green) !important;
-  border-radius: 4px;
-  font-size: 0.85rem !important;
-  transition: all 0.3s !important;
-}
-
-.nav-cta:hover {
-  background: var(--neon-green) !important;
-  color: var(--dark) !important;
-}
-
-/* ── HERO ── */
-#hero {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  position: relative;
-  padding: 8rem 2rem 4rem;
-  overflow: hidden;
-}
-
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0,212,255,0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,212,255,0.05) 1px, transparent 1px);
-  background-size: 60px 60px;
-  animation: gridMove 20s linear infinite;
-}
-
-@keyframes gridMove {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(60px); }
-}
-
-.hero-glow {
-  position: absolute;
-  width: 800px;
-  height: 800px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: pulse 4s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-}
-
-.hero-content { position: relative; z-index: 2; max-width: 900px; }
-
-.hero-badge {
-  display: inline-block;
-  padding: 0.4rem 1.2rem;
-  border: 1px solid rgba(0,255,136,0.4);
-  border-radius: 100px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--neon-green);
-  margin-bottom: 2rem;
-  animation: fadeDown 0.8s ease both;
-}
-
-.hero-badge span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--neon-green); margin-right: 0.6rem; animation: blink 1.5s ease infinite; }
-
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-
-@keyframes fadeDown {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-h1 {
-  font-family: 'Orbitron', monospace;
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 900;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  margin-bottom: 1.5rem;
-  animation: fadeUp 0.8s 0.2s ease both;
-}
-
-.h1-line1 { display: block; color: var(--text); }
-.h1-line2 {
-  display: block;
-  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200%;
-  animation: gradientShift 3s ease infinite, fadeUp 0.8s 0.2s ease both;
-}
-
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hero-sub {
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: var(--text-dim);
-  max-width: 600px;
-  margin: 0 auto 3rem;
-  line-height: 1.6;
-  animation: fadeUp 0.8s 0.4s ease both;
-}
-
-.hero-ctas {
-  display: flex;
-  gap: 1.2rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: fadeUp 0.8s 0.6s ease both;
-}
-
-.btn-primary {
-  padding: 1rem 2.5rem;
-  background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
-  color: var(--dark);
-  font-family: 'Orbitron', monospace;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 0 30px rgba(0,255,136,0.3);
-}
-
-.btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 50px rgba(0,255,136,0.5);
-}
-
-.btn-secondary {
-  padding: 1rem 2.5rem;
-  background: transparent;
-  color: var(--text);
-  font-family: 'Orbitron', monospace;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.btn-secondary:hover {
-  border-color: var(--neon-blue);
-  color: var(--neon-blue);
-  transform: translateY(-3px);
-}
-
-.hero-stats {
-  display: flex;
-  gap: 4rem;
-  justify-content: center;
-  margin-top: 5rem;
-  animation: fadeUp 0.8s 0.8s ease both;
-}
-
-.stat { text-align: center; }
-
-.stat-num {
-  font-family: 'Orbitron', monospace;
-  font-size: 2rem;
-  font-weight: 900;
-  color: var(--neon-green);
-}
-
-.stat-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-top: 0.3rem;
-}
-
-/* ── SECTIONS ── */
-section { padding: 7rem 4rem; }
-
-.section-label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--neon-green);
-  margin-bottom: 1rem;
-}
-
-.section-title {
-  font-family: 'Orbitron', monospace;
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
-}
-
-.section-sub {
-  font-size: 1.1rem;
-  color: var(--text-dim);
-  max-width: 600px;
-  line-height: 1.7;
-}
-
-/* ── HOW IT WORKS ── */
-#how {
-  background: var(--dark2);
-  position: relative;
-  overflow: hidden;
-}
-
-#how::before {
-  content: '';
-  position: absolute;
-  right: -200px;
-  top: -200px;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(180,79,255,0.08) 0%, transparent 70%);
-}
-
-.how-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
-  margin-top: 4rem;
-}
-
-.how-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s;
-}
-
-.how-card:hover {
-  border-color: var(--neon-blue);
-  transform: translateY(-6px);
-}
-
-.how-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.how-card:hover::before { opacity: 1; }
-
-.how-num {
-  font-family: 'Orbitron', monospace;
-  font-size: 3rem;
-  font-weight: 900;
-  color: rgba(0,212,255,0.1);
-  line-height: 1;
-  margin-bottom: 1rem;
-}
-
-.how-icon {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.how-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 0.8rem;
-  color: var(--text);
-}
-
-.how-desc {
-  font-size: 0.95rem;
-  color: var(--text-dim);
-  line-height: 1.6;
-}
-
-/* ── TOKENOMICS ── */
-#tokenomics { background: var(--dark); }
-
-.token-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-top: 4rem;
-}
-
-.token-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 2.5rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.token-card.primary { border-color: rgba(0,255,136,0.3); }
-.token-card.secondary { border-color: rgba(180,79,255,0.3); }
-
-.token-ticker {
-  font-family: 'Orbitron', monospace;
-  font-size: 2.5rem;
-  font-weight: 900;
-  margin-bottom: 0.5rem;
-}
-
-.token-card.primary .token-ticker { color: var(--neon-green); }
-.token-card.secondary .token-ticker { color: var(--neon-purple); }
-
-.token-name {
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 2rem;
-}
-
-.token-rows { display: flex; flex-direction: column; gap: 1rem; }
-
-.token-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.8rem 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.token-row:last-child { border-bottom: none; }
-
-.token-row-label {
-  font-size: 0.9rem;
-  color: var(--text-dim);
-  font-weight: 500;
-}
-
-.token-row-val {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--text);
-}
-
-.allocation-bars { margin-top: 3rem; }
-
-.alloc-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.alloc-label {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  width: 180px;
-  flex-shrink: 0;
-}
-
-.alloc-bar-bg {
-  flex: 1;
-  height: 6px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 100px;
-  overflow: hidden;
-}
-
-.alloc-bar {
-  height: 100%;
-  border-radius: 100px;
-  transition: width 1s ease;
-}
-
-.alloc-pct {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--text);
-  width: 40px;
-  text-align: right;
-}
-
-/* ── ROADMAP ── */
-#roadmap {
-  background: var(--dark2);
-  position: relative;
-}
-
-.roadmap-line {
-  position: absolute;
-  left: 50%;
-  top: 10rem;
-  bottom: 4rem;
-  width: 1px;
-  background: linear-gradient(180deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
-  transform: translateX(-50%);
-}
-
-.roadmap-items {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  margin-top: 4rem;
-  position: relative;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.roadmap-item {
-  display: grid;
-  grid-template-columns: 1fr 60px 1fr;
-  align-items: center;
-  gap: 2rem;
-}
-
-.roadmap-item:nth-child(even) .roadmap-content { grid-column: 3; grid-row: 1; }
-.roadmap-item:nth-child(even) .roadmap-empty { grid-column: 1; grid-row: 1; }
-
-.roadmap-dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid var(--neon-green);
-  background: var(--dark);
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-  flex-shrink: 0;
-}
-
-.roadmap-dot.done {
-  background: var(--neon-green);
-  box-shadow: 0 0 15px var(--neon-green);
-}
-
-.roadmap-dot.active {
-  background: var(--neon-blue);
-  border-color: var(--neon-blue);
-  box-shadow: 0 0 15px var(--neon-blue);
-  animation: pulse-dot 2s ease infinite;
-}
-
-@keyframes pulse-dot {
-  0%,100% { box-shadow: 0 0 15px var(--neon-blue); }
-  50% { box-shadow: 0 0 30px var(--neon-blue); }
-}
-
-.roadmap-content {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem 2rem;
-  transition: border-color 0.3s;
-}
-
-.roadmap-content:hover { border-color: rgba(0,212,255,0.4); }
-
-.roadmap-phase {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--neon-green);
-  margin-bottom: 0.4rem;
-}
-
-.roadmap-title {
-  font-family: 'Orbitron', monospace;
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 0.8rem;
-}
-
-.roadmap-items-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.roadmap-items-list li {
-  font-size: 0.9rem;
-  color: var(--text-dim);
-  padding-left: 1rem;
-  position: relative;
-}
-
-.roadmap-items-list li::before {
-  content: '›';
-  position: absolute;
-  left: 0;
-  color: var(--neon-blue);
-}
-
-/* ── CONTRACTS ── */
-#contracts { background: var(--dark); }
-
-.contracts-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1rem;
-  margin-top: 3rem;
-}
-
-.contract-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  transition: border-color 0.3s, transform 0.3s;
-}
-
-.contract-card:hover {
-  border-color: var(--neon-green);
-  transform: translateY(-3px);
-}
-
-.contract-name {
-  font-family: 'Orbitron', monospace;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--neon-green);
-}
-
-.contract-addr {
-  font-family: monospace;
-  font-size: 0.8rem;
-  color: var(--text-dim);
-  word-break: break-all;
-}
-
-.contract-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--neon-blue);
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  transition: color 0.2s;
-}
-
-.contract-link:hover { color: var(--neon-green); }
-
-/* ── COMMUNITY ── */
-#community {
-  background: var(--dark2);
-  text-align: center;
-}
-
-.community-cards {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 3rem;
-}
-
-.community-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 3rem 4rem;
-  text-decoration: none;
-  color: var(--text);
-  transition: all 0.3s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  min-width: 220px;
-}
-
-.community-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--neon-blue);
-  box-shadow: 0 20px 60px rgba(0,212,255,0.1);
-}
-
-.community-icon { font-size: 3rem; }
-
-.community-name {
-  font-family: 'Orbitron', monospace;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.community-desc {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-}
-
-/* ── WHITEPAPER CTA ── */
-#whitepaper {
-  background: var(--dark);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-#whitepaper::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at center, rgba(0,255,136,0.05) 0%, transparent 70%);
-}
-
-.wp-content { position: relative; z-index: 2; }
-
-.wp-badge {
-  display: inline-block;
-  padding: 0.5rem 1.5rem;
-  background: rgba(0,255,136,0.1);
-  border: 1px solid rgba(0,255,136,0.3);
-  border-radius: 100px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--neon-green);
-  margin-bottom: 2rem;
-}
-
-/* ── FOOTER ── */
-footer {
-  background: var(--dark2);
-  border-top: 1px solid var(--border);
-  padding: 3rem 4rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.footer-logo {
-  font-family: 'Orbitron', monospace;
-  font-weight: 900;
-  font-size: 1.2rem;
-  background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.footer-text {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-}
-
-.footer-links {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-}
-
-.footer-links a {
-  font-size: 0.85rem;
-  color: var(--text-dim);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.footer-links a:hover { color: var(--neon-green); }
-
-@media (max-width: 768px) {
-  nav { padding: 1rem 1.5rem; }
-  .nav-links { display: none; }
-  section { padding: 5rem 1.5rem; }
-  .token-grid { grid-template-columns: 1fr; }
-  .roadmap-line { display: none; }
-  .roadmap-item { grid-template-columns: 1fr; }
-  .roadmap-item:nth-child(even) .roadmap-content { grid-column: 1; }
-  .roadmap-dot { display: none; }
-  .hero-stats { gap: 2rem; flex-wrap: wrap; }
-  footer { flex-direction: column; text-align: center; }
-}
+  --bg:#050810;--bg2:#0a0f1e;--bg3:#0f1628;--card:#0c1220;
+  --border:rgba(0,212,255,0.12);--neon:#00ff88;--blue:#00d4ff;
+  --purple:#b44fff;--orange:#ff6b2b;--red:#ff3355;
+  --text:#d0e8ff;--dim:#5a7a99;--gold:#ffd700;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:999;}
+
+/* WALLET BAR */
+.wallet-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0.6rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;}
+.wallet-status{display:flex;align-items:center;gap:0.6rem;}
+.wallet-dot{width:8px;height:8px;border-radius:50%;background:var(--dim);}
+.wallet-dot.connected{background:var(--neon);box-shadow:0 0 8px var(--neon);}
+.wallet-addr{font-family:'Share Tech Mono',monospace;color:var(--dim);}
+.wallet-addr.connected{color:var(--neon);}
+.connect-btn{padding:0.4rem 1rem;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.4);color:var(--neon);font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;transition:all 0.2s;}
+.connect-btn:hover{background:rgba(0,255,136,0.2);}
+.network-badge{padding:0.3rem 0.7rem;border-radius:4px;font-size:0.75rem;font-weight:600;}
+.network-badge.polygon{background:rgba(130,71,229,0.2);border:1px solid rgba(130,71,229,0.4);color:#8247e5;}
+.network-badge.wrong{background:rgba(255,51,85,0.2);border:1px solid rgba(255,51,85,0.4);color:var(--red);}
+
+header{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 1.5rem;background:rgba(5,8,16,0.95);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(90deg,var(--neon),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.header-resources{display:flex;gap:1.5rem;align-items:center;}
+.res{display:flex;align-items:center;gap:0.4rem;font-family:'Share Tech Mono',monospace;font-size:0.85rem;}
+.res-icon{font-size:1rem;}
+.res-val{color:var(--neon);font-weight:700;min-width:50px;}
+.res-label{color:var(--dim);font-size:0.75rem;}
+.header-right{display:flex;align-items:center;gap:1rem;}
+.syndicate-badge{padding:0.3rem 0.8rem;background:rgba(180,79,255,0.15);border:1px solid rgba(180,79,255,0.4);border-radius:4px;font-size:0.8rem;font-weight:600;color:var(--purple);}
+.game-time{font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--dim);}
+
+.layout{display:grid;grid-template-columns:260px 1fr 280px;height:calc(100vh - 90px);}
+.left-panel{background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:1rem;}
+.panel-title{font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.2em;color:var(--dim);text-transform:uppercase;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+.build-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:1.5rem;}
+.build-btn{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.8rem 0.5rem;cursor:pointer;text-align:center;transition:all 0.2s;}
+.build-btn:hover{border-color:var(--blue);transform:translateY(-2px);}
+.build-btn.selected{border-color:var(--neon);background:rgba(0,255,136,0.08);}
+.build-icon{font-size:1.5rem;display:block;margin-bottom:0.3rem;}
+.build-name{font-size:0.75rem;font-weight:600;color:var(--text);display:block;}
+.build-cost{font-size:0.7rem;color:var(--neon);font-family:'Share Tech Mono',monospace;}
+.stats-section{margin-top:1rem;}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.stat-name{font-size:0.85rem;color:var(--dim);}
+.stat-val{font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--text);}
+.progress-bar{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:0.3rem;overflow:hidden;}
+.progress-fill{height:100%;border-radius:2px;transition:width 0.5s ease;}
+
+.game-area{position:relative;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;}
+.grid-container{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:1rem;}
+#grid{display:grid;gap:2px;cursor:crosshair;}
+.cell{width:56px;height:56px;border:1px solid rgba(0,212,255,0.08);border-radius:4px;background:rgba(0,20,40,0.4);position:relative;transition:all 0.15s;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;overflow:hidden;}
+.cell:hover{border-color:rgba(0,212,255,0.4);background:rgba(0,212,255,0.06);transform:scale(1.05);z-index:10;}
+.cell.empty:hover::after{content:'＋';position:absolute;font-size:1.2rem;color:rgba(0,212,255,0.5);font-weight:300;}
+.cell.built{background:var(--card);}
+.cell.built:hover{border-color:var(--neon);}
+.cell.hq{border-color:rgba(255,215,0,0.6)!important;background:rgba(255,215,0,0.08)!important;}
+.cell-level{position:absolute;bottom:2px;right:3px;font-size:0.55rem;font-family:'Share Tech Mono',monospace;color:var(--neon);font-weight:700;}
+.minimap-bar{padding:0.5rem 1rem;background:var(--bg2);border-top:1px solid var(--border);display:flex;gap:1.5rem;align-items:center;}
+.minimap-label{font-size:0.75rem;color:var(--dim);font-weight:600;letter-spacing:0.1em;}
+.event-ticker{flex:1;font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--blue);overflow:hidden;white-space:nowrap;}
+
+.right-panel{background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;padding:1rem;}
+.selected-info{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem;min-height:120px;}
+.sel-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100px;color:var(--dim);font-size:0.85rem;gap:0.5rem;}
+.sel-name{font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:0.3rem;}
+.sel-level{font-size:0.8rem;color:var(--neon);margin-bottom:0.8rem;}
+.sel-stats{display:flex;flex-direction:column;gap:0.4rem;}
+.sel-stat{display:flex;justify-content:space-between;font-size:0.82rem;}
+.sel-stat span:first-child{color:var(--dim);}
+.sel-stat span:last-child{font-family:'Share Tech Mono',monospace;color:var(--text);}
+.action-btns{display:flex;gap:0.5rem;margin-top:0.8rem;flex-wrap:wrap;}
+.btn{padding:0.5rem 0.8rem;border-radius:5px;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;letter-spacing:0.05em;cursor:pointer;transition:all 0.2s;border:1px solid;}
+.btn-upgrade{background:rgba(0,255,136,0.1);border-color:rgba(0,255,136,0.4);color:var(--neon);}
+.btn-upgrade:hover{background:rgba(0,255,136,0.2);}
+.btn-demolish{background:rgba(90,122,153,0.1);border-color:rgba(90,122,153,0.3);color:var(--dim);}
+.btn-demolish:hover{background:rgba(90,122,153,0.2);color:var(--text);}
+.mission-list{display:flex;flex-direction:column;gap:0.5rem;}
+.mission{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.8rem;transition:all 0.2s;}
+.mission:hover{border-color:var(--blue);}
+.mission.completed{border-color:rgba(0,255,136,0.4);background:rgba(0,255,136,0.05);}
+.mission-name{font-size:0.85rem;font-weight:600;margin-bottom:0.3rem;}
+.mission-desc{font-size:0.75rem;color:var(--dim);margin-bottom:0.5rem;line-height:1.4;}
+.mission-reward{font-size:0.75rem;color:var(--neon);font-family:'Share Tech Mono',monospace;}
+.mission-claim{font-size:0.7rem;padding:0.3rem 0.8rem;}
+.syndicate-section{margin-top:1rem;}
+.syndicate-card{background:var(--card);border:1px solid rgba(180,79,255,0.3);border-radius:10px;padding:1rem;}
+.syn-name{font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;color:var(--purple);margin-bottom:0.5rem;}
+.syn-members{font-size:0.8rem;color:var(--dim);margin-bottom:0.8rem;}
+.syn-power{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;}
+.syn-power-bar{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
+.syn-power-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:3px;}
+
+/* GAME TOKEN SECTION */
+.game-token-section{margin-top:1rem;background:var(--card);border:1px solid rgba(0,255,136,0.2);border-radius:10px;padding:1rem;text-align:center;}
+.game-bal{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--neon);}
+.game-label{font-size:0.75rem;color:var(--dim);margin-top:0.2rem;}
+.claim-btn{width:100%;margin-top:0.8rem;padding:0.7rem;background:linear-gradient(135deg,var(--neon),var(--blue));color:var(--bg);font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;border:none;border-radius:6px;cursor:pointer;transition:all 0.2s;letter-spacing:0.05em;}
+.claim-btn:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,255,136,0.3);}
+.claim-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.tx-link{display:block;margin-top:0.5rem;font-size:0.7rem;color:var(--blue);text-decoration:none;font-family:'Share Tech Mono',monospace;word-break:break-all;}
+.tx-link:hover{color:var(--neon);}
+
+/* THRESHOLD PROGRESS */
+.threshold-bar-wrap{margin-top:0.8rem;}
+.threshold-bar{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-top:0.3rem;}
+.threshold-fill{height:100%;background:linear-gradient(90deg,var(--neon),var(--blue));border-radius:3px;transition:width 0.5s ease;}
+.threshold-text{display:flex;justify-content:space-between;font-size:0.7rem;font-family:'Share Tech Mono',monospace;color:var(--dim);}
+
+.notif{position:fixed;top:100px;right:20px;background:var(--card);border:1px solid var(--neon);border-radius:8px;padding:0.8rem 1.2rem;font-size:0.85rem;color:var(--neon);z-index:200;animation:slideIn 0.3s ease;max-width:300px;}
+.notif.error{border-color:var(--red);color:var(--red);}
+.notif.info{border-color:var(--blue);color:var(--blue);}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">GAME3</div>
-  <ul class="nav-links">
-    <li><a href="#how">Come funziona</a></li>
-    <li><a href="#tokenomics">Tokenomics</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contracts">Contratti</a></li>
-    <li><a href="#community" class="nav-cta">Community</a></li>
-  </ul>
-</nav>
+<!-- WALLET BAR -->
+<div class="wallet-bar">
+  <div class="wallet-status">
+    <div class="wallet-dot" id="wallet-dot"></div>
+    <span class="wallet-addr" id="wallet-addr">Non connesso</span>
+  </div>
+  <div style="display:flex;gap:0.8rem;align-items:center;">
+    <span class="network-badge" id="network-badge" style="display:none"></span>
+    <span id="token-balance" style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--dim);display:none"></span>
+    <button class="connect-btn" id="connect-btn" onclick="connectWallet()">CONNETTI WALLET</button>
+  </div>
+</div>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-content">
-    <div class="hero-badge"><span></span>Live su Polygon Mainnet</div>
-    <h1>
-      <span class="h1-line1">Play.</span>
-      <span class="h1-line2">Earn. Own.</span>
-    </h1>
-    <p class="hero-sub">Il primo ecosistema GameFi freemium con dual token, pre-IPO mining e conversione diretta in stablecoin. Gioca gratis, guadagna $GAME, converti in USDC.</p>
-    <div class="hero-ctas">
-      <a href="#how" class="btn-primary">Inizia a giocare</a>
-      <a href="#whitepaper" class="btn-secondary">Leggi il Whitepaper</a>
+<header>
+  <div class="logo">⬡ CYBER<span style="color:var(--blue)">GRID</span></div>
+  <div class="header-resources">
+    <div class="res"><span class="res-icon">⚡</span><div><div class="res-val" id="res-energy">250</div><div class="res-label">Energia</div></div></div>
+    <div class="res"><span class="res-icon">💾</span><div><div class="res-val" id="res-data">180</div><div class="res-label">Data</div></div></div>
+    <div class="res"><span class="res-icon">🔧</span><div><div class="res-val" id="res-credits">320</div><div class="res-label">Credits</div></div></div>
+    <div class="res"><span class="res-icon">🛡️</span><div><div class="res-val" id="res-defense">45</div><div class="res-label">Difesa</div></div></div>
+  </div>
+  <div class="header-right">
+    <div class="syndicate-badge">⬡ NullByte Syndicate</div>
+    <div class="game-time" id="game-time">GG 1 — 00:00</div>
+  </div>
+</header>
+
+<div class="layout">
+  <div class="left-panel">
+    <div class="panel-title">Costruzioni</div>
+    <div class="build-grid" id="build-menu"></div>
+    <div class="panel-title">Statistiche Nodo</div>
+    <div class="stats-section">
+      <div class="stat-row"><span class="stat-name">Edifici costruiti</span><span class="stat-val" id="stat-buildings">1</span></div>
+      <div class="stat-row"><span class="stat-name">Prod. Energia/s</span><span class="stat-val" id="stat-eprod">+2.0</span></div>
+      <div class="stat-row"><span class="stat-name">Prod. Data/s</span><span class="stat-val" id="stat-dprod">+1.5</span></div>
+      <div class="stat-row"><span class="stat-name">Attacchi subiti</span><span class="stat-val" id="stat-attacks">0</span></div>
+      <div class="stat-row"><span class="stat-name">Missioni completate</span><span class="stat-val" id="stat-missions">0</span></div>
     </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-num">1B</div>
-        <div class="stat-label">Supply $GAME</div>
+    <div class="panel-title" style="margin-top:1rem;">Livello Nodo</div>
+    <div style="padding:0.5rem 0">
+      <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem">
+        <span style="color:var(--dim)">XP</span>
+        <span style="font-family:'Share Tech Mono',monospace" id="xp-text">0 / 100</span>
       </div>
-      <div class="stat">
-        <div class="stat-num">100M</div>
-        <div class="stat-label">Supply $GVOTE</div>
+      <div class="progress-bar"><div class="progress-fill" id="xp-bar" style="width:0%;background:linear-gradient(90deg,var(--neon),var(--blue))"></div></div>
+    </div>
+  </div>
+
+  <div class="game-area">
+    <div class="grid-container"><div id="grid"></div></div>
+    <div class="minimap-bar">
+      <span class="minimap-label">LOG</span>
+      <div class="event-ticker" id="event-ticker">Sistema avviato. Connetti il wallet per abilitare il claim on-chain.</div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="panel-title">Selezione</div>
+    <div class="selected-info" id="selected-info">
+      <div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Clicca una cella per costruire o selezionare</span></div>
+    </div>
+
+    <div class="panel-title">Missioni</div>
+    <div class="mission-list" id="mission-list"></div>
+
+    <div class="syndicate-section">
+      <div class="panel-title">Syndicate</div>
+      <div class="syndicate-card">
+        <div class="syn-name">NullByte Syndicate</div>
+        <div class="syn-members">👥 247 membri attivi</div>
+        <div class="syn-power">
+          <span style="font-size:0.75rem;color:var(--dim)">Potere</span>
+          <div class="syn-power-bar"><div class="syn-power-fill" style="width:62%"></div></div>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.75rem">62%</span>
+        </div>
       </div>
-      <div class="stat">
-        <div class="stat-num">10K</div>
-        <div class="stat-label">$GAME → 1 USDC</div>
+    </div>
+
+    <div class="game-token-section">
+      <div class="game-label">$GAME accumulato (in-game)</div>
+      <div class="game-bal" id="game-balance">0.00</div>
+      <div class="game-label" id="game-rate">+0.00 / min</div>
+      <div class="threshold-bar-wrap">
+        <div class="threshold-text">
+          <span>Soglia claim</span>
+          <span id="threshold-pct">0%</span>
+        </div>
+        <div class="threshold-bar"><div class="threshold-fill" id="threshold-fill" style="width:0%"></div></div>
+        <div class="threshold-text" style="margin-top:0.2rem">
+          <span>0</span><span style="color:var(--neon)">10.000 $GAME</span>
+        </div>
       </div>
-      <div class="stat">
-        <div class="stat-num">0%</div>
-        <div class="stat-label">Pay-to-win</div>
+      <button class="claim-btn" id="claim-btn" onclick="claimTokens()" disabled>
+        CLAIM $GAME ON-CHAIN
+      </button>
+      <div id="last-tx" style="display:none"></div>
+      <div style="margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--border)">
+        <div class="game-label">$GAME nel wallet on-chain</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:1rem;color:var(--blue);margin-top:0.3rem" id="onchain-balance">—</div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- HOW IT WORKS -->
-<section id="how">
-  <div class="section-label">Mechanics</div>
-  <h2 class="section-title">Come funziona</h2>
-  <p class="section-sub">Un sistema semplice: gioca, accumula token, potenziati o converti in stablecoin. Nessun acquisto obbligatorio.</p>
-  <div class="how-grid">
-    <div class="how-card">
-      <div class="how-num">01</div>
-      <div class="how-icon">🎮</div>
-      <div class="how-title">Gioca gratis</div>
-      <div class="how-desc">Accedi al gioco senza alcun costo. Completa partite, missioni e tornei per guadagnare $GAME ogni giorno.</div>
-    </div>
-    <div class="how-card">
-      <div class="how-num">02</div>
-      <div class="how-icon">💰</div>
-      <div class="how-title">Accumula $GAME</div>
-      <div class="how-desc">Ogni azione di gioco ti premia. Streak giornaliere, vittorie nei tornei e referral moltiplicano i tuoi guadagni.</div>
-    </div>
-    <div class="how-card">
-      <div class="how-num">03</div>
-      <div class="how-icon">⚡</div>
-      <div class="how-title">Potenzia o converti</div>
-      <div class="how-desc">Usa i $GAME per upgrade e boost, oppure accumula 10.000 per convertirli in 1 USDC direttamente on-chain.</div>
-    </div>
-    <div class="how-card">
-      <div class="how-num">04</div>
-      <div class="how-icon">🏆</div>
-      <div class="how-title">Stake per $GVOTE</div>
-      <div class="how-desc">Fai staking dei tuoi $GAME per guadagnare $GVOTE, il token di governance con accesso al pre-IPO mining.</div>
-    </div>
-  </div>
-</section>
+<script>
+// ── CONTRACTS ────────────────────────────────────────────
+const GAME_TOKEN_ADDR    = '0xfbD7AC4a2B2E425b2E9Bd70694eEF1cA4Fe19464';
+const GAME_REWARDS_ADDR  = '0x11F1716C27e6495EEcE3d35d25894Cdae40Ac557';
+const POLYGON_CHAIN_ID   = '0x89'; // 137
 
-<!-- TOKENOMICS -->
-<section id="tokenomics">
-  <div class="section-label">Economy</div>
-  <h2 class="section-title">Tokenomics</h2>
-  <p class="section-sub">Un modello dual-token progettato per essere sostenibile nel tempo, con meccanismi deflazionari integrati.</p>
-  <div class="token-grid">
-    <div class="token-card primary">
-      <div class="token-ticker">$GAME</div>
-      <div class="token-name">Token di Utilità</div>
-      <div class="token-rows">
-        <div class="token-row">
-          <span class="token-row-label">Supply massima</span>
-          <span class="token-row-val">1,000,000,000</span>
-        </div>
-        <div class="token-row">
-          <span class="token-row-label">Standard</span>
-          <span class="token-row-val">ERC-20</span>
-        </div>
-        <div class="token-row">
-          <span class="token-row-label">Blockchain</span>
-          <span class="token-row-val">Polygon</span>
-        </div>
-        <div class="token-row">
-          <span class="token-row-label">Conversione</span>
-          <span class="token-row-val">10K → 1 USDC</span>
-        </div>
-        <div class="token-row">
-          <span class="token-row-label">Burn per upgrade</span>
-          <span class="token-row-val">40–70%</span>
-        </div>
+const ERC20_ABI = [
+  'function balanceOf(address) view returns (uint256)',
+  'function decimals() view returns (uint8)',
+];
+
+const REWARDS_ABI = [
+  'function claimReward(uint256 baseAmount, uint256 nonce, uint256 expiry, bytes calldata signature) external',
+  'function nonces(address) view returns (uint256)',
+  'function dailyLimit() view returns (uint256)',
+  'function dailyEarned(address) view returns (uint256)',
+];
+
+// ── WEB3 STATE ────────────────────────────────────────────
+let provider = null;
+let signer   = null;
+let userAddr = null;
+let gameTokenContract = null;
+let rewardsContract   = null;
+
+// ── CONNECT WALLET ────────────────────────────────────────
+async function connectWallet() {
+  if (!window.ethereum) {
+    showNotif('❌ MetaMask non trovato. Installalo su metamask.io', 'error');
+    return;
+  }
+  try {
+    const btn = document.getElementById('connect-btn');
+    btn.textContent = 'Connessione...';
+    btn.disabled = true;
+
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    userAddr = accounts[0];
+
+    provider = new ethers.BrowserProvider(window.ethereum);
+    signer   = await provider.getSigner();
+
+    const network = await provider.getNetwork();
+    const chainId = '0x' + network.chainId.toString(16);
+
+    if (chainId !== POLYGON_CHAIN_ID) {
+      showNotif('⚠️ Cambia rete su Polygon Mainnet in MetaMask', 'error');
+      await switchToPolygon();
+    }
+
+    gameTokenContract = new ethers.Contract(GAME_TOKEN_ADDR, ERC20_ABI, provider);
+    rewardsContract   = new ethers.Contract(GAME_REWARDS_ADDR, REWARDS_ABI, signer);
+
+    updateWalletUI();
+    await fetchOnchainBalance();
+    addTicker(`✅ Wallet connesso: ${userAddr.slice(0,6)}...${userAddr.slice(-4)}`);
+    showNotif('✅ Wallet connesso! Costruisci edifici per accumulare $GAME.', 'info');
+
+    window.ethereum.on('accountsChanged', (accs) => { userAddr = accs[0]; updateWalletUI(); });
+    window.ethereum.on('chainChanged', () => location.reload());
+
+  } catch (e) {
+    showNotif('❌ Connessione rifiutata', 'error');
+    console.error(e);
+  } finally {
+    const btn = document.getElementById('connect-btn');
+    btn.disabled = false;
+  }
+}
+
+async function switchToPolygon() {
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: POLYGON_CHAIN_ID }],
+    });
+  } catch (e) {
+    if (e.code === 4902) {
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [{
+          chainId: POLYGON_CHAIN_ID,
+          chainName: 'Polygon Mainnet',
+          nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 },
+          rpcUrls: ['https://polygon-rpc.com'],
+          blockExplorerUrls: ['https://polygonscan.com'],
+        }],
+      });
+    }
+  }
+}
+
+function updateWalletUI() {
+  const dot    = document.getElementById('wallet-dot');
+  const addr   = document.getElementById('wallet-addr');
+  const badge  = document.getElementById('network-badge');
+  const btn    = document.getElementById('connect-btn');
+
+  if (userAddr) {
+    dot.classList.add('connected');
+    addr.classList.add('connected');
+    addr.textContent = userAddr.slice(0,6) + '...' + userAddr.slice(-4);
+    badge.style.display = 'inline';
+    badge.className = 'network-badge polygon';
+    badge.textContent = 'Polygon';
+    btn.textContent = 'CONNESSO';
+    btn.style.opacity = '0.5';
+    btn.style.cursor = 'default';
+  }
+}
+
+async function fetchOnchainBalance() {
+  if (!gameTokenContract || !userAddr) return;
+  try {
+    const bal = await gameTokenContract.balanceOf(userAddr);
+    const dec = await gameTokenContract.decimals();
+    const formatted = ethers.formatUnits(bal, dec);
+    document.getElementById('onchain-balance').textContent =
+      parseFloat(formatted).toFixed(2) + ' $GAME';
+    document.getElementById('token-balance').style.display = 'inline';
+    document.getElementById('token-balance').textContent =
+      parseFloat(formatted).toFixed(2) + ' $GAME on-chain';
+  } catch (e) {
+    console.error('Balance fetch error:', e);
+  }
+}
+
+// ── CLAIM ON-CHAIN ────────────────────────────────────────
+// NOTA: In produzione questa firma viene dal tuo server backend.
+// Per ora usiamo una firma locale (solo per demo/test).
+// Il tuo wallet admin deve avere il ruolo SIGNER_ROLE sul contratto GameRewards.
+async function claimTokens() {
+  if (!signer || !userAddr) {
+    showNotif('❌ Connetti prima il wallet', 'error');
+    return;
+  }
+  if (state.gameToken < 10000) {
+    showNotif('❌ Servono almeno 10.000 $GAME', 'error');
+    return;
+  }
+
+  const btn = document.getElementById('claim-btn');
+  btn.disabled = true;
+  btn.textContent = 'Elaborazione...';
+
+  try {
+    const amountToMint = ethers.parseEther(Math.floor(state.gameToken).toString());
+    const nonce  = await rewardsContract.nonces(userAddr);
+    const expiry = BigInt(Math.floor(Date.now() / 1000) + 300); // 5 minuti
+
+    // FIRMA — in produzione: chiamata al backend
+    // Per ora firma con il signer corrente (deve avere SIGNER_ROLE)
+    const msgHash = ethers.solidityPackedKeccak256(
+      ['address', 'uint256', 'uint256', 'uint256'],
+      [userAddr, amountToMint, nonce, expiry]
+    );
+    const signature = await signer.signMessage(ethers.getBytes(msgHash));
+
+    showNotif('⏳ Transazione in corso...', 'info');
+    addTicker('⏳ Transazione MetaMask in attesa di conferma...');
+
+    const tx = await rewardsContract.claimReward(amountToMint, nonce, expiry, signature);
+    addTicker(`📤 TX inviata: ${tx.hash.slice(0,12)}...`);
+    showNotif('⏳ In attesa di conferma blockchain...', 'info');
+
+    const receipt = await tx.wait();
+
+    const claimedAmount = Math.floor(state.gameToken);
+    state.gameToken = 0;
+    addXP(100);
+    addTicker(`✅ ${claimedAmount} $GAME mintati on-chain! TX: ${receipt.hash.slice(0,12)}...`);
+    showNotif(`🎉 ${claimedAmount} $GAME mintati nel tuo wallet!`);
+
+    // Mostra link Polygonscan
+    const txDiv = document.getElementById('last-tx');
+    txDiv.style.display = 'block';
+    txDiv.innerHTML = `<a class="tx-link" href="https://polygonscan.com/tx/${receipt.hash}" target="_blank">✅ Vedi TX su Polygonscan →</a>`;
+
+    await fetchOnchainBalance();
+    updateHUD();
+
+  } catch (e) {
+    console.error(e);
+    if (e.code === 4001) {
+      showNotif('❌ Transazione rifiutata dall\'utente', 'error');
+    } else if (e.message && e.message.includes('Daily limit')) {
+      showNotif('❌ Limite giornaliero raggiunto', 'error');
+    } else {
+      showNotif('❌ Errore: ' + (e.reason || e.message || 'Sconosciuto'), 'error');
+    }
+  } finally {
+    btn.disabled = false;
+    updateHUD();
+  }
+}
+
+// ── GAME STATE ────────────────────────────────────────────
+const GRID_SIZE = 9;
+const state = {
+  grid: Array(GRID_SIZE * GRID_SIZE).fill(null),
+  resources: { energy:250, data:180, credits:320, defense:45 },
+  gameToken: 0,
+  xp: 0, xpNext: 100, level: 1,
+  day: 1, seconds: 0,
+  selectedBuild: null, selectedCell: null,
+  attacksReceived: 0, missionsCompleted: 0,
+  ticker: [],
+};
+const center = Math.floor(GRID_SIZE/2)*GRID_SIZE + Math.floor(GRID_SIZE/2);
+state.grid[center] = { type:'hq', level:1, hp:100, maxHp:100 };
+
+const BUILDINGS = [
+  { id:'hq',      name:'Quartier Generale', icon:'🏛️', cost:{credits:0},                  prod:{energy:2,data:1.5}, maxLevel:5 },
+  { id:'reactor', name:'Reattore',          icon:'⚡',  cost:{credits:80},                 prod:{energy:5},          maxLevel:5 },
+  { id:'server',  name:'Server Farm',       icon:'💾',  cost:{credits:60,energy:30},       prod:{data:4},            maxLevel:5 },
+  { id:'turret',  name:'Torretta',          icon:'🔫',  cost:{credits:100,data:40},        prod:{defense:8},         maxLevel:4 },
+  { id:'miner',   name:'Token Miner',       icon:'⛏️',  cost:{credits:150,energy:60,data:40}, prod:{game:0.5},      maxLevel:3 },
+  { id:'lab',     name:'Laboratorio',       icon:'🧪',  cost:{credits:200,data:80},        prod:{xp:2},              maxLevel:3 },
+  { id:'vault',   name:'Vault',             icon:'🔒',  cost:{credits:180,energy:50},      prod:{},                  maxLevel:3 },
+  { id:'relay',   name:'Relay Node',        icon:'📡',  cost:{credits:120,data:50},        prod:{synergy:true},      maxLevel:2 },
+];
+
+const MISSIONS = [
+  { id:'m1', name:'Prima Connessione', desc:'Costruisci il primo edificio', reward:50,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type!=='hq').length>=1, done:false },
+  { id:'m2', name:'Rete Energetica',   desc:'Raggiungi 500 di energia',     reward:100, rewardType:'credits', condition:()=>state.resources.energy>=500, done:false },
+  { id:'m3', name:'Data Miner',        desc:'Costruisci 2 Server Farm',     reward:200, rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='server').length>=2, done:false },
+  { id:'m4', name:'Primo Token',       desc:'Accumula 100 $GAME',           reward:500, rewardType:'credits', condition:()=>state.gameToken>=100, done:false },
+  { id:'m5', name:'Nodo Difeso',       desc:'Raggiungi 50 di difesa',       reward:150, rewardType:'data',    condition:()=>state.resources.defense>=50, done:false },
+  { id:'m6', name:'Livello 2',         desc:'Raggiungi il livello 2',        reward:300, rewardType:'credits', condition:()=>state.level>=2, done:false },
+];
+
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  grid.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 56px)`;
+  grid.innerHTML = '';
+  state.grid.forEach((cell, i) => {
+    const div = document.createElement('div');
+    div.className = 'cell' + (cell ? ' built' : ' empty') + (i===center ? ' hq' : '');
+    div.dataset.idx = i;
+    if (cell) {
+      const bld = BUILDINGS.find(b=>b.id===cell.type);
+      div.innerHTML = `<span>${bld?bld.icon:'?'}</span><span class="cell-level">Lv${cell.level}</span>`;
+    }
+    div.addEventListener('click', ()=>onCellClick(i));
+    grid.appendChild(div);
+  });
+}
+
+function onCellClick(idx) {
+  if (state.grid[idx]) { state.selectedCell=idx; state.selectedBuild=null; renderSelected(); }
+  else if (state.selectedBuild) { tryBuild(idx); }
+  else { state.selectedCell=idx; renderSelected(); }
+}
+
+function tryBuild(idx) {
+  const bld = BUILDINGS.find(b=>b.id===state.selectedBuild);
+  if (!bld||bld.id==='hq') return;
+  for (const [res,amt] of Object.entries(bld.cost)) {
+    if ((state.resources[res]||0)<amt) { showNotif(`❌ Risorse insufficienti: ${res}`, 'error'); return; }
+  }
+  for (const [res,amt] of Object.entries(bld.cost)) state.resources[res]-=amt;
+  state.grid[idx]={type:bld.id,level:1,hp:100,maxHp:100};
+  addXP(20);
+  addTicker(`✅ ${bld.name} costruito`);
+  showNotif(`⚡ ${bld.name} costruito!`);
+  renderGrid(); updateStats(); updateHUD(); checkMissions();
+}
+
+function renderSelected() {
+  const panel = document.getElementById('selected-info');
+  const cell = state.grid[state.selectedCell];
+  if (!cell) { panel.innerHTML=`<div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Clicca una cella per costruire o selezionare</span></div>`; return; }
+  const bld = BUILDINGS.find(b=>b.id===cell.type);
+  const canUp = cell.level<bld.maxLevel;
+  const upgCost = getUpgradeCost(bld,cell.level);
+  panel.innerHTML=`
+    <div style="font-size:2rem;margin-bottom:0.5rem">${bld.icon}</div>
+    <div class="sel-name">${bld.name}</div>
+    <div class="sel-level">Livello ${cell.level} / ${bld.maxLevel}</div>
+    <div class="sel-stats">
+      ${Object.entries(bld.prod).filter(([k])=>k!=='synergy').map(([k,v])=>`<div class="sel-stat"><span>${k}</span><span>+${v}/s × Lv</span></div>`).join('')}
+      <div class="sel-stat"><span>HP</span><span>${cell.hp}/${cell.maxHp}</span></div>
+    </div>
+    <div class="action-btns">
+      ${canUp?`<button class="btn btn-upgrade" onclick="upgradeBuilding(${state.selectedCell})">⬆ UPGRADE (${upgCost}cr)</button>`:''}
+      ${cell.type!=='hq'?`<button class="btn btn-demolish" onclick="demolish(${state.selectedCell})">🗑 DEMOLI</button>`:''}
+    </div>`;
+}
+
+function getUpgradeCost(bld,level){return(level*100)+Object.values(bld.cost).reduce((a,b)=>a+b,0);}
+
+function upgradeBuilding(idx) {
+  const cell=state.grid[idx];
+  const bld=BUILDINGS.find(b=>b.id===cell.type);
+  if(cell.level>=bld.maxLevel)return;
+  const cost=getUpgradeCost(bld,cell.level);
+  if(state.resources.credits<cost){showNotif(`❌ Servono ${cost} credits`,'error');return;}
+  state.resources.credits-=cost;
+  cell.level++; cell.maxHp+=50; cell.hp=cell.maxHp;
+  addXP(40);
+  addTicker(`⬆ ${bld.name} → Lv${cell.level}`);
+  showNotif(`✨ ${bld.name} → Livello ${cell.level}!`);
+  renderGrid(); renderSelected(); updateStats(); updateHUD();
+}
+
+function demolish(idx) {
+  const cell=state.grid[idx];
+  if(!cell||cell.type==='hq')return;
+  const bld=BUILDINGS.find(b=>b.id===cell.type);
+  state.resources.credits+=Math.floor(Object.values(bld.cost).reduce((a,b)=>a+b,0)*0.5);
+  state.grid[idx]=null; state.selectedCell=null;
+  addTicker(`🗑 ${bld.name} demolito`);
+  renderGrid(); renderSelected(); updateStats();
+}
+
+function renderBuildMenu() {
+  document.getElementById('build-menu').innerHTML=BUILDINGS.filter(b=>b.id!=='hq').map(b=>`
+    <div class="build-btn ${state.selectedBuild===b.id?'selected':''}" onclick="selectBuild('${b.id}')">
+      <span class="build-icon">${b.icon}</span>
+      <span class="build-name">${b.name}</span>
+      <span class="build-cost">${Object.entries(b.cost).map(([k,v])=>`${v}${k.slice(0,2)}`).join(' ')}</span>
+    </div>`).join('');
+}
+
+function selectBuild(id){state.selectedBuild=state.selectedBuild===id?null:id;state.selectedCell=null;renderBuildMenu();renderSelected();}
+
+function renderMissions() {
+  document.getElementById('mission-list').innerHTML=MISSIONS.map(m=>{
+    const ready=m.condition()&&!m.done;
+    return `<div class="mission ${m.done?'completed':''}">
+      <div class="mission-name">${m.done?'✅':ready?'🔔':'○'} ${m.name}</div>
+      <div class="mission-desc">${m.desc}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div class="mission-reward">+${m.reward} ${m.rewardType}</div>
+        ${ready?`<button class="btn btn-upgrade mission-claim" onclick="claimMission('${m.id}')">CLAIM</button>`:''}
       </div>
-    </div>
-    <div class="token-card secondary">
-      <div class="token-ticker">$GVOTE</div>
-      <div class="token-name">Token di Governance</div>
-      <div class="token-rows">
-        <div class="token-row">
-          <span class="token-row-label">Supply totale</span>
-          <span class="token-row-val">100,000,000</span>
-        </div>
-        <div class="token-row">
-          <span class="token-row-label">Standard</span>
-          <span class="token-row-val">ERC-20Votes</span>
-        </div>
-        <div class="token-row">
-          <span class="token-row-label">Emissione</span>
-          <span class="token-row-val">Fissa — no mint</span>
-        </div>
-        <div class="token-row">
-          <span class="token-row-label">Come ottenerlo</span>
-          <span class="token-row-val">Staking $GAME</span>
-        </div>
-        <div class="token-row">
-          <span class="token-row-label">Vesting team</span>
-          <span class="token-row-val">24 mesi</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="allocation-bars" style="margin-top: 3rem; max-width: 700px;">
-    <p class="section-label" style="margin-bottom: 1.5rem;">Allocation $GVOTE</p>
-    <div class="alloc-row">
-      <span class="alloc-label">Community / P2E</span>
-      <div class="alloc-bar-bg"><div class="alloc-bar" style="width:35%; background: linear-gradient(90deg, #00ff88, #00d4ff);"></div></div>
-      <span class="alloc-pct">35%</span>
-    </div>
-    <div class="alloc-row">
-      <span class="alloc-label">Pre-IPO Mining</span>
-      <div class="alloc-bar-bg"><div class="alloc-bar" style="width:20%; background: linear-gradient(90deg, #b44fff, #00d4ff);"></div></div>
-      <span class="alloc-pct">20%</span>
-    </div>
-    <div class="alloc-row">
-      <span class="alloc-label">Treasury</span>
-      <div class="alloc-bar-bg"><div class="alloc-bar" style="width:15%; background: linear-gradient(90deg, #ff6b2b, #b44fff);"></div></div>
-      <span class="alloc-pct">15%</span>
-    </div>
-    <div class="alloc-row">
-      <span class="alloc-label">Team</span>
-      <div class="alloc-bar-bg"><div class="alloc-bar" style="width:15%; background: linear-gradient(90deg, #00d4ff, #b44fff);"></div></div>
-      <span class="alloc-pct">15%</span>
-    </div>
-    <div class="alloc-row">
-      <span class="alloc-label">Investors</span>
-      <div class="alloc-bar-bg"><div class="alloc-bar" style="width:10%; background: linear-gradient(90deg, #ff6b2b, #00d4ff);"></div></div>
-      <span class="alloc-pct">10%</span>
-    </div>
-    <div class="alloc-row">
-      <span class="alloc-label">Advisors</span>
-      <div class="alloc-bar-bg"><div class="alloc-bar" style="width:5%; background: linear-gradient(90deg, #00ff88, #ff6b2b);"></div></div>
-      <span class="alloc-pct">5%</span>
-    </div>
-  </div>
-</section>
+    </div>`;
+  }).join('');
+}
 
-<!-- ROADMAP -->
-<section id="roadmap">
-  <div class="section-label">Timeline</div>
-  <h2 class="section-title">Roadmap</h2>
-  <p class="section-sub">Dal whitepaper al lancio pubblico — ogni fase costruita su quella precedente.</p>
-  <div class="roadmap-items">
-    <div class="roadmap-item">
-      <div class="roadmap-content">
-        <div class="roadmap-phase">Q1–Q2 2025 ✓</div>
-        <div class="roadmap-title">Fondamenta</div>
-        <ul class="roadmap-items-list">
-          <li>Whitepaper tokenomico</li>
-          <li>Smart contract sviluppati</li>
-          <li>40 test unitari passati</li>
-          <li>Deploy su Polygon Mainnet</li>
-        </ul>
-      </div>
-      <div class="roadmap-dot done"></div>
-      <div class="roadmap-empty"></div>
-    </div>
-    <div class="roadmap-item">
-      <div class="roadmap-empty"></div>
-      <div class="roadmap-dot active"></div>
-      <div class="roadmap-content">
-        <div class="roadmap-phase">Q3–Q4 2025 ◉ In corso</div>
-        <div class="roadmap-title">Alpha & Community</div>
-        <ul class="roadmap-items-list">
-          <li>MVP gioco (alpha chiusa)</li>
-          <li>Whitelist prime 500 wallet</li>
-          <li>$GAME live su testnet</li>
-          <li>Discord & community launch</li>
-        </ul>
-      </div>
-    </div>
-    <div class="roadmap-item">
-      <div class="roadmap-content">
-        <div class="roadmap-phase">Q1 2026</div>
-        <div class="roadmap-title">Beta Pubblica</div>
-        <ul class="roadmap-items-list">
-          <li>Beta aperta al pubblico</li>
-          <li>Audit smart contract esterno</li>
-          <li>KYC integration</li>
-          <li>Marketplace NFT</li>
-        </ul>
-      </div>
-      <div class="roadmap-dot"></div>
-      <div class="roadmap-empty"></div>
-    </div>
-    <div class="roadmap-item">
-      <div class="roadmap-empty"></div>
-      <div class="roadmap-dot"></div>
-      <div class="roadmap-content">
-        <div class="roadmap-phase">Q2–Q4 2026</div>
-        <div class="roadmap-title">Lancio & Token</div>
-        <ul class="roadmap-items-list">
-          <li>Bridge stablecoin live</li>
-          <li>Seed round investors</li>
-          <li>Listing CEX minore</li>
-          <li>DAO governance attiva</li>
-        </ul>
-      </div>
-    </div>
-    <div class="roadmap-item">
-      <div class="roadmap-content">
-        <div class="roadmap-phase">2027</div>
-        <div class="roadmap-title">IPO & Espansione</div>
-        <ul class="roadmap-items-list">
-          <li>Public token sale</li>
-          <li>Listing DEX principale</li>
-          <li>DAO fully operational</li>
-          <li>Season 2 del gioco</li>
-        </ul>
-      </div>
-      <div class="roadmap-dot"></div>
-      <div class="roadmap-empty"></div>
-    </div>
-  </div>
-</section>
+function claimMission(id){
+  const m=MISSIONS.find(x=>x.id===id);
+  if(!m||m.done||!m.condition())return;
+  m.done=true;
+  state.resources[m.rewardType]=(state.resources[m.rewardType]||0)+m.reward;
+  state.missionsCompleted++;
+  addXP(50);
+  addTicker(`🏆 Missione: ${m.name} (+${m.reward} ${m.rewardType})`);
+  showNotif(`🏆 +${m.reward} ${m.rewardType}!`);
+  updateHUD(); renderMissions();
+  document.getElementById('stat-missions').textContent=state.missionsCompleted;
+}
 
-<!-- CONTRACTS -->
-<section id="contracts">
-  <div class="section-label">On-Chain</div>
-  <h2 class="section-title">Contratti verificati</h2>
-  <p class="section-sub">Tutti i contratti sono open-source, verificati e pubblici su Polygonscan.</p>
-  <div class="contracts-grid">
-    <div class="contract-card">
-      <div class="contract-name">GameToken ($GAME)</div>
-      <div class="contract-addr">0xfbD7AC4a2B2E425b2E9Bd70694eEF1cA4Fe19464</div>
-      <a href="https://polygonscan.com/address/0xfbD7AC4a2B2E425b2E9Bd70694eEF1cA4Fe19464#code" target="_blank" class="contract-link">Vedi su Polygonscan →</a>
-    </div>
-    <div class="contract-card">
-      <div class="contract-name">GovToken ($GVOTE)</div>
-      <div class="contract-addr">0xe997D4F330aAC0e6DdBa0f6a2424F2223fD56535</div>
-      <a href="https://polygonscan.com/address/0xe997D4F330aAC0e6DdBa0f6a2424F2223fD56535#code" target="_blank" class="contract-link">Vedi su Polygonscan →</a>
-    </div>
-    <div class="contract-card">
-      <div class="contract-name">GameRewards</div>
-      <div class="contract-addr">0x11F1716C27e6495EEcE3d35d25894Cdae40Ac557</div>
-      <a href="https://polygonscan.com/address/0x11F1716C27e6495EEcE3d35d25894Cdae40Ac557#code" target="_blank" class="contract-link">Vedi su Polygonscan →</a>
-    </div>
-    <div class="contract-card">
-      <div class="contract-name">StablecoinBridge</div>
-      <div class="contract-addr">0xD407e68BC167c9EC88847b5b7D20B7C04C5791E3</div>
-      <a href="https://polygonscan.com/address/0xD407e68BC167c9EC88847b5b7D20B7C04C5791E3#code" target="_blank" class="contract-link">Vedi su Polygonscan →</a>
-    </div>
-    <div class="contract-card">
-      <div class="contract-name">PreIPOMining</div>
-      <div class="contract-addr">0x9f5FB3a347d944F75C92Aa59E012a667158bb0A5</div>
-      <a href="https://polygonscan.com/address/0x9f5FB3a347d944F75C92Aa59E012a667158bb0A5#code" target="_blank" class="contract-link">Vedi su Polygonscan →</a>
-    </div>
-  </div>
-</section>
+function checkMissions(){MISSIONS.forEach(m=>{if(!m.done&&m.condition())renderMissions();});}
 
-<!-- COMMUNITY -->
-<section id="community">
-  <div class="section-label">Community</div>
-  <h2 class="section-title">Unisciti alla community</h2>
-  <p class="section-sub" style="margin: 0 auto;">Entra nei canali ufficiali, resta aggiornato sugli sviluppi e partecipa alle decisioni della DAO.</p>
-  <div class="community-cards">
-    <a href="#" class="community-card">
-      <div class="community-icon">💬</div>
-      <div class="community-name">Discord</div>
-      <div class="community-desc">Chat, supporto e annunci</div>
-    </a>
-    <a href="#" class="community-card">
-      <div class="community-icon">✈️</div>
-      <div class="community-name">Telegram</div>
-      <div class="community-desc">Aggiornamenti in tempo reale</div>
-    </a>
-    <a href="#" class="community-card">
-      <div class="community-icon">🐦</div>
-      <div class="community-name">Twitter / X</div>
-      <div class="community-desc">News e partnership</div>
-    </a>
-  </div>
-</section>
+let gameTokenRate=0;
+function tick(){
+  state.seconds++;
+  if(state.seconds%60===0)state.day++;
+  let eprod=0,dprod=0,gameRate=0,xpRate=0;
+  state.grid.forEach(cell=>{
+    if(!cell)return;
+    const bld=BUILDINGS.find(b=>b.id===cell.type);
+    const mult=cell.level;
+    if(bld.prod.energy)  eprod+=bld.prod.energy*mult*0.1;
+    if(bld.prod.data)    dprod+=bld.prod.data*mult*0.1;
+    if(bld.prod.game)    gameRate+=bld.prod.game*mult*0.1;
+    if(bld.prod.xp)      xpRate+=bld.prod.xp*mult*0.1;
+  });
+  state.resources.energy=Math.min(9999,state.resources.energy+eprod);
+  state.resources.data=Math.min(9999,state.resources.data+dprod);
+  state.resources.credits+=0.5;
+  state.gameToken+=gameRate;
+  gameTokenRate=gameRate*10*60;
+  if(xpRate>0)addXP(xpRate);
+  if(state.seconds%30===0)randomEvent();
+  updateHUD(); checkMissions(); updateTime();
+}
 
-<!-- WHITEPAPER -->
-<section id="whitepaper">
-  <div class="wp-content">
-    <div class="wp-badge">Documento ufficiale</div>
-    <h2 class="section-title" style="font-size: clamp(2rem, 5vw, 3.5rem);">Leggi il Whitepaper</h2>
-    <p class="section-sub" style="margin: 1.5rem auto 3rem; max-width: 500px;">Tokenomics completa, meccanismi di gioco, analisi dei rischi e roadmap dettagliata. Tutto quello che devi sapere su GAME3 Protocol.</p>
-    <a href="GAME3_Whitepaper_Tokenomico.docx" download class="btn-primary">Download Whitepaper v1.0</a>
-  </div>
-</section>
+function randomEvent(){
+  const events=[
+    ()=>{const b=Math.floor(Math.random()*50)+20;state.resources.credits+=b;addTicker(`💰 Transazione anonima: +${b} credits`);},
+    ()=>{const b=Math.floor(Math.random()*30)+10;state.resources.data+=b;addTicker(`📡 Data packet: +${b} data`);},
+    ()=>{state.attacksReceived++;document.getElementById('stat-attacks').textContent=state.attacksReceived;addTicker(`⚠️ Attacco hacker respinto!`);showNotif('⚠️ Attacco respinto!','error');},
+    ()=>{state.resources.energy+=50;addTicker(`🤝 Syndicate invia supporto: +50 energia`);},
+    ()=>{addXP(25);addTicker(`🧪 Ricerca completata: +25 XP`);},
+  ];
+  events[Math.floor(Math.random()*events.length)]();
+}
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">GAME3 Protocol</div>
-  <div class="footer-text">© 2025 GAME3 Protocol. Deploy su Polygon Mainnet.</div>
-  <ul class="footer-links">
-    <li><a href="#how">Come funziona</a></li>
-    <li><a href="#contracts">Contratti</a></li>
-    <li><a href="#whitepaper">Whitepaper</a></li>
-  </ul>
-</footer>
+function addXP(amount){
+  state.xp+=amount;
+  while(state.xp>=state.xpNext){state.xp-=state.xpNext;state.level++;state.xpNext=Math.floor(state.xpNext*1.5);showNotif(`🎉 Livello ${state.level}!`);addTicker(`⬆ Nodo → Livello ${state.level}`);}
+  const pct=(state.xp/state.xpNext*100).toFixed(0);
+  document.getElementById('xp-bar').style.width=pct+'%';
+  document.getElementById('xp-text').textContent=`${Math.floor(state.xp)} / ${state.xpNext}`;
+}
 
+function updateHUD(){
+  document.getElementById('res-energy').textContent=Math.floor(state.resources.energy);
+  document.getElementById('res-data').textContent=Math.floor(state.resources.data);
+  document.getElementById('res-credits').textContent=Math.floor(state.resources.credits);
+  document.getElementById('res-defense').textContent=Math.floor(state.resources.defense);
+  document.getElementById('game-balance').textContent=state.gameToken.toFixed(2);
+  document.getElementById('game-rate').textContent=`+${gameTokenRate.toFixed(2)} / min`;
+  const pct=Math.min(100,(state.gameToken/10000*100));
+  document.getElementById('threshold-fill').style.width=pct+'%';
+  document.getElementById('threshold-pct').textContent=pct.toFixed(1)+'%';
+  const btn=document.getElementById('claim-btn');
+  const canClaim=state.gameToken>=10000&&userAddr;
+  btn.disabled=!canClaim;
+  if(!userAddr) btn.textContent='CONNETTI WALLET PER CLAIM';
+  else if(state.gameToken<10000) btn.textContent=`CLAIM $GAME (${state.gameToken.toFixed(0)}/10.000)`;
+  else btn.textContent=`CLAIM ${Math.floor(state.gameToken)} $GAME ON-CHAIN`;
+}
+
+function updateTime(){
+  const mins=Math.floor(state.seconds/60)%60;
+  const secs=state.seconds%60;
+  document.getElementById('game-time').textContent=`GG ${state.day} — ${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+}
+
+function updateStats(){
+  document.getElementById('stat-buildings').textContent=state.grid.filter(c=>c).length;
+  let ep=0,dp=0;
+  state.grid.forEach(cell=>{if(!cell)return;const bld=BUILDINGS.find(b=>b.id===cell.type);if(bld.prod.energy)ep+=bld.prod.energy*cell.level;if(bld.prod.data)dp+=bld.prod.data*cell.level;});
+  document.getElementById('stat-eprod').textContent=`+${(ep*0.1).toFixed(1)}/s`;
+  document.getElementById('stat-dprod').textContent=`+${(dp*0.1).toFixed(1)}/s`;
+}
+
+function addTicker(msg){
+  state.ticker.unshift(msg);
+  if(state.ticker.length>20)state.ticker.pop();
+  document.getElementById('event-ticker').textContent=state.ticker[0];
+}
+
+let notifTimer=null;
+function showNotif(msg,type=''){
+  const ex=document.querySelector('.notif');if(ex)ex.remove();
+  const div=document.createElement('div');
+  div.className='notif'+(type?' '+type:'');
+  div.textContent=msg;
+  document.body.appendChild(div);
+  clearTimeout(notifTimer);
+  notifTimer=setTimeout(()=>div.remove(),3500);
+}
+
+function init(){
+  renderGrid(); renderBuildMenu(); renderMissions();
+  updateHUD(); updateStats();
+  addTicker('🔌 CyberGrid avviato. Connetti il wallet per il claim on-chain.');
+  setInterval(tick,100);
+  setInterval(renderMissions,5000);
+  setInterval(()=>{if(userAddr)fetchOnchainBalance();},30000);
+}
+init();
+</script>
 </body>
 </html>

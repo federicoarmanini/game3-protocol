@@ -704,7 +704,7 @@ function saveGame() {
   }));
 }
 
-function loadGame() {
+function loadGame() {***
   const saved = localStorage.getItem('cybergrid');
   if (!saved) return;
   const data = JSON.parse(saved);
@@ -732,18 +732,64 @@ function loadGame() {
     }
   }
 }
+async function saveToBackend() {
+  if (!userAddr) return;
+  try {
+    await fetch(`${BACKEND_URL}/api/player/save`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address: userAddr, state })
+    });
+  } catch(e) { console.error('Save failed:', e); }
+}
 
-function init() {
-  loadGame();
+async function loadFromBackend() {
+  if (!userAddr) return;
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/player/load`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ address: userAddr })
+    });
+    const data = await res.json();
+    if (data.exists) {
+      state.grid = data.state.grid;
+      state.resources = data.state.resources;
+      state.gameToken = data.state.gameToken || 0;
+      state.xp = data.state.xp || 0;
+      state.xpNext = data.state.xpNext || 100;
+      state.level = data.state.level || 1;
+      state.day = data.state.day || 1;
+      renderGrid(); updateHUD(); updateStats();
+      if (data.offlineTokens > 0) {
+        setTimeout(() => showNotif(`💤 Offline ${Math.floor(data.elapsedSeconds/60)}min — +${data.offlineTokens.toFixed(2)} $GAME accumulati!`), 1000);
+      }
+    }
+  } catch(e) { console.error('Load failed:', e); }
+}
+
+async function init() {
   renderGrid(); renderBuildMenu(); renderMissions();
   updateHUD(); updateStats();
   addTicker('🔌 CyberGrid avviato. Connetti il wallet per il claim on-chain.');
+
+  // Carica dal backend se wallet connesso, altrimenti localStorage
+  if (userAddr) {
+    await loadFromBackend();
+  } else {
+    loadGame();
+  }
+
   setInterval(tick, 100);
   setInterval(renderMissions, 5000);
   setInterval(saveGame, 30000);
-  setInterval(() => { if(userAddr) fetchOnchainBalance(); }, 30000);
+  setInterval(async () => {
+    if (userAddr) {
+      await saveToBackend();
+      await fetchOnchainBalance();
+    }
+  }, 30000);
 }
-init(); 
 </script>
 </body>
 </html>

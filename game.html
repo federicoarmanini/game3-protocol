@@ -7,7 +7,6 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-657X132Z28');
 </script>
 <meta charset="UTF-8">
@@ -113,7 +112,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .syn-power-bar{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
 .syn-power-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:3px;}
 
-/* GAME TOKEN SECTION */
 .game-token-section{margin-top:1rem;background:var(--card);border:1px solid rgba(0,255,136,0.2);border-radius:10px;padding:1rem;text-align:center;}
 .game-bal{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--neon);}
 .game-label{font-size:0.75rem;color:var(--dim);margin-top:0.2rem;}
@@ -122,8 +120,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .claim-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
 .tx-link{display:block;margin-top:0.5rem;font-size:0.7rem;color:var(--blue);text-decoration:none;font-family:'Share Tech Mono',monospace;word-break:break-all;}
 .tx-link:hover{color:var(--neon);}
-
-/* THRESHOLD PROGRESS */
 .threshold-bar-wrap{margin-top:0.8rem;}
 .threshold-bar{height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;margin-top:0.3rem;}
 .threshold-fill{height:100%;background:linear-gradient(90deg,var(--neon),var(--blue));border-radius:3px;transition:width 0.5s ease;}
@@ -138,7 +134,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 </head>
 <body>
 
-<!-- WALLET BAR -->
 <div class="wallet-bar">
   <div class="wallet-status">
     <div class="wallet-dot" id="wallet-dot"></div>
@@ -200,10 +195,8 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
     <div class="selected-info" id="selected-info">
       <div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Clicca una cella per costruire o selezionare</span></div>
     </div>
-
     <div class="panel-title">Missioni</div>
     <div class="mission-list" id="mission-list"></div>
-
     <div class="syndicate-section">
       <div class="panel-title">Syndicate</div>
       <div class="syndicate-card">
@@ -216,7 +209,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
         </div>
       </div>
     </div>
-
     <div class="game-token-section">
       <div class="game-label">$GAME accumulato (in-game)</div>
       <div class="game-bal" id="game-balance">0.00</div>
@@ -244,17 +236,15 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 </div>
 
 <script>
-// ── CONTRACTS ────────────────────────────────────────────
 const BACKEND_URL = 'https://game3-backend-production.up.railway.app';
-const GAME_TOKEN_ADDR    = '0xfbD7AC4a2B2E425b2E9Bd70694eEF1cA4Fe19464';
-const GAME_REWARDS_ADDR  = '0x11F1716C27e6495EEcE3d35d25894Cdae40Ac557';
-const POLYGON_CHAIN_ID   = '0x89'; // 137
+const GAME_TOKEN_ADDR   = '0xfbD7AC4a2B2E425b2E9Bd70694eEF1cA4Fe19464';
+const GAME_REWARDS_ADDR = '0x11F1716C27e6495EEcE3d35d25894Cdae40Ac557';
+const POLYGON_CHAIN_ID  = '0x89';
 
 const ERC20_ABI = [
   'function balanceOf(address) view returns (uint256)',
   'function decimals() view returns (uint8)',
 ];
-
 const REWARDS_ABI = [
   'function claimReward(uint256 baseAmount, uint256 nonce, uint256 expiry, bytes calldata signature) external',
   'function nonces(address) view returns (uint256)',
@@ -262,49 +252,37 @@ const REWARDS_ABI = [
   'function dailyEarned(address) view returns (uint256)',
 ];
 
-// ── WEB3 STATE ────────────────────────────────────────────
 let provider = null;
 let signer   = null;
 let userAddr = null;
 let gameTokenContract = null;
 let rewardsContract   = null;
 
-// ── CONNECT WALLET ────────────────────────────────────────
 async function connectWallet() {
-  if (!window.ethereum) {
-    showNotif('❌ MetaMask non trovato. Installalo su metamask.io', 'error');
-    return;
-  }
+  if (!window.ethereum) { showNotif('❌ MetaMask non trovato.', 'error'); return; }
   try {
     const btn = document.getElementById('connect-btn');
     btn.textContent = 'Connessione...';
     btn.disabled = true;
-
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     userAddr = accounts[0];
-
     provider = new ethers.BrowserProvider(window.ethereum);
     signer   = await provider.getSigner();
-
     const network = await provider.getNetwork();
     const chainId = '0x' + network.chainId.toString(16);
-
     if (chainId !== POLYGON_CHAIN_ID) {
-      showNotif('⚠️ Cambia rete su Polygon Mainnet in MetaMask', 'error');
+      showNotif('⚠️ Cambia rete su Polygon Mainnet', 'error');
       await switchToPolygon();
     }
-
     gameTokenContract = new ethers.Contract(GAME_TOKEN_ADDR, ERC20_ABI, provider);
     rewardsContract   = new ethers.Contract(GAME_REWARDS_ADDR, REWARDS_ABI, signer);
-
     updateWalletUI();
+    await loadFromBackend();
     await fetchOnchainBalance();
     addTicker(`✅ Wallet connesso: ${userAddr.slice(0,6)}...${userAddr.slice(-4)}`);
-    showNotif('✅ Wallet connesso! Costruisci edifici per accumulare $GAME.', 'info');
-
+    showNotif('✅ Wallet connesso!', 'info');
     window.ethereum.on('accountsChanged', (accs) => { userAddr = accs[0]; updateWalletUI(); });
     window.ethereum.on('chainChanged', () => location.reload());
-
   } catch (e) {
     showNotif('❌ Connessione rifiutata', 'error');
     console.error(e);
@@ -316,32 +294,19 @@ async function connectWallet() {
 
 async function switchToPolygon() {
   try {
-    await window.ethereum.request({
-      method: 'wallet_switchEthereumChain',
-      params: [{ chainId: POLYGON_CHAIN_ID }],
-    });
+    await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: POLYGON_CHAIN_ID }] });
   } catch (e) {
     if (e.code === 4902) {
-      await window.ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [{
-          chainId: POLYGON_CHAIN_ID,
-          chainName: 'Polygon Mainnet',
-          nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 },
-          rpcUrls: ['https://polygon-rpc.com'],
-          blockExplorerUrls: ['https://polygonscan.com'],
-        }],
-      });
+      await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId: POLYGON_CHAIN_ID, chainName: 'Polygon Mainnet', nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 }, rpcUrls: ['https://polygon-rpc.com'], blockExplorerUrls: ['https://polygonscan.com'] }] });
     }
   }
 }
 
 function updateWalletUI() {
-  const dot    = document.getElementById('wallet-dot');
-  const addr   = document.getElementById('wallet-addr');
-  const badge  = document.getElementById('network-badge');
-  const btn    = document.getElementById('connect-btn');
-
+  const dot  = document.getElementById('wallet-dot');
+  const addr = document.getElementById('wallet-addr');
+  const badge = document.getElementById('network-badge');
+  const btn  = document.getElementById('connect-btn');
   if (userAddr) {
     dot.classList.add('connected');
     addr.classList.add('connected');
@@ -361,109 +326,68 @@ async function fetchOnchainBalance() {
     const bal = await gameTokenContract.balanceOf(userAddr);
     const dec = await gameTokenContract.decimals();
     const formatted = ethers.formatUnits(bal, dec);
-    document.getElementById('onchain-balance').textContent =
-      parseFloat(formatted).toFixed(2) + ' $GAME';
+    document.getElementById('onchain-balance').textContent = parseFloat(formatted).toFixed(2) + ' $GAME';
     document.getElementById('token-balance').style.display = 'inline';
-    document.getElementById('token-balance').textContent =
-      parseFloat(formatted).toFixed(2) + ' $GAME on-chain';
-  } catch (e) {
-    console.error('Balance fetch error:', e);
-  }
+    document.getElementById('token-balance').textContent = parseFloat(formatted).toFixed(2) + ' $GAME on-chain';
+  } catch (e) { console.error('Balance fetch error:', e); }
 }
 
-// ── CLAIM ON-CHAIN ────────────────────────────────────────
-// NOTA: In produzione questa firma viene dal tuo server backend.
-// Per ora usiamo una firma locale (solo per demo/test).
-// Il tuo wallet admin deve avere il ruolo SIGNER_ROLE sul contratto GameRewards.
 async function claimTokens() {
-  if (!signer || !userAddr) {
-    showNotif('❌ Connetti prima il wallet', 'error');
-    return;
-  }
-  if (state.gameToken < 10000) {
-    showNotif('❌ Servono almeno 10.000 $GAME', 'error');
-    return;
-  }
-
+  if (!signer || !userAddr) { showNotif('❌ Connetti prima il wallet', 'error'); return; }
+  if (state.gameToken < 10000) { showNotif('❌ Servono almeno 10.000 $GAME', 'error'); return; }
   const btn = document.getElementById('claim-btn');
   btn.disabled = true;
   btn.textContent = 'Elaborazione...';
-
   try {
     const amountToMint = ethers.parseEther(Math.floor(state.gameToken).toString());
     const nonce  = await rewardsContract.nonces(userAddr);
-    const expiry = BigInt(Math.floor(Date.now() / 1000) + 300); // 5 minuti
-
-    // FIRMA — in produzione: chiamata al backend
-    // Per ora firma con il signer corrente (deve avere SIGNER_ROLE)
-    const msgHash = ethers.solidityPackedKeccak256(
-      ['address', 'uint256', 'uint256', 'uint256'],
-      [userAddr, amountToMint, nonce, expiry]
-    );
+    const expiry = BigInt(Math.floor(Date.now() / 1000) + 300);
+    const msgHash = ethers.solidityPackedKeccak256(['address', 'uint256', 'uint256', 'uint256'], [userAddr, amountToMint, nonce, expiry]);
     const signature = await signer.signMessage(ethers.getBytes(msgHash));
-
     showNotif('⏳ Transazione in corso...', 'info');
-    addTicker('⏳ Transazione MetaMask in attesa di conferma...');
-
     const tx = await rewardsContract.claimReward(amountToMint, nonce, expiry, signature);
     addTicker(`📤 TX inviata: ${tx.hash.slice(0,12)}...`);
-    showNotif('⏳ In attesa di conferma blockchain...', 'info');
-
     const receipt = await tx.wait();
-
     const claimedAmount = Math.floor(state.gameToken);
     state.gameToken = 0;
     addXP(100);
-    addTicker(`✅ ${claimedAmount} $GAME mintati on-chain! TX: ${receipt.hash.slice(0,12)}...`);
-    showNotif(`🎉 ${claimedAmount} $GAME mintati nel tuo wallet!`);
-
-    // Mostra link Polygonscan
+    addTicker(`✅ ${claimedAmount} $GAME mintati on-chain!`);
+    showNotif(`🎉 ${claimedAmount} $GAME mintati!`);
     const txDiv = document.getElementById('last-tx');
     txDiv.style.display = 'block';
     txDiv.innerHTML = `<a class="tx-link" href="https://polygonscan.com/tx/${receipt.hash}" target="_blank">✅ Vedi TX su Polygonscan →</a>`;
-
     await fetchOnchainBalance();
     updateHUD();
-
   } catch (e) {
     console.error(e);
-    if (e.code === 4001) {
-      showNotif('❌ Transazione rifiutata dall\'utente', 'error');
-    } else if (e.message && e.message.includes('Daily limit')) {
-      showNotif('❌ Limite giornaliero raggiunto', 'error');
-    } else {
-      showNotif('❌ Errore: ' + (e.reason || e.message || 'Sconosciuto'), 'error');
-    }
+    if (e.code === 4001) showNotif('❌ Transazione rifiutata', 'error');
+    else showNotif('❌ Errore: ' + (e.reason || e.message || 'Sconosciuto'), 'error');
   } finally {
     btn.disabled = false;
     updateHUD();
   }
 }
 
-// ── GAME STATE ────────────────────────────────────────────
 const GRID_SIZE = 9;
 const state = {
   grid: Array(GRID_SIZE * GRID_SIZE).fill(null),
   resources: { energy:250, data:180, credits:320, defense:45 },
-  gameToken: 0,
-  xp: 0, xpNext: 100, level: 1,
-  day: 1, seconds: 0,
-  selectedBuild: null, selectedCell: null,
-  attacksReceived: 0, missionsCompleted: 0,
-  ticker: [],
+  gameToken: 0, xp: 0, xpNext: 100, level: 1,
+  day: 1, seconds: 0, selectedBuild: null, selectedCell: null,
+  attacksReceived: 0, missionsCompleted: 0, ticker: [],
 };
 const center = Math.floor(GRID_SIZE/2)*GRID_SIZE + Math.floor(GRID_SIZE/2);
 state.grid[center] = { type:'hq', level:1, hp:100, maxHp:100 };
 
 const BUILDINGS = [
-  { id:'hq',      name:'Quartier Generale', icon:'🏛️', cost:{credits:0},                  prod:{energy:2,data:1.5}, maxLevel:5 },
-  { id:'reactor', name:'Reattore',          icon:'⚡',  cost:{credits:80},                 prod:{energy:5},          maxLevel:5 },
-  { id:'server',  name:'Server Farm',       icon:'💾',  cost:{credits:60,energy:30},       prod:{data:4},            maxLevel:5 },
-  { id:'turret',  name:'Torretta',          icon:'🔫',  cost:{credits:100,data:40},        prod:{defense:8},         maxLevel:4 },
-  { id:'miner',   name:'Token Miner',       icon:'⛏️',  cost:{credits:150,energy:60,data:40}, prod:{game:0.5},      maxLevel:3 },
-  { id:'lab',     name:'Laboratorio',       icon:'🧪',  cost:{credits:200,data:80},        prod:{xp:2},              maxLevel:3 },
-  { id:'vault',   name:'Vault',             icon:'🔒',  cost:{credits:180,energy:50},      prod:{},                  maxLevel:3 },
-  { id:'relay',   name:'Relay Node',        icon:'📡',  cost:{credits:120,data:50},        prod:{synergy:true},      maxLevel:2 },
+  { id:'hq',      name:'Quartier Generale', icon:'🏛️', cost:{credits:0},                     prod:{energy:2,data:1.5}, maxLevel:5 },
+  { id:'reactor', name:'Reattore',          icon:'⚡',  cost:{credits:80},                    prod:{energy:5},          maxLevel:5 },
+  { id:'server',  name:'Server Farm',       icon:'💾',  cost:{credits:60,energy:30},          prod:{data:4},            maxLevel:5 },
+  { id:'turret',  name:'Torretta',          icon:'🔫',  cost:{credits:100,data:40},           prod:{defense:8},         maxLevel:4 },
+  { id:'miner',   name:'Token Miner',       icon:'⛏️',  cost:{credits:150,energy:60,data:40}, prod:{game:0.5},          maxLevel:3 },
+  { id:'lab',     name:'Laboratorio',       icon:'🧪',  cost:{credits:200,data:80},           prod:{xp:2},              maxLevel:3 },
+  { id:'vault',   name:'Vault',             icon:'🔒',  cost:{credits:180,energy:50},         prod:{},                  maxLevel:3 },
+  { id:'relay',   name:'Relay Node',        icon:'📡',  cost:{credits:120,data:50},           prod:{synergy:true},      maxLevel:2 },
 ];
 
 const MISSIONS = [
@@ -693,22 +617,17 @@ function showNotif(msg,type=''){
 
 function saveGame() {
   localStorage.setItem('cybergrid', JSON.stringify({
-    grid: state.grid,
-    resources: state.resources,
-    gameToken: state.gameToken,
-    xp: state.xp,
-    xpNext: state.xpNext,
-    level: state.level,
-    day: state.day,
-    lastSave: Date.now()
+    grid: state.grid, resources: state.resources,
+    gameToken: state.gameToken, xp: state.xp,
+    xpNext: state.xpNext, level: state.level,
+    day: state.day, lastSave: Date.now()
   }));
 }
 
-function loadGame() {***
+function loadGame() {
   const saved = localStorage.getItem('cybergrid');
   if (!saved) return;
   const data = JSON.parse(saved);
-
   state.grid = data.grid;
   state.resources = data.resources;
   state.gameToken = data.gameToken || 0;
@@ -716,8 +635,6 @@ function loadGame() {***
   state.xpNext = data.xpNext || 100;
   state.level = data.level || 1;
   state.day = data.day || 1;
-
-  // Calcola produzione offline
   const elapsed = Math.floor((Date.now() - data.lastSave) / 1000);
   if (elapsed > 10) {
     let gameOffline = 0;
@@ -727,11 +644,10 @@ function loadGame() {***
       if (bld.prod.game) gameOffline += bld.prod.game * cell.level * 0.1 * elapsed;
     });
     state.gameToken += gameOffline;
-    if (gameOffline > 0) {
-      setTimeout(() => showNotif(`💤 Offline ${Math.floor(elapsed/60)}min — +${gameOffline.toFixed(2)} $GAME accumulati!`), 1000);
-    }
+    if (gameOffline > 0) setTimeout(() => showNotif(`💤 Offline ${Math.floor(elapsed/60)}min — +${gameOffline.toFixed(2)} $GAME accumulati!`), 1000);
   }
 }
+
 async function saveToBackend() {
   if (!userAddr) return;
   try {
@@ -761,9 +677,7 @@ async function loadFromBackend() {
       state.level = data.state.level || 1;
       state.day = data.state.day || 1;
       renderGrid(); updateHUD(); updateStats();
-      if (data.offlineTokens > 0) {
-        setTimeout(() => showNotif(`💤 Offline ${Math.floor(data.elapsedSeconds/60)}min — +${data.offlineTokens.toFixed(2)} $GAME accumulati!`), 1000);
-      }
+      if (data.offlineTokens > 0) setTimeout(() => showNotif(`💤 Offline ${Math.floor(data.elapsedSeconds/60)}min — +${data.offlineTokens.toFixed(2)} $GAME accumulati!`), 1000);
     }
   } catch(e) { console.error('Load failed:', e); }
 }
@@ -772,24 +686,19 @@ async function init() {
   renderGrid(); renderBuildMenu(); renderMissions();
   updateHUD(); updateStats();
   addTicker('🔌 CyberGrid avviato. Connetti il wallet per il claim on-chain.');
-
-  // Carica dal backend se wallet connesso, altrimenti localStorage
   if (userAddr) {
     await loadFromBackend();
   } else {
     loadGame();
   }
-
   setInterval(tick, 100);
   setInterval(renderMissions, 5000);
   setInterval(saveGame, 30000);
   setInterval(async () => {
-    if (userAddr) {
-      await saveToBackend();
-      await fetchOnchainBalance();
-    }
+    if (userAddr) { await saveToBackend(); await fetchOnchainBalance(); }
   }, 30000);
 }
+init();
 </script>
 </body>
 </html>

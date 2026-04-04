@@ -681,13 +681,57 @@ function showNotif(msg,type=''){
   notifTimer=setTimeout(()=>div.remove(),3500);
 }
 
-function init(){
+function saveGame() {
+  localStorage.setItem('cybergrid', JSON.stringify({
+    grid: state.grid,
+    resources: state.resources,
+    gameToken: state.gameToken,
+    xp: state.xp,
+    xpNext: state.xpNext,
+    level: state.level,
+    day: state.day,
+    lastSave: Date.now()
+  }));
+}
+
+function loadGame() {
+  const saved = localStorage.getItem('cybergrid');
+  if (!saved) return;
+  const data = JSON.parse(saved);
+
+  state.grid = data.grid;
+  state.resources = data.resources;
+  state.gameToken = data.gameToken || 0;
+  state.xp = data.xp || 0;
+  state.xpNext = data.xpNext || 100;
+  state.level = data.level || 1;
+  state.day = data.day || 1;
+
+  // Calcola produzione offline
+  const elapsed = Math.floor((Date.now() - data.lastSave) / 1000);
+  if (elapsed > 10) {
+    let gameOffline = 0;
+    state.grid.forEach(cell => {
+      if (!cell) return;
+      const bld = BUILDINGS.find(b => b.id === cell.type);
+      if (bld.prod.game) gameOffline += bld.prod.game * cell.level * 0.1 * elapsed;
+    });
+    state.gameToken += gameOffline;
+    if (gameOffline > 0) {
+      setTimeout(() => showNotif(`💤 Offline ${Math.floor(elapsed/60)}min — +${gameOffline.toFixed(2)} $GAME accumulati!`), 1000);
+    }
+  }
+}
+
+function init() {
+  loadGame();
   renderGrid(); renderBuildMenu(); renderMissions();
   updateHUD(); updateStats();
   addTicker('🔌 CyberGrid avviato. Connetti il wallet per il claim on-chain.');
-  setInterval(tick,100);
-  setInterval(renderMissions,5000);
-  setInterval(()=>{if(userAddr)fetchOnchainBalance();},30000);
+  setInterval(tick, 100);
+  setInterval(renderMissions, 5000);
+  setInterval(saveGame, 30000);
+  setInterval(() => { if(userAddr) fetchOnchainBalance(); }, 30000);
 }
 init();
 </script>

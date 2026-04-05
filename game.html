@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-657X132Z28"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -26,7 +25,6 @@ html{scroll-behavior:smooth;}
 body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:999;}
 
-/* WALLET BAR */
 .wallet-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0.6rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;}
 .wallet-status{display:flex;align-items:center;gap:0.6rem;}
 .wallet-dot{width:8px;height:8px;border-radius:50%;background:var(--dim);}
@@ -37,7 +35,6 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .connect-btn:hover{background:rgba(0,255,136,0.2);}
 .network-badge{padding:0.3rem 0.7rem;border-radius:4px;font-size:0.75rem;font-weight:600;}
 .network-badge.polygon{background:rgba(130,71,229,0.2);border:1px solid rgba(130,71,229,0.4);color:#8247e5;}
-.network-badge.wrong{background:rgba(255,51,85,0.2);border:1px solid rgba(255,51,85,0.4);color:var(--red);}
 
 header{display:flex;align-items:center;justify-content:space-between;padding:0.8rem 1.5rem;background:rgba(5,8,16,0.95);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
 .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:1.1rem;background:linear-gradient(90deg,var(--neon),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
@@ -49,6 +46,14 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .header-right{display:flex;align-items:center;gap:1rem;}
 .syndicate-badge{padding:0.3rem 0.8rem;background:rgba(180,79,255,0.15);border:1px solid rgba(180,79,255,0.4);border-radius:4px;font-size:0.8rem;font-weight:600;color:var(--purple);}
 .game-time{font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--dim);}
+
+/* EVENT BANNER */
+.event-banner{display:none;position:fixed;top:52px;left:0;right:0;z-index:90;padding:0.6rem 2rem;text-align:center;font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;letter-spacing:0.1em;animation:slideDown 0.3s ease;}
+.event-banner.surge{background:rgba(0,255,136,0.2);border-bottom:1px solid var(--neon);color:var(--neon);}
+.event-banner.blackout{background:rgba(255,51,85,0.2);border-bottom:1px solid var(--red);color:var(--red);}
+.event-banner.storm{background:rgba(0,212,255,0.2);border-bottom:1px solid var(--blue);color:var(--blue);}
+.event-banner.raid{background:rgba(180,79,255,0.2);border-bottom:1px solid var(--purple);color:var(--purple);}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
 
 .layout{display:grid;grid-template-columns:260px 1fr 280px;height:calc(100vh - 90px);}
 .left-panel{background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:1rem;}
@@ -77,13 +82,15 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .cell.built:hover{border-color:var(--neon);}
 .cell.hq{border-color:rgba(255,215,0,0.6)!important;background:rgba(255,215,0,0.08)!important;}
 .cell-level{position:absolute;bottom:2px;right:3px;font-size:0.55rem;font-family:'Share Tech Mono',monospace;color:var(--neon);font-weight:700;}
+.cell.under-attack{animation:attackPulse 0.5s ease infinite;}
+@keyframes attackPulse{0%,100%{border-color:var(--red)}50%{border-color:transparent}}
 .minimap-bar{padding:0.5rem 1rem;background:var(--bg2);border-top:1px solid var(--border);display:flex;gap:1.5rem;align-items:center;}
 .minimap-label{font-size:0.75rem;color:var(--dim);font-weight:600;letter-spacing:0.1em;}
 .event-ticker{flex:1;font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--blue);overflow:hidden;white-space:nowrap;}
 
 .right-panel{background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;padding:1rem;}
-.selected-info{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem;min-height:120px;}
-.sel-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100px;color:var(--dim);font-size:0.85rem;gap:0.5rem;}
+.selected-info{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;margin-bottom:1rem;min-height:100px;}
+.sel-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:80px;color:var(--dim);font-size:0.85rem;gap:0.5rem;}
 .sel-name{font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;color:var(--text);margin-bottom:0.3rem;}
 .sel-level{font-size:0.8rem;color:var(--neon);margin-bottom:0.8rem;}
 .sel-stats{display:flex;flex-direction:column;gap:0.4rem;}
@@ -96,7 +103,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .btn-upgrade:hover{background:rgba(0,255,136,0.2);}
 .btn-demolish{background:rgba(90,122,153,0.1);border-color:rgba(90,122,153,0.3);color:var(--dim);}
 .btn-demolish:hover{background:rgba(90,122,153,0.2);color:var(--text);}
-.mission-list{display:flex;flex-direction:column;gap:0.5rem;}
+.btn-attack{background:rgba(255,51,85,0.1);border-color:rgba(255,51,85,0.4);color:var(--red);}
+.btn-attack:hover{background:rgba(255,51,85,0.2);}
+
+.mission-list{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1rem;}
 .mission{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.8rem;transition:all 0.2s;}
 .mission:hover{border-color:var(--blue);}
 .mission.completed{border-color:rgba(0,255,136,0.4);background:rgba(0,255,136,0.05);}
@@ -104,6 +114,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .mission-desc{font-size:0.75rem;color:var(--dim);margin-bottom:0.5rem;line-height:1.4;}
 .mission-reward{font-size:0.75rem;color:var(--neon);font-family:'Share Tech Mono',monospace;}
 .mission-claim{font-size:0.7rem;padding:0.3rem 0.8rem;}
+
 .syndicate-section{margin-top:1rem;}
 .syndicate-card{background:var(--card);border:1px solid rgba(180,79,255,0.3);border-radius:10px;padding:1rem;}
 .syn-name{font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;color:var(--purple);margin-bottom:0.5rem;}
@@ -111,6 +122,20 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .syn-power{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;}
 .syn-power-bar{flex:1;height:6px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;}
 .syn-power-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:3px;}
+
+/* PVP */
+.pvp-section{margin-top:1rem;background:var(--card);border:1px solid rgba(255,51,85,0.2);border-radius:10px;padding:1rem;}
+.pvp-title{font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.2em;color:var(--red);text-transform:uppercase;margin-bottom:0.8rem;}
+.pvp-btn{width:100%;padding:0.6rem;background:rgba(255,51,85,0.1);border:1px solid rgba(255,51,85,0.4);color:var(--red);font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;border-radius:6px;cursor:pointer;transition:all 0.2s;letter-spacing:0.05em;}
+.pvp-btn:hover{background:rgba(255,51,85,0.2);}
+.pvp-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.pvp-cooldown{font-size:0.75rem;color:var(--dim);text-align:center;margin-top:0.4rem;font-family:'Share Tech Mono',monospace;}
+
+/* TORNEO */
+.tournament-section{margin-top:1rem;background:var(--card);border:1px solid rgba(255,215,0,0.2);border-radius:10px;padding:1rem;}
+.tournament-title{font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:0.5rem;}
+.tournament-timer{font-family:'Share Tech Mono',monospace;font-size:1rem;color:var(--gold);margin-bottom:0.5rem;}
+.tournament-info{font-size:0.8rem;color:var(--dim);}
 
 .game-token-section{margin-top:1rem;background:var(--card);border:1px solid rgba(0,255,136,0.2);border-radius:10px;padding:1rem;text-align:center;}
 .game-bal{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--neon);}
@@ -128,11 +153,14 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .notif{position:fixed;top:100px;right:20px;background:var(--card);border:1px solid var(--neon);border-radius:8px;padding:0.8rem 1.2rem;font-size:0.85rem;color:var(--neon);z-index:200;animation:slideIn 0.3s ease;max-width:300px;}
 .notif.error{border-color:var(--red);color:var(--red);}
 .notif.info{border-color:var(--blue);color:var(--blue);}
+.notif.gold{border-color:var(--gold);color:var(--gold);}
 @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 </style>
 </head>
 <body>
+
+<div class="event-banner" id="event-banner"></div>
 
 <div class="wallet-bar">
   <div class="wallet-status">
@@ -170,12 +198,13 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
       <div class="stat-row"><span class="stat-name">Prod. Energia/s</span><span class="stat-val" id="stat-eprod">+2.0</span></div>
       <div class="stat-row"><span class="stat-name">Prod. Data/s</span><span class="stat-val" id="stat-dprod">+1.5</span></div>
       <div class="stat-row"><span class="stat-name">Attacchi subiti</span><span class="stat-val" id="stat-attacks">0</span></div>
+      <div class="stat-row"><span class="stat-name">Raid lanciati</span><span class="stat-val" id="stat-raids">0</span></div>
       <div class="stat-row"><span class="stat-name">Missioni completate</span><span class="stat-val" id="stat-missions">0</span></div>
     </div>
     <div class="panel-title" style="margin-top:1rem;">Livello Nodo</div>
     <div style="padding:0.5rem 0">
       <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem">
-        <span style="color:var(--dim)">XP</span>
+        <span style="color:var(--dim)">XP — Lv <span id="node-level">1</span></span>
         <span style="font-family:'Share Tech Mono',monospace" id="xp-text">0 / 100</span>
       </div>
       <div class="progress-bar"><div class="progress-fill" id="xp-bar" style="width:0%;background:linear-gradient(90deg,var(--neon),var(--blue))"></div></div>
@@ -189,46 +218,59 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
       <div class="event-ticker" id="event-ticker">Sistema avviato. Connetti il wallet per abilitare il claim on-chain.</div>
     </div>
   </div>
+
   <div class="right-panel">
     <div class="panel-title">Selezione</div>
     <div class="selected-info" id="selected-info">
-      <div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Clicca una cella per costruire o selezionare</span></div>
+      <div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Clicca una cella per costruire</span></div>
     </div>
+
     <div class="panel-title">Missioni</div>
     <div class="mission-list" id="mission-list"></div>
+
     <div class="syndicate-section">
       <div class="panel-title">Syndicate</div>
       <div class="syndicate-card">
         <div class="syn-name">NullByte Syndicate</div>
-        <div class="syn-members">👥 247 membri attivi</div>
+        <div class="syn-members">👥 <span id="syn-members">247</span> membri attivi</div>
         <div class="syn-power">
           <span style="font-size:0.75rem;color:var(--dim)">Potere</span>
-          <div class="syn-power-bar"><div class="syn-power-fill" style="width:62%"></div></div>
-          <span style="font-family:'Share Tech Mono',monospace;font-size:0.75rem">62%</span>
+          <div class="syn-power-bar"><div class="syn-power-fill" id="syn-power-fill" style="width:62%"></div></div>
+          <span style="font-family:'Share Tech Mono',monospace;font-size:0.75rem" id="syn-power-pct">62%</span>
         </div>
       </div>
     </div>
+
+    <!-- PVP -->
+    <div class="pvp-section">
+      <div class="pvp-title">⚔ Raid PvP</div>
+      <button class="pvp-btn" id="pvp-btn" onclick="launchRaid()">LANCIA RAID</button>
+      <div class="pvp-cooldown" id="pvp-cooldown">Pronto all'attacco</div>
+    </div>
+
+    <!-- TORNEO -->
+    <div class="tournament-section">
+      <div class="tournament-title">🏆 Torneo Settimanale</div>
+      <div class="tournament-timer" id="tournament-timer">--:--:--</div>
+      <div class="tournament-info">Top 3 ricevono bonus $GAME</div>
+    </div>
+
+    <!-- LEADERBOARD -->
     <div style="margin-top:1rem;">
-  <div class="panel-title">Leaderboard</div>
-  <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
-</div>
+      <div class="panel-title">Leaderboard</div>
+      <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
+    </div>
+
     <div class="game-token-section">
       <div class="game-label">$GAME accumulato (in-game)</div>
       <div class="game-bal" id="game-balance">0.00</div>
       <div class="game-label" id="game-rate">+0.00 / min</div>
       <div class="threshold-bar-wrap">
-        <div class="threshold-text">
-          <span>Soglia claim</span>
-          <span id="threshold-pct">0%</span>
-        </div>
+        <div class="threshold-text"><span>Soglia claim</span><span id="threshold-pct">0%</span></div>
         <div class="threshold-bar"><div class="threshold-fill" id="threshold-fill" style="width:0%"></div></div>
-        <div class="threshold-text" style="margin-top:0.2rem">
-          <span>0</span><span style="color:var(--neon)">10.000 $GAME</span>
-        </div>
+        <div class="threshold-text" style="margin-top:0.2rem"><span>0</span><span style="color:var(--neon)">10.000 $GAME</span></div>
       </div>
-      <button class="claim-btn" id="claim-btn" onclick="claimTokens()" disabled>
-        CLAIM $GAME ON-CHAIN
-      </button>
+      <button class="claim-btn" id="claim-btn" onclick="claimTokens()" disabled>CLAIM $GAME ON-CHAIN</button>
       <div id="last-tx" style="display:none"></div>
       <div style="margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--border)">
         <div class="game-label">$GAME nel wallet on-chain</div>
@@ -244,208 +286,156 @@ const GAME_TOKEN_ADDR   = '0xfbD7AC4a2B2E425b2E9Bd70694eEF1cA4Fe19464';
 const GAME_REWARDS_ADDR = '0x11F1716C27e6495EEcE3d35d25894Cdae40Ac557';
 const POLYGON_CHAIN_ID  = '0x89';
 
-const ERC20_ABI = [
-  'function balanceOf(address) view returns (uint256)',
-  'function decimals() view returns (uint8)',
-];
-const REWARDS_ABI = [
-  'function claimReward(uint256 baseAmount, uint256 nonce, uint256 expiry, bytes calldata signature) external',
-  'function nonces(address) view returns (uint256)',
-  'function dailyLimit() view returns (uint256)',
-  'function dailyEarned(address) view returns (uint256)',
-];
+const ERC20_ABI = ['function balanceOf(address) view returns (uint256)','function decimals() view returns (uint8)'];
+const REWARDS_ABI = ['function claimReward(uint256 baseAmount, uint256 nonce, uint256 expiry, bytes calldata signature) external','function nonces(address) view returns (uint256)'];
 
-let provider = null;
-let signer   = null;
-let userAddr = null;
-let gameTokenContract = null;
-let rewardsContract   = null;
+let provider=null,signer=null,userAddr=null,gameTokenContract=null,rewardsContract=null;
 
 async function connectWallet() {
-  if (!window.ethereum) { showNotif('❌ MetaMask non trovato.', 'error'); return; }
+  if (!window.ethereum) { showNotif('❌ MetaMask non trovato.','error'); return; }
   try {
-    const btn = document.getElementById('connect-btn');
-    btn.textContent = 'Connessione...';
-    btn.disabled = true;
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    userAddr = accounts[0];
-    provider = new ethers.BrowserProvider(window.ethereum);
-    signer   = await provider.getSigner();
-    const network = await provider.getNetwork();
-    const chainId = '0x' + network.chainId.toString(16);
-    if (chainId !== POLYGON_CHAIN_ID) {
-      showNotif('⚠️ Cambia rete su Polygon Mainnet', 'error');
-      await switchToPolygon();
-    }
-    gameTokenContract = new ethers.Contract(GAME_TOKEN_ADDR, ERC20_ABI, provider);
-    rewardsContract   = new ethers.Contract(GAME_REWARDS_ADDR, REWARDS_ABI, signer);
+    const btn=document.getElementById('connect-btn');
+    btn.textContent='Connessione...'; btn.disabled=true;
+    const accounts=await window.ethereum.request({method:'eth_requestAccounts'});
+    userAddr=accounts[0];
+    provider=new ethers.BrowserProvider(window.ethereum);
+    signer=await provider.getSigner();
+    const network=await provider.getNetwork();
+    const chainId='0x'+network.chainId.toString(16);
+    if(chainId!==POLYGON_CHAIN_ID){showNotif('⚠️ Cambia rete su Polygon','error');await switchToPolygon();}
+    gameTokenContract=new ethers.Contract(GAME_TOKEN_ADDR,ERC20_ABI,provider);
+    rewardsContract=new ethers.Contract(GAME_REWARDS_ADDR,REWARDS_ABI,signer);
     updateWalletUI();
     await loadFromBackend();
     await fetchOnchainBalance();
     addTicker(`✅ Wallet connesso: ${userAddr.slice(0,6)}...${userAddr.slice(-4)}`);
-    showNotif('✅ Wallet connesso!', 'info');
-    window.ethereum.on('accountsChanged', (accs) => { userAddr = accs[0]; updateWalletUI(); });
-    window.ethereum.on('chainChanged', () => location.reload());
-  } catch (e) {
-    showNotif('❌ Connessione rifiutata', 'error');
-    console.error(e);
-  } finally {
-    const btn = document.getElementById('connect-btn');
-    btn.disabled = false;
-  }
+    showNotif('✅ Wallet connesso!','info');
+    window.ethereum.on('accountsChanged',(accs)=>{userAddr=accs[0];updateWalletUI();});
+    window.ethereum.on('chainChanged',()=>location.reload());
+  } catch(e){showNotif('❌ Connessione rifiutata','error');console.error(e);}
+  finally{document.getElementById('connect-btn').disabled=false;}
 }
 
 async function switchToPolygon() {
-  try {
-    await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: POLYGON_CHAIN_ID }] });
-  } catch (e) {
-    if (e.code === 4902) {
-      await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId: POLYGON_CHAIN_ID, chainName: 'Polygon Mainnet', nativeCurrency: { name: 'POL', symbol: 'POL', decimals: 18 }, rpcUrls: ['https://polygon-rpc.com'], blockExplorerUrls: ['https://polygonscan.com'] }] });
-    }
-  }
+  try{await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:POLYGON_CHAIN_ID}]});}
+  catch(e){if(e.code===4902)await window.ethereum.request({method:'wallet_addEthereumChain',params:[{chainId:POLYGON_CHAIN_ID,chainName:'Polygon Mainnet',nativeCurrency:{name:'POL',symbol:'POL',decimals:18},rpcUrls:['https://polygon-rpc.com'],blockExplorerUrls:['https://polygonscan.com']}]});}
 }
 
 function updateWalletUI() {
-  const dot  = document.getElementById('wallet-dot');
-  const addr = document.getElementById('wallet-addr');
-  const badge = document.getElementById('network-badge');
-  const btn  = document.getElementById('connect-btn');
-  if (userAddr) {
-    dot.classList.add('connected');
-    addr.classList.add('connected');
-    addr.textContent = userAddr.slice(0,6) + '...' + userAddr.slice(-4);
-    badge.style.display = 'inline';
-    badge.className = 'network-badge polygon';
-    badge.textContent = 'Polygon';
-    btn.textContent = 'CONNESSO';
-    btn.style.opacity = '0.5';
-    btn.style.cursor = 'default';
-  }
+  const dot=document.getElementById('wallet-dot'),addr=document.getElementById('wallet-addr'),badge=document.getElementById('network-badge'),btn=document.getElementById('connect-btn');
+  if(userAddr){dot.classList.add('connected');addr.classList.add('connected');addr.textContent=userAddr.slice(0,6)+'...'+userAddr.slice(-4);badge.style.display='inline';badge.className='network-badge polygon';badge.textContent='Polygon';btn.textContent='CONNESSO';btn.style.opacity='0.5';btn.style.cursor='default';}
 }
 
 async function fetchOnchainBalance() {
-  if (!gameTokenContract || !userAddr) return;
-  try {
-    const bal = await gameTokenContract.balanceOf(userAddr);
-    const dec = await gameTokenContract.decimals();
-    const formatted = ethers.formatUnits(bal, dec);
-    document.getElementById('onchain-balance').textContent = parseFloat(formatted).toFixed(2) + ' $GAME';
-    document.getElementById('token-balance').style.display = 'inline';
-    document.getElementById('token-balance').textContent = parseFloat(formatted).toFixed(2) + ' $GAME on-chain';
-  } catch (e) { console.error('Balance fetch error:', e); }
+  if(!gameTokenContract||!userAddr)return;
+  try{const bal=await gameTokenContract.balanceOf(userAddr);const dec=await gameTokenContract.decimals();const f=ethers.formatUnits(bal,dec);document.getElementById('onchain-balance').textContent=parseFloat(f).toFixed(2)+' $GAME';document.getElementById('token-balance').style.display='inline';document.getElementById('token-balance').textContent=parseFloat(f).toFixed(2)+' $GAME on-chain';}
+  catch(e){console.error(e);}
 }
 
 async function claimTokens() {
-  if (!signer || !userAddr) { showNotif('❌ Connetti prima il wallet', 'error'); return; }
-  if (state.gameToken < 10000) { showNotif('❌ Servono almeno 10.000 $GAME', 'error'); return; }
-  const btn = document.getElementById('claim-btn');
-  btn.disabled = true;
-  btn.textContent = 'Elaborazione...';
-  try {
-    const amountToMint = ethers.parseEther(Math.floor(state.gameToken).toString());
-    const nonce  = await rewardsContract.nonces(userAddr);
-    const expiry = BigInt(Math.floor(Date.now() / 1000) + 300);
-    const msgHash = ethers.solidityPackedKeccak256(['address', 'uint256', 'uint256', 'uint256'], [userAddr, amountToMint, nonce, expiry]);
-    const signature = await signer.signMessage(ethers.getBytes(msgHash));
-    showNotif('⏳ Transazione in corso...', 'info');
-    const tx = await rewardsContract.claimReward(amountToMint, nonce, expiry, signature);
-    addTicker(`📤 TX inviata: ${tx.hash.slice(0,12)}...`);
-    const receipt = await tx.wait();
-    const claimedAmount = Math.floor(state.gameToken);
-    state.gameToken = 0;
-    addXP(100);
-    addTicker(`✅ ${claimedAmount} $GAME mintati on-chain!`);
-    showNotif(`🎉 ${claimedAmount} $GAME mintati!`);
-    const txDiv = document.getElementById('last-tx');
-    txDiv.style.display = 'block';
-    txDiv.innerHTML = `<a class="tx-link" href="https://polygonscan.com/tx/${receipt.hash}" target="_blank">✅ Vedi TX su Polygonscan →</a>`;
-    await fetchOnchainBalance();
-    updateHUD();
-  } catch (e) {
-    console.error(e);
-    if (e.code === 4001) showNotif('❌ Transazione rifiutata', 'error');
-    else showNotif('❌ Errore: ' + (e.reason || e.message || 'Sconosciuto'), 'error');
-  } finally {
-    btn.disabled = false;
-    updateHUD();
-  }
+  if(!signer||!userAddr){showNotif('❌ Connetti il wallet','error');return;}
+  if(state.gameToken<10000){showNotif('❌ Servono 10.000 $GAME','error');return;}
+  const btn=document.getElementById('claim-btn');btn.disabled=true;btn.textContent='Elaborazione...';
+  try{
+    const amountToMint=ethers.parseEther(Math.floor(state.gameToken).toString());
+    const nonce=await rewardsContract.nonces(userAddr);
+    const expiry=BigInt(Math.floor(Date.now()/1000)+300);
+    const msgHash=ethers.solidityPackedKeccak256(['address','uint256','uint256','uint256'],[userAddr,amountToMint,nonce,expiry]);
+    const signature=await signer.signMessage(ethers.getBytes(msgHash));
+    showNotif('⏳ Transazione in corso...','info');
+    const tx=await rewardsContract.claimReward(amountToMint,nonce,expiry,signature);
+    const receipt=await tx.wait();
+    const claimed=Math.floor(state.gameToken);state.gameToken=0;addXP(100);
+    addTicker(`✅ ${claimed} $GAME mintati on-chain!`);showNotif(`🎉 ${claimed} $GAME mintati!`);
+    document.getElementById('last-tx').style.display='block';
+    document.getElementById('last-tx').innerHTML=`<a class="tx-link" href="https://polygonscan.com/tx/${receipt.hash}" target="_blank">✅ Vedi TX su Polygonscan →</a>`;
+    await fetchOnchainBalance();updateHUD();
+  }catch(e){console.error(e);if(e.code===4001)showNotif('❌ Transazione rifiutata','error');else showNotif('❌ Errore: '+(e.reason||e.message||'Sconosciuto'),'error');}
+  finally{btn.disabled=false;updateHUD();}
 }
 
-const GRID_SIZE = 9;
-const state = {
-  grid: Array(GRID_SIZE * GRID_SIZE).fill(null),
-  resources: { energy:250, data:180, credits:320, defense:45 },
-  gameToken: 0, xp: 0, xpNext: 100, level: 1,
-  day: 1, seconds: 0, selectedBuild: null, selectedCell: null,
-  attacksReceived: 0, missionsCompleted: 0, ticker: [],
+// ── GAME STATE ────────────────────────────────────────────
+const GRID_SIZE=9;
+const state={
+  grid:Array(GRID_SIZE*GRID_SIZE).fill(null),
+  resources:{energy:250,data:180,credits:320,defense:45},
+  gameToken:0,xp:0,xpNext:100,level:1,
+  day:1,seconds:0,selectedBuild:null,selectedCell:null,
+  attacksReceived:0,missionsCompleted:0,raidsLaunched:0,ticker:[],
+  pvpCooldown:0,activeEvent:null,eventTimer:0,
+  tournamentScore:0,
 };
-const center = Math.floor(GRID_SIZE/2)*GRID_SIZE + Math.floor(GRID_SIZE/2);
-state.grid[center] = { type:'hq', level:1, hp:100, maxHp:100 };
+const center=Math.floor(GRID_SIZE/2)*GRID_SIZE+Math.floor(GRID_SIZE/2);
+state.grid[center]={type:'hq',level:1,hp:100,maxHp:100};
 
-const BUILDINGS = [
-  { id:'hq',      name:'Quartier Generale', icon:'🏛️', cost:{credits:0},                     prod:{energy:2,data:1.5}, maxLevel:5 },
-  { id:'reactor', name:'Reattore',          icon:'⚡',  cost:{credits:80},                    prod:{energy:5},          maxLevel:5 },
-  { id:'server',  name:'Server Farm',       icon:'💾',  cost:{credits:60,energy:30},          prod:{data:4},            maxLevel:5 },
-  { id:'turret',  name:'Torretta',          icon:'🔫',  cost:{credits:100,data:40},           prod:{defense:8},         maxLevel:4 },
-  { id:'miner',   name:'Token Miner',       icon:'⛏️',  cost:{credits:150,energy:60,data:40}, prod:{game:0.5},          maxLevel:3 },
-  { id:'lab',     name:'Laboratorio',       icon:'🧪',  cost:{credits:200,data:80},           prod:{xp:2},              maxLevel:3 },
-  { id:'vault',   name:'Vault',             icon:'🔒',  cost:{credits:180,energy:50},         prod:{},                  maxLevel:3 },
-  { id:'relay',   name:'Relay Node',        icon:'📡',  cost:{credits:120,data:50},           prod:{synergy:true},      maxLevel:2 },
+const BUILDINGS=[
+  {id:'hq',       name:'Quartier Generale', icon:'🏛️', cost:{credits:0},                      prod:{energy:2,data:1.5}, maxLevel:5},
+  {id:'reactor',  name:'Reattore',           icon:'⚡',  cost:{credits:80},                     prod:{energy:5},          maxLevel:5},
+  {id:'server',   name:'Server Farm',        icon:'💾',  cost:{credits:60,energy:30},           prod:{data:4},            maxLevel:5},
+  {id:'turret',   name:'Torretta',           icon:'🔫',  cost:{credits:100,data:40},            prod:{defense:8},         maxLevel:4},
+  {id:'miner',    name:'Token Miner',        icon:'⛏️',  cost:{credits:150,energy:60,data:40},  prod:{game:0.5},          maxLevel:3},
+  {id:'lab',      name:'Laboratorio',        icon:'🧪',  cost:{credits:200,data:80},            prod:{xp:2},              maxLevel:3},
+  {id:'vault',    name:'Vault',              icon:'🔒',  cost:{credits:180,energy:50},          prod:{},                  maxLevel:3},
+  {id:'relay',    name:'Relay Node',         icon:'📡',  cost:{credits:120,data:50},            prod:{synergy:true},      maxLevel:2},
+  {id:'drone',    name:'Drone Bay',          icon:'🚁',  cost:{credits:220,energy:80,data:60},  prod:{attack:2},          maxLevel:3},
+  {id:'shield',   name:'Shield Generator',   icon:'🛡',  cost:{credits:250,data:100},           prod:{defense:15},        maxLevel:3},
+  {id:'quantum',  name:'Quantum Lab',        icon:'⚛️',  cost:{credits:300,energy:100,data:80}, prod:{xp:5,game:0.2},     maxLevel:2},
 ];
 
-const MISSIONS = [
-  { id:'m1', name:'Prima Connessione', desc:'Costruisci il primo edificio', reward:50,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type!=='hq').length>=1, done:false },
-  { id:'m2', name:'Rete Energetica',   desc:'Raggiungi 500 di energia',     reward:100, rewardType:'credits', condition:()=>state.resources.energy>=500, done:false },
-  { id:'m3', name:'Data Miner',        desc:'Costruisci 2 Server Farm',     reward:200, rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='server').length>=2, done:false },
-  { id:'m4', name:'Primo Token',       desc:'Accumula 100 $GAME',           reward:500, rewardType:'credits', condition:()=>state.gameToken>=100, done:false },
-  { id:'m5', name:'Nodo Difeso',       desc:'Raggiungi 50 di difesa',       reward:150, rewardType:'data',    condition:()=>state.resources.defense>=50, done:false },
-  { id:'m6', name:'Livello 2',         desc:'Raggiungi il livello 2',        reward:300, rewardType:'credits', condition:()=>state.level>=2, done:false },
+// ── MISSIONI ─────────────────────────────────────────────
+const MISSIONS=[
+  {id:'m1',  name:'Prima Connessione',    desc:'Costruisci il primo edificio',        reward:50,   rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type!=='hq').length>=1,     done:false},
+  {id:'m2',  name:'Rete Energetica',      desc:'Raggiungi 500 di energia',            reward:100,  rewardType:'credits', condition:()=>state.resources.energy>=500,                           done:false},
+  {id:'m3',  name:'Data Miner',           desc:'Costruisci 2 Server Farm',            reward:200,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='server').length>=2,  done:false},
+  {id:'m4',  name:'Primo Token',          desc:'Accumula 100 $GAME',                  reward:500,  rewardType:'credits', condition:()=>state.gameToken>=100,                                  done:false},
+  {id:'m5',  name:'Nodo Difeso',          desc:'Raggiungi 50 di difesa',              reward:150,  rewardType:'data',    condition:()=>state.resources.defense>=50,                           done:false},
+  {id:'m6',  name:'Livello 2',            desc:'Raggiungi il livello 2',              reward:300,  rewardType:'credits', condition:()=>state.level>=2,                                        done:false},
+  {id:'m7',  name:'Espansione',           desc:'Costruisci 5 edifici',                reward:400,  rewardType:'credits', condition:()=>state.grid.filter(c=>c).length>=6,                     done:false},
+  {id:'m8',  name:'Primo Raid',           desc:'Lancia il tuo primo raid PvP',        reward:300,  rewardType:'credits', condition:()=>state.raidsLaunched>=1,                                done:false},
+  {id:'m9',  name:'Difensore',            desc:'Raggiungi 200 di difesa',             reward:600,  rewardType:'credits', condition:()=>state.resources.defense>=200,                          done:false},
+  {id:'m10', name:'Quantum Builder',      desc:'Costruisci un Quantum Lab',           reward:800,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='quantum').length>=1, done:false},
+  {id:'m11', name:'Operatore Senior',     desc:'Raggiungi il livello 5',              reward:1000, rewardType:'credits', condition:()=>state.level>=5,                                        done:false},
+  {id:'m12', name:'Crypto Whale',         desc:'Accumula 1000 $GAME',                 reward:2000, rewardType:'credits', condition:()=>state.gameToken>=1000,                                 done:false},
 ];
 
+// ── GRID ──────────────────────────────────────────────────
 function renderGrid() {
-  const grid = document.getElementById('grid');
-  grid.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 56px)`;
-  grid.innerHTML = '';
-  state.grid.forEach((cell, i) => {
-    const div = document.createElement('div');
-    div.className = 'cell' + (cell ? ' built' : ' empty') + (i===center ? ' hq' : '');
-    div.dataset.idx = i;
-    if (cell) {
-      const bld = BUILDINGS.find(b=>b.id===cell.type);
-      div.innerHTML = `<span>${bld?bld.icon:'?'}</span><span class="cell-level">Lv${cell.level}</span>`;
-    }
-    div.addEventListener('click', ()=>onCellClick(i));
+  const grid=document.getElementById('grid');
+  grid.style.gridTemplateColumns=`repeat(${GRID_SIZE}, 56px)`;
+  grid.innerHTML='';
+  state.grid.forEach((cell,i)=>{
+    const div=document.createElement('div');
+    div.className='cell'+(cell?' built':' empty')+(i===center?' hq':'');
+    div.dataset.idx=i;
+    if(cell){const bld=BUILDINGS.find(b=>b.id===cell.type);div.innerHTML=`<span>${bld?bld.icon:'?'}</span><span class="cell-level">Lv${cell.level}</span>`;}
+    div.addEventListener('click',()=>onCellClick(i));
     grid.appendChild(div);
   });
 }
 
 function onCellClick(idx) {
-  if (state.grid[idx]) { state.selectedCell=idx; state.selectedBuild=null; renderSelected(); }
-  else if (state.selectedBuild) { tryBuild(idx); }
-  else { state.selectedCell=idx; renderSelected(); }
+  if(state.grid[idx]){state.selectedCell=idx;state.selectedBuild=null;renderSelected();}
+  else if(state.selectedBuild){tryBuild(idx);}
+  else{state.selectedCell=idx;renderSelected();}
 }
 
 function tryBuild(idx) {
-  const bld = BUILDINGS.find(b=>b.id===state.selectedBuild);
-  if (!bld||bld.id==='hq') return;
-  for (const [res,amt] of Object.entries(bld.cost)) {
-    if ((state.resources[res]||0)<amt) { showNotif(`❌ Risorse insufficienti: ${res}`, 'error'); return; }
-  }
-  for (const [res,amt] of Object.entries(bld.cost)) state.resources[res]-=amt;
+  const bld=BUILDINGS.find(b=>b.id===state.selectedBuild);
+  if(!bld||bld.id==='hq')return;
+  for(const[res,amt]of Object.entries(bld.cost)){if((state.resources[res]||0)<amt){showNotif(`❌ Risorse insufficienti: ${res}`,'error');return;}}
+  for(const[res,amt]of Object.entries(bld.cost))state.resources[res]-=amt;
   state.grid[idx]={type:bld.id,level:1,hp:100,maxHp:100};
-  addXP(20);
-  addTicker(`✅ ${bld.name} costruito`);
-  showNotif(`⚡ ${bld.name} costruito!`);
-  renderGrid(); updateStats(); updateHUD(); checkMissions();
+  addXP(20);addTicker(`✅ ${bld.name} costruito`);showNotif(`⚡ ${bld.name} costruito!`);
+  renderGrid();updateStats();updateHUD();checkMissions();
 }
 
 function renderSelected() {
-  const panel = document.getElementById('selected-info');
-  const cell = state.grid[state.selectedCell];
-  if (!cell) { panel.innerHTML=`<div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Clicca una cella per costruire o selezionare</span></div>`; return; }
-  const bld = BUILDINGS.find(b=>b.id===cell.type);
-  const canUp = cell.level<bld.maxLevel;
-  const upgCost = getUpgradeCost(bld,cell.level);
+  const panel=document.getElementById('selected-info');
+  const cell=state.grid[state.selectedCell];
+  if(!cell){panel.innerHTML=`<div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Clicca una cella per costruire</span></div>`;return;}
+  const bld=BUILDINGS.find(b=>b.id===cell.type);
+  const canUp=cell.level<bld.maxLevel;
+  const upgCost=getUpgradeCost(bld,cell.level);
   panel.innerHTML=`
     <div style="font-size:2rem;margin-bottom:0.5rem">${bld.icon}</div>
     <div class="sel-name">${bld.name}</div>
@@ -463,27 +453,21 @@ function renderSelected() {
 function getUpgradeCost(bld,level){return(level*100)+Object.values(bld.cost).reduce((a,b)=>a+b,0);}
 
 function upgradeBuilding(idx) {
-  const cell=state.grid[idx];
-  const bld=BUILDINGS.find(b=>b.id===cell.type);
+  const cell=state.grid[idx];const bld=BUILDINGS.find(b=>b.id===cell.type);
   if(cell.level>=bld.maxLevel)return;
   const cost=getUpgradeCost(bld,cell.level);
   if(state.resources.credits<cost){showNotif(`❌ Servono ${cost} credits`,'error');return;}
-  state.resources.credits-=cost;
-  cell.level++; cell.maxHp+=50; cell.hp=cell.maxHp;
-  addXP(40);
-  addTicker(`⬆ ${bld.name} → Lv${cell.level}`);
-  showNotif(`✨ ${bld.name} → Livello ${cell.level}!`);
-  renderGrid(); renderSelected(); updateStats(); updateHUD();
+  state.resources.credits-=cost;cell.level++;cell.maxHp+=50;cell.hp=cell.maxHp;
+  addXP(40);addTicker(`⬆ ${bld.name} → Lv${cell.level}`);showNotif(`✨ ${bld.name} → Livello ${cell.level}!`);
+  renderGrid();renderSelected();updateStats();updateHUD();
 }
 
 function demolish(idx) {
-  const cell=state.grid[idx];
-  if(!cell||cell.type==='hq')return;
+  const cell=state.grid[idx];if(!cell||cell.type==='hq')return;
   const bld=BUILDINGS.find(b=>b.id===cell.type);
   state.resources.credits+=Math.floor(Object.values(bld.cost).reduce((a,b)=>a+b,0)*0.5);
-  state.grid[idx]=null; state.selectedCell=null;
-  addTicker(`🗑 ${bld.name} demolito`);
-  renderGrid(); renderSelected(); updateStats();
+  state.grid[idx]=null;state.selectedCell=null;
+  addTicker(`🗑 ${bld.name} demolito`);renderGrid();renderSelected();updateStats();
 }
 
 function renderBuildMenu() {
@@ -497,6 +481,7 @@ function renderBuildMenu() {
 
 function selectBuild(id){state.selectedBuild=state.selectedBuild===id?null:id;state.selectedCell=null;renderBuildMenu();renderSelected();}
 
+// ── MISSIONI ─────────────────────────────────────────────
 function renderMissions() {
   document.getElementById('mission-list').innerHTML=MISSIONS.map(m=>{
     const ready=m.condition()&&!m.done;
@@ -511,46 +496,162 @@ function renderMissions() {
   }).join('');
 }
 
-function claimMission(id){
-  const m=MISSIONS.find(x=>x.id===id);
-  if(!m||m.done||!m.condition())return;
-  m.done=true;
-  state.resources[m.rewardType]=(state.resources[m.rewardType]||0)+m.reward;
-  state.missionsCompleted++;
-  addXP(50);
+function claimMission(id) {
+  const m=MISSIONS.find(x=>x.id===id);if(!m||m.done||!m.condition())return;
+  m.done=true;state.resources[m.rewardType]=(state.resources[m.rewardType]||0)+m.reward;
+  state.missionsCompleted++;addXP(50);
   addTicker(`🏆 Missione: ${m.name} (+${m.reward} ${m.rewardType})`);
-  showNotif(`🏆 +${m.reward} ${m.rewardType}!`);
-  updateHUD(); renderMissions();
-  document.getElementById('stat-missions').textContent=state.missionsCompleted;
+  showNotif(`🏆 +${m.reward} ${m.rewardType}!`,'gold');
+  updateHUD();renderMissions();document.getElementById('stat-missions').textContent=state.missionsCompleted;
 }
 
 function checkMissions(){MISSIONS.forEach(m=>{if(!m.done&&m.condition())renderMissions();});}
 
+// ── PVP RAID ─────────────────────────────────────────────
+const PVP_COOLDOWN_SECONDS=300; // 5 minuti
+
+function launchRaid() {
+  if(state.pvpCooldown>0){showNotif(`⏳ Cooldown: ${state.pvpCooldown}s`,'error');return;}
+  const attackPower=calcAttackPower();
+  if(attackPower===0){showNotif('❌ Costruisci un Drone Bay per attaccare!','error');return;}
+
+  // Simula un nodo nemico
+  const enemyDefense=Math.floor(Math.random()*100)+20;
+  const success=attackPower>enemyDefense*0.7;
+  const stolen=success?Math.floor(Math.random()*50)+10:0;
+
+  state.raidsLaunched++;
+  state.pvpCooldown=PVP_COOLDOWN_SECONDS;
+  state.tournamentScore+=success?10:2;
+  document.getElementById('stat-raids').textContent=state.raidsLaunched;
+
+  if(success){
+    state.resources.credits+=stolen;
+    addTicker(`⚔ Raid riuscito! Rubati ${stolen} credits al nodo nemico`);
+    showNotif(`⚔ Raid riuscito! +${stolen} credits!`,'gold');
+  } else {
+    state.attacksReceived++;
+    addTicker(`❌ Raid fallito — difesa nemica troppo alta (${enemyDefense})`);
+    showNotif('❌ Raid fallito! Difesa nemica superiore.','error');
+  }
+  addXP(30);updateHUD();checkMissions();
+}
+
+function calcAttackPower() {
+  let power=0;
+  state.grid.forEach(cell=>{
+    if(!cell||cell.type!=='drone')return;
+    power+=cell.level*10;
+  });
+  return power;
+}
+
+function updatePvpCooldown() {
+  if(state.pvpCooldown>0){
+    state.pvpCooldown--;
+    document.getElementById('pvp-cooldown').textContent=`Cooldown: ${state.pvpCooldown}s`;
+    document.getElementById('pvp-btn').disabled=true;
+  } else {
+    document.getElementById('pvp-cooldown').textContent='Pronto all\'attacco';
+    document.getElementById('pvp-btn').disabled=false;
+  }
+}
+
+// ── EVENTI SPECIALI ───────────────────────────────────────
+const SPECIAL_EVENTS=[
+  {id:'surge',   name:'⚡ ENERGY SURGE',    desc:'Produzione energia x2 per 60s!',  type:'surge',   duration:60, effect:()=>{state.activeEvent='surge';showNotif('⚡ Energy Surge! Produzione x2 per 60s!','gold');}},
+  {id:'blackout',name:'🔴 BLACKOUT',        desc:'Produzione energia dimezzata!',    type:'blackout',duration:30, effect:()=>{state.activeEvent='blackout';showNotif('🔴 Blackout! Energia dimezzata per 30s.','error');}},
+  {id:'storm',   name:'💾 DATA STORM',      desc:'+200 Data bonus!',               type:'storm',   duration:0,  effect:()=>{state.resources.data+=200;showNotif('💾 Data Storm! +200 Data!','info');}},
+  {id:'raid',    name:'⚔ SYNDICATE RAID',   desc:'La Syndicate ti protegge! +50 difesa', type:'raid', duration:0, effect:()=>{state.resources.defense+=50;showNotif('⚔ Syndicate Raid respinto! +50 difesa!','gold');}},
+  {id:'bonus',   name:'💰 AIRDROP',         desc:'+100 Credits dalla DAO!',        type:'surge',   duration:0,  effect:()=>{state.resources.credits+=100;showNotif('💰 DAO Airdrop! +100 Credits!','gold');}},
+];
+
+let nextEventIn=300; // primo evento dopo 5 minuti
+
+function triggerRandomEvent() {
+  const event=SPECIAL_EVENTS[Math.floor(Math.random()*SPECIAL_EVENTS.length)];
+  event.effect();
+  if(event.duration>0){
+    state.eventTimer=event.duration;
+    showEventBanner(event);
+    addTicker(`🚨 EVENTO: ${event.name} — ${event.desc}`);
+  } else {
+    addTicker(`⚡ EVENTO: ${event.name} — ${event.desc}`);
+  }
+  nextEventIn=Math.floor(Math.random()*300)+180; // prossimo evento 3-8 minuti
+}
+
+function showEventBanner(event) {
+  const banner=document.getElementById('event-banner');
+  banner.textContent=`${event.name} — ${event.desc}`;
+  banner.className=`event-banner ${event.type}`;
+  banner.style.display='block';
+  setTimeout(()=>{banner.style.display='none';state.activeEvent=null;},event.duration*1000);
+}
+
+// ── TORNEO ────────────────────────────────────────────────
+function updateTournamentTimer() {
+  const now=new Date();
+  const nextMonday=new Date();
+  nextMonday.setDate(now.getDate()+(8-now.getDay())%7||7);
+  nextMonday.setHours(0,0,0,0);
+  const diff=nextMonday-now;
+  const h=Math.floor(diff/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+  document.getElementById('tournament-timer').textContent=
+    `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// ── SYNDICATE ─────────────────────────────────────────────
+function updateSyndicate() {
+  const members=247+Math.floor(state.seconds/60);
+  const power=Math.min(99,62+Math.floor(state.tournamentScore/10));
+  document.getElementById('syn-members').textContent=members;
+  document.getElementById('syn-power-fill').style.width=power+'%';
+  document.getElementById('syn-power-pct').textContent=power+'%';
+}
+
+// ── PRODUCTION TICK ───────────────────────────────────────
 let gameTokenRate=0;
-function tick(){
+function tick() {
   state.seconds++;
   if(state.seconds%60===0)state.day++;
+
+  // Evento countdown
+  nextEventIn--;
+  if(nextEventIn<=0)triggerRandomEvent();
+  if(state.eventTimer>0)state.eventTimer--;
+
   let eprod=0,dprod=0,gameRate=0,xpRate=0;
+  const energyMult=(state.activeEvent==='surge')?2:(state.activeEvent==='blackout')?0.5:1;
+
   state.grid.forEach(cell=>{
     if(!cell)return;
     const bld=BUILDINGS.find(b=>b.id===cell.type);
     const mult=cell.level;
-    if(bld.prod.energy)  eprod+=bld.prod.energy*mult*0.1;
+    if(bld.prod.energy)  eprod+=bld.prod.energy*mult*0.1*energyMult;
     if(bld.prod.data)    dprod+=bld.prod.data*mult*0.1;
     if(bld.prod.game)    gameRate+=bld.prod.game*mult*0.1;
     if(bld.prod.xp)      xpRate+=bld.prod.xp*mult*0.1;
   });
+
   state.resources.energy=Math.min(9999,state.resources.energy+eprod);
   state.resources.data=Math.min(9999,state.resources.data+dprod);
   state.resources.credits+=0.5;
   state.gameToken+=gameRate;
+  state.tournamentScore+=gameRate*0.1;
   gameTokenRate=gameRate*10*60;
+
   if(xpRate>0)addXP(xpRate);
   if(state.seconds%30===0)randomEvent();
-  updateHUD(); checkMissions(); updateTime();
+
+  updatePvpCooldown();
+  updateHUD();checkMissions();updateTime();
+  if(state.seconds%5===0){updateSyndicate();updateTournamentTimer();}
 }
 
-function randomEvent(){
+function randomEvent() {
   const events=[
     ()=>{const b=Math.floor(Math.random()*50)+20;state.resources.credits+=b;addTicker(`💰 Transazione anonima: +${b} credits`);},
     ()=>{const b=Math.floor(Math.random()*30)+10;state.resources.data+=b;addTicker(`📡 Data packet: +${b} data`);},
@@ -561,15 +662,16 @@ function randomEvent(){
   events[Math.floor(Math.random()*events.length)]();
 }
 
-function addXP(amount){
+function addXP(amount) {
   state.xp+=amount;
-  while(state.xp>=state.xpNext){state.xp-=state.xpNext;state.level++;state.xpNext=Math.floor(state.xpNext*1.5);showNotif(`🎉 Livello ${state.level}!`);addTicker(`⬆ Nodo → Livello ${state.level}`);}
+  while(state.xp>=state.xpNext){state.xp-=state.xpNext;state.level++;state.xpNext=Math.floor(state.xpNext*1.5);showNotif(`🎉 Livello ${state.level}!`,'gold');addTicker(`⬆ Nodo → Livello ${state.level}`);}
   const pct=(state.xp/state.xpNext*100).toFixed(0);
   document.getElementById('xp-bar').style.width=pct+'%';
   document.getElementById('xp-text').textContent=`${Math.floor(state.xp)} / ${state.xpNext}`;
+  document.getElementById('node-level').textContent=state.level;
 }
 
-function updateHUD(){
+function updateHUD() {
   document.getElementById('res-energy').textContent=Math.floor(state.resources.energy);
   document.getElementById('res-data').textContent=Math.floor(state.resources.data);
   document.getElementById('res-credits').textContent=Math.floor(state.resources.credits);
@@ -582,18 +684,17 @@ function updateHUD(){
   const btn=document.getElementById('claim-btn');
   const canClaim=state.gameToken>=10000&&userAddr;
   btn.disabled=!canClaim;
-  if(!userAddr) btn.textContent='CONNETTI WALLET PER CLAIM';
-  else if(state.gameToken<10000) btn.textContent=`CLAIM $GAME (${state.gameToken.toFixed(0)}/10.000)`;
+  if(!userAddr)btn.textContent='CONNETTI WALLET PER CLAIM';
+  else if(state.gameToken<10000)btn.textContent=`CLAIM $GAME (${state.gameToken.toFixed(0)}/10.000)`;
   else btn.textContent=`CLAIM ${Math.floor(state.gameToken)} $GAME ON-CHAIN`;
 }
 
-function updateTime(){
-  const mins=Math.floor(state.seconds/60)%60;
-  const secs=state.seconds%60;
+function updateTime() {
+  const mins=Math.floor(state.seconds/60)%60;const secs=state.seconds%60;
   document.getElementById('game-time').textContent=`GG ${state.day} — ${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
 }
 
-function updateStats(){
+function updateStats() {
   document.getElementById('stat-buildings').textContent=state.grid.filter(c=>c).length;
   let ep=0,dp=0;
   state.grid.forEach(cell=>{if(!cell)return;const bld=BUILDINGS.find(b=>b.id===cell.type);if(bld.prod.energy)ep+=bld.prod.energy*cell.level;if(bld.prod.data)dp+=bld.prod.data*cell.level;});
@@ -601,120 +702,95 @@ function updateStats(){
   document.getElementById('stat-dprod').textContent=`+${(dp*0.1).toFixed(1)}/s`;
 }
 
-function addTicker(msg){
-  state.ticker.unshift(msg);
-  if(state.ticker.length>20)state.ticker.pop();
+function addTicker(msg) {
+  state.ticker.unshift(msg);if(state.ticker.length>20)state.ticker.pop();
   document.getElementById('event-ticker').textContent=state.ticker[0];
 }
 
 let notifTimer=null;
-function showNotif(msg,type=''){
+function showNotif(msg,type='') {
   const ex=document.querySelector('.notif');if(ex)ex.remove();
   const div=document.createElement('div');
-  div.className='notif'+(type?' '+type:'');
-  div.textContent=msg;
-  document.body.appendChild(div);
-  clearTimeout(notifTimer);
+  div.className='notif'+(type?' '+type:'');div.textContent=msg;
+  document.body.appendChild(div);clearTimeout(notifTimer);
   notifTimer=setTimeout(()=>div.remove(),3500);
 }
 
+// ── SAVE/LOAD ─────────────────────────────────────────────
 function saveGame() {
-  localStorage.setItem('cybergrid', JSON.stringify({
-    grid: state.grid, resources: state.resources,
-    gameToken: state.gameToken, xp: state.xp,
-    xpNext: state.xpNext, level: state.level,
-    day: state.day, lastSave: Date.now()
+  localStorage.setItem('cybergrid',JSON.stringify({
+    grid:state.grid,resources:state.resources,gameToken:state.gameToken,
+    xp:state.xp,xpNext:state.xpNext,level:state.level,day:state.day,
+    raidsLaunched:state.raidsLaunched,tournamentScore:state.tournamentScore,
+    lastSave:Date.now()
   }));
 }
 
 function loadGame() {
-  const saved = localStorage.getItem('cybergrid');
-  if (!saved) return;
-  const data = JSON.parse(saved);
-  state.grid = data.grid;
-  state.resources = data.resources;
-  state.gameToken = data.gameToken || 0;
-  state.xp = data.xp || 0;
-  state.xpNext = data.xpNext || 100;
-  state.level = data.level || 1;
-  state.day = data.day || 1;
-  const elapsed = Math.floor((Date.now() - data.lastSave) / 1000);
-  if (elapsed > 10) {
-    let gameOffline = 0;
-    state.grid.forEach(cell => {
-      if (!cell) return;
-      const bld = BUILDINGS.find(b => b.id === cell.type);
-      if (bld.prod.game) gameOffline += bld.prod.game * cell.level * 0.1 * elapsed;
-    });
-    state.gameToken += gameOffline;
-    if (gameOffline > 0) setTimeout(() => showNotif(`💤 Offline ${Math.floor(elapsed/60)}min — +${gameOffline.toFixed(2)} $GAME accumulati!`), 1000);
+  const saved=localStorage.getItem('cybergrid');if(!saved)return;
+  const data=JSON.parse(saved);
+  state.grid=data.grid;state.resources=data.resources;
+  state.gameToken=data.gameToken||0;state.xp=data.xp||0;
+  state.xpNext=data.xpNext||100;state.level=data.level||1;state.day=data.day||1;
+  state.raidsLaunched=data.raidsLaunched||0;state.tournamentScore=data.tournamentScore||0;
+  const elapsed=Math.min(Math.floor((Date.now()-data.lastSave)/1000),28800);
+  if(elapsed>10){
+    let gameOffline=0;
+    state.grid.forEach(cell=>{if(!cell)return;const bld=BUILDINGS.find(b=>b.id===cell.type);if(bld.prod.game)gameOffline+=bld.prod.game*cell.level*0.1*elapsed;});
+    state.gameToken+=gameOffline;
+    if(gameOffline>0)setTimeout(()=>showNotif(`💤 Offline ${Math.floor(elapsed/60)}min — +${gameOffline.toFixed(2)} $GAME!`,'gold'),1000);
   }
 }
 
 async function saveToBackend() {
-  if (!userAddr) return;
-  try {
-    await fetch(`${BACKEND_URL}/api/player/save`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ address: userAddr, state })
-    });
-  } catch(e) { console.error('Save failed:', e); }
+  if(!userAddr)return;
+  try{await fetch(`${BACKEND_URL}/api/player/save`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({address:userAddr,state})});}
+  catch(e){console.error('Save failed:',e);}
 }
 
 async function loadFromBackend() {
-  if (!userAddr) return;
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/player/load`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ address: userAddr })
-    });
-    const data = await res.json();
-    if (data.exists) {
-      state.grid = data.state.grid;
-      state.resources = data.state.resources;
-      state.gameToken = data.state.gameToken || 0;
-      state.xp = data.state.xp || 0;
-      state.xpNext = data.state.xpNext || 100;
-      state.level = data.state.level || 1;
-      state.day = data.state.day || 1;
-      renderGrid(); updateHUD(); updateStats();
-      if (data.offlineTokens > 0) setTimeout(() => showNotif(`💤 Offline ${Math.floor(data.elapsedSeconds/60)}min — +${data.offlineTokens.toFixed(2)} $GAME accumulati!`), 1000);
+  if(!userAddr)return;
+  try{
+    const res=await fetch(`${BACKEND_URL}/api/player/load`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({address:userAddr})});
+    const data=await res.json();
+    if(data.exists){
+      state.grid=data.state.grid;state.resources=data.state.resources;
+      state.gameToken=data.state.gameToken||0;state.xp=data.state.xp||0;
+      state.xpNext=data.state.xpNext||100;state.level=data.state.level||1;state.day=data.state.day||1;
+      state.raidsLaunched=data.state.raidsLaunched||0;
+      renderGrid();updateHUD();updateStats();
+      if(data.offlineTokens>0)setTimeout(()=>showNotif(`💤 Offline ${Math.floor(data.elapsedSeconds/60)}min — +${data.offlineTokens.toFixed(2)} $GAME!`,'gold'),1000);
     }
-  } catch(e) { console.error('Load failed:', e); }
+  }catch(e){console.error('Load failed:',e);}
 }
- async function loadLeaderboard() {
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/leaderboard`);
-    const data = await res.json();
-    const el = document.getElementById('leaderboard-list');
-    if (!data.length) { el.innerHTML = '<div style="font-size:0.8rem;color:var(--dim);text-align:center;padding:0.5rem">Nessun giocatore ancora</div>'; return; }
-    el.innerHTML = data.map((p, i) => `
+
+async function loadLeaderboard() {
+  try{
+    const res=await fetch(`${BACKEND_URL}/api/leaderboard`);
+    const data=await res.json();
+    const el=document.getElementById('leaderboard-list');
+    if(!data.length){el.innerHTML='<div style="font-size:0.8rem;color:var(--dim);text-align:center;padding:0.5rem">Nessun giocatore ancora</div>';return;}
+    el.innerHTML=data.map((p,i)=>`
       <div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0.6rem;background:var(--card);border:1px solid var(--border);border-radius:6px;">
-        <span style="font-family:'Orbitron',monospace;font-size:0.7rem;color:${i===0?'var(--gold)':i===1?'var(--dim)':i===2?'var(--orange)':'var(--dim)'};">#${i+1}</span>
+        <span style="font-family:'Orbitron',monospace;font-size:0.7rem;color:${i===0?'var(--gold)':i===1?'#c0c0c0':i===2?'var(--orange)':'var(--dim)'};">#${i+1}</span>
         <span style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--text);">${p.address}</span>
         <span style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--neon);">${p.gameToken.toLocaleString()}</span>
       </div>`).join('');
-  } catch(e) { console.error('Leaderboard error:', e); }
+  }catch(e){console.error('Leaderboard error:',e);}
 }
+
+// ── INIT ─────────────────────────────────────────────────
 async function init() {
-  renderGrid(); renderBuildMenu(); renderMissions();
-  updateHUD(); updateStats();
+  renderGrid();renderBuildMenu();renderMissions();
+  updateHUD();updateStats();updateTournamentTimer();
   addTicker('🔌 CyberGrid avviato. Connetti il wallet per il claim on-chain.');
-  if (userAddr) {
-    await loadFromBackend();
-  } else {
-    loadGame();
-  }
+  if(userAddr){await loadFromBackend();}else{loadGame();}
   await loadLeaderboard();
-  setInterval(tick, 100);
-  setInterval(renderMissions, 5000);
-  setInterval(saveGame, 30000);
-  setInterval(loadLeaderboard, 60000);
-  setInterval(async () => {
-    if (userAddr) { await saveToBackend(); await fetchOnchainBalance(); }
-  }, 30000);
+  setInterval(tick,100);
+  setInterval(renderMissions,5000);
+  setInterval(saveGame,30000);
+  setInterval(loadLeaderboard,60000);
+  setInterval(async()=>{if(userAddr){await saveToBackend();await fetchOnchainBalance();}},30000);
 }
 init();
 </script>

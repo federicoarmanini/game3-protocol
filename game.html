@@ -189,7 +189,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
       <div class="event-ticker" id="event-ticker">Sistema avviato. Connetti il wallet per abilitare il claim on-chain.</div>
     </div>
   </div>
-
   <div class="right-panel">
     <div class="panel-title">Selezione</div>
     <div class="selected-info" id="selected-info">
@@ -209,6 +208,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
         </div>
       </div>
     </div>
+    <div style="margin-top:1rem;">
+  <div class="panel-title">Leaderboard</div>
+  <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
+</div>
     <div class="game-token-section">
       <div class="game-label">$GAME accumulato (in-game)</div>
       <div class="game-bal" id="game-balance">0.00</div>
@@ -681,7 +684,20 @@ async function loadFromBackend() {
     }
   } catch(e) { console.error('Load failed:', e); }
 }
-
+ async function loadLeaderboard() {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/leaderboard`);
+    const data = await res.json();
+    const el = document.getElementById('leaderboard-list');
+    if (!data.length) { el.innerHTML = '<div style="font-size:0.8rem;color:var(--dim);text-align:center;padding:0.5rem">Nessun giocatore ancora</div>'; return; }
+    el.innerHTML = data.map((p, i) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0.6rem;background:var(--card);border:1px solid var(--border);border-radius:6px;">
+        <span style="font-family:'Orbitron',monospace;font-size:0.7rem;color:${i===0?'var(--gold)':i===1?'var(--dim)':i===2?'var(--orange)':'var(--dim)'};">#${i+1}</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--text);">${p.address}</span>
+        <span style="font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--neon);">${p.gameToken.toLocaleString()}</span>
+      </div>`).join('');
+  } catch(e) { console.error('Leaderboard error:', e); }
+}
 async function init() {
   renderGrid(); renderBuildMenu(); renderMissions();
   updateHUD(); updateStats();
@@ -691,9 +707,11 @@ async function init() {
   } else {
     loadGame();
   }
+  await loadLeaderboard();
   setInterval(tick, 100);
   setInterval(renderMissions, 5000);
   setInterval(saveGame, 30000);
+  setInterval(loadLeaderboard, 60000);
   setInterval(async () => {
     if (userAddr) { await saveToBackend(); await fetchOnchainBalance(); }
   }, 30000);

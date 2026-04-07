@@ -805,5 +805,38 @@ async function init() {
 }
 init();
 </script>
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0a0f1e;border-top:1px solid rgba(0,212,255,0.2);padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-family:'Rajdhani',sans-serif;">
+  <div style="max-width:600px;">
+    <div style="font-family:'Orbitron',monospace;font-size:0.8rem;color:#00ff88;margin-bottom:0.4rem;letter-spacing:0.1em;">🍪 COOKIE POLICY</div>
+    <div style="font-size:0.85rem;color:#7a8aaa;line-height:1.5;">Questo sito usa cookie <strong style="color:#e8f0fe">necessari</strong> per il funzionamento e cookie <strong style="color:#e8f0fe">analitici</strong> (Google Analytics) per migliorare l'esperienza. Puoi accettare tutti o solo i necessari.</div>
+  </div>
+  <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
+    <button onclick="acceptCookies('necessary')" style="padding:0.5rem 1.2rem;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#7a8aaa;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">SOLO NECESSARI</button>
+    <button onclick="acceptCookies('all')" style="padding:0.5rem 1.2rem;background:linear-gradient(135deg,#00ff88,#00d4ff);border:none;color:#060811;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">ACCETTA TUTTI</button>
+  </div>
+</div>
+
+<script>
+function initCookieBanner() {
+  const consent = localStorage.getItem('cookieConsent');
+  if (!consent) {
+    document.getElementById('cookie-banner').style.display = 'flex';
+  } else if (consent === 'necessary') {
+    // Disabilita Google Analytics
+    window['ga-disable-G-657X13ZZ28'] = true;
+  }
+}
+
+function acceptCookies(type) {
+  localStorage.setItem('cookieConsent', type);
+  document.getElementById('cookie-banner').style.display = 'none';
+  if (type === 'necessary') {
+    window['ga-disable-G-657X13ZZ28'] = true;
+  }
+}
+
+initCookieBanner();
+</script>
 </body>
 </html>

@@ -532,7 +532,7 @@ function launchRaid() {
   const stolen=success?Math.floor(Math.random()*50)+10:0;
 
   state.raidsLaunched++;
-  state.pvpCooldown=PVP_COOLDOWN_SECONDS;
+  pvpCooldownEndTime = Date.now() + PVP_COOLDOWN_SECONDS * 1000;
   state.tournamentScore+=success?10:2;
   document.getElementById('stat-raids').textContent=state.raidsLaunched;
 

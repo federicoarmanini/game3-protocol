@@ -159,6 +159,16 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 </style>
 </head>
 <body>
+  <div id="mobile-warning" style="display:none;position:fixed;inset:0;background:#050810;z-index:9999;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:2rem;">
+  <div style="font-size:3rem;margin-bottom:1rem">🖥️</div>
+  <div style="font-family:'Orbitron',monospace;font-size:1.2rem;color:#00ff88;margin-bottom:1rem">DESKTOP ONLY</div>
+  <div style="color:#5a7a99;font-size:0.95rem;line-height:1.6">CyberGrid richiede un monitor desktop.<br>Apri il gioco da PC per la migliore esperienza.</div>
+</div>
+<script>
+  if(window.innerWidth < 768) {
+    document.getElementById('mobile-warning').style.display='flex';
+  }
+</script>
 
 <div class="event-banner" id="event-banner"></div>
 

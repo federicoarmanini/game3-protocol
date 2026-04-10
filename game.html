@@ -10,7 +10,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CyberGrid — GAME3 Protocol</title>
+<title>NodeStrike — GAME3 Protocol</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <style>
@@ -162,7 +162,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
   <div id="mobile-warning" style="display:none;position:fixed;inset:0;background:#050810;z-index:9999;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:2rem;">
   <div style="font-size:3rem;margin-bottom:1rem">🖥️</div>
   <div style="font-family:'Orbitron',monospace;font-size:1.2rem;color:#00ff88;margin-bottom:1rem">DESKTOP ONLY</div>
-  <div style="color:#5a7a99;font-size:0.95rem;line-height:1.6">CyberGrid richiede un monitor desktop.<br>Apri il gioco da PC per la migliore esperienza.</div>
+  <div style="color:#5a7a99;font-size:0.95rem;line-height:1.6">NodeStrike richiede un monitor desktop.<br>Apri il gioco da PC per la migliore esperienza.</div>
 </div>
 <script>
   if(window.innerWidth < 768) {
@@ -185,7 +185,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 </div>
 
 <header>
-  <div class="logo">⬡ CYBER<span style="color:var(--blue)">GRID</span></div>
+  <div class="logo">⬡ NODE<span style="color:var(--blue)">STRIKE</span></div>
   <div class="header-resources">
     <div class="res"><span class="res-icon">⚡</span><div><div class="res-val" id="res-energy">250</div><div class="res-label">Energia</div></div></div>
     <div class="res"><span class="res-icon">💾</span><div><div class="res-val" id="res-data">180</div><div class="res-label">Data</div></div></div>
@@ -729,7 +729,7 @@ function showNotif(msg,type='') {
 
 // ── SAVE/LOAD ─────────────────────────────────────────────
 function saveGame() {
-  localStorage.setItem('cybergrid',JSON.stringify({
+  localStorage.setItem('nodestrike',JSON.stringify({
     grid:state.grid,resources:state.resources,gameToken:state.gameToken,
     xp:state.xp,xpNext:state.xpNext,level:state.level,day:state.day,
     raidsLaunched:state.raidsLaunched,tournamentScore:state.tournamentScore,
@@ -738,7 +738,7 @@ function saveGame() {
 }
 
 function loadGame() {
-  const saved=localStorage.getItem('cybergrid');if(!saved)return;
+  const saved=localStorage.getItem('nodestrike');if(!saved)return;
   const data=JSON.parse(saved);
   state.grid=data.grid;state.resources=data.resources;
   state.gameToken=data.gameToken||0;state.xp=data.xp||0;
@@ -794,7 +794,7 @@ async function loadLeaderboard() {
 async function init() {
   renderGrid();renderBuildMenu();renderMissions();
   updateHUD();updateStats();updateTournamentTimer();
-  addTicker('🔌 CyberGrid avviato. Connetti il wallet per il claim on-chain.');
+  addTicker('🔌 NodeStrike avviato. Connetti il wallet per il claim on-chain.');
   if(userAddr){await loadFromBackend();}else{loadGame();}
   await loadLeaderboard();
   setInterval(tick,100);

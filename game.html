@@ -151,7 +151,8 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .threshold-fill{height:100%;background:linear-gradient(90deg,var(--neon),var(--blue));border-radius:3px;transition:width 0.5s ease;}
 .threshold-text{display:flex;justify-content:space-between;font-size:0.7rem;font-family:'Share Tech Mono',monospace;color:var(--dim);}
 
-.notif{position:fixed;top:100px;right:20px;background:var(--card);border:1px solid var(--neon);border-radius:8px;padding:0.8rem 1.2rem;font-size:0.85rem;color:var(--neon);z-index:200;animation:slideIn 0.3s ease;max-width:300px;}
+.attack-notif{position:fixed;top:100px;right:20px;background:rgba(255,51,85,0.12);border:1px solid var(--red);border-radius:6px;padding:0.4rem 0.8rem;
+font-size:0.75rem;color:var(--red);z-index:199;animation:slideIn 0.3s ease;max-width:220px;pointer-events:none;opacity:0.85;}
 .notif.error{border-color:var(--red);color:var(--red);}
 .notif.info{border-color:var(--blue);color:var(--blue);}
 .notif.gold{border-color:var(--gold);color:var(--gold);}
@@ -330,6 +331,7 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
 
 <script>
 const BACKEND_URL = 'https://game3-backend-production.up.railway.app';
+let pvpCooldownEndTime = 0;  
 const GAME_TOKEN_ADDR   = '0x300bF56FF2146B6BCA1F44e11CdDc38377a4d219';
 const GAME_REWARDS_ADDR = '0x346f472422A95C6213b3a06702F8397F3909ef3d';
 const POLYGON_CHAIN_ID  = '0x89';
@@ -569,7 +571,7 @@ function launchRaid() {
   const stolen=success?Math.floor(Math.random()*50)+10:0;
 
   state.raidsLaunched++;
-  state.pvpCooldown=PVP_COOLDOWN_SECONDS;
+  pvpCooldownEndTime = Date.now() + PVP_COOLDOWN_SECONDS * 1000;
   state.tournamentScore+=success?10:2;
   document.getElementById('stat-raids').textContent=state.raidsLaunched;
 
@@ -593,18 +595,16 @@ function calcAttackPower() {
   });
   return power;
 }
-
 function updatePvpCooldown() {
-  if(state.pvpCooldown>0){
-    state.pvpCooldown--;
-    document.getElementById('pvp-cooldown').textContent=`Cooldown: ${state.pvpCooldown}s`;
+  const remaining = Math.max(0, Math.ceil((pvpCooldownEndTime - Date.now()) / 1000));
+  if(remaining > 0){
+    document.getElementById('pvp-cooldown').textContent=`Cooldown: ${remaining}s`;
     document.getElementById('pvp-btn').disabled=true;
   } else {
-    document.getElementById('pvp-cooldown').textContent='Pronto all\'attacco';
+    document.getElementById('pvp-cooldown').textContent='Ready to attack';
     document.getElementById('pvp-btn').disabled=false;
   }
 }
-
 // ── EVENTI SPECIALI ───────────────────────────────────────
 const SPECIAL_EVENTS=[
   {id:'surge',   name:'⚡ ENERGY SURGE',    desc:'Energy production x2 for 60s!',  type:'surge',   duration:60, effect:()=>{state.activeEvent='surge';showNotif('⚡ Energy Surge! Produzione x2 per 60s!','gold');}},
@@ -1031,9 +1031,9 @@ function renderMilestones() {
 function notifyPvpAttack() {
   const div = document.createElement('div');
   div.className = 'attack-notif';
-  div.innerHTML = `⚔️ <strong>YOUR NODE IS UNDER ATTACK!</strong><br><span style="font-size:0.78rem">An enemy node is raiding you. Build a Shield Generator to defend.</span>`;
+  div.innerHTML = `⚔️ Node under attack! Build a Shield to defend.`;
   document.body.appendChild(div);
-  setTimeout(() => div.remove(), 5000);
+  setTimeout(() => div.remove(), 3000);
 }
 
 // ── INIT ─────────────────────────────────────────────────

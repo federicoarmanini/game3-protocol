@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-657X132Z28"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -10,7 +11,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NodeStrike — GAME3 Protocol</title>
+<title>NodeStrike</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
 <style>
@@ -31,8 +32,6 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .wallet-dot.connected{background:var(--neon);box-shadow:0 0 8px var(--neon);}
 .wallet-addr{font-family:'Share Tech Mono',monospace;color:var(--dim);}
 .wallet-addr.connected{color:var(--neon);}
-.home-btn{padding:0.4rem 1rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:var(--blue);font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;text-decoration:none;display:inline-block;}
-.home-btn:hover{background:rgba(0,212,255,0.2);}
 .connect-btn{padding:0.4rem 1rem;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.4);color:var(--neon);font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;transition:all 0.2s;}
 .connect-btn:hover{background:rgba(0,255,136,0.2);}
 .network-badge{padding:0.3rem 0.7rem;border-radius:4px;font-size:0.75rem;font-weight:600;}
@@ -77,7 +76,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .game-area{position:relative;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;}
 .grid-container{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:1rem;}
 #grid{display:grid;gap:2px;cursor:crosshair;}
-.cell{width:64px;height:64px;border:1px solid rgba(0,212,255,0.08);border-radius:4px;background:rgba(0,20,40,0.4);position:relative;transition:all 0.15s;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;overflow:hidden;}
+.cell{width:56px;height:56px;border:1px solid rgba(0,212,255,0.08);border-radius:4px;background:rgba(0,20,40,0.4);position:relative;transition:all 0.15s;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4rem;overflow:hidden;}
 .cell:hover{border-color:rgba(0,212,255,0.4);background:rgba(0,212,255,0.06);transform:scale(1.05);z-index:10;}
 .cell.empty:hover::after{content:'＋';position:absolute;font-size:1.2rem;color:rgba(0,212,255,0.5);font-weight:300;}
 .cell.built{background:var(--card);}
@@ -158,63 +157,76 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .notif.gold{border-color:var(--gold);color:var(--gold);}
 @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+.home-btn{padding:0.4rem 1rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:var(--blue);font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;text-decoration:none;display:inline-block;transition:all 0.2s;}
+.home-btn:hover{background:rgba(0,212,255,0.2);}
+.streak-section{margin-top:1rem;background:var(--card);border:1px solid rgba(255,215,0,0.3);border-radius:10px;padding:1rem;}
+.streak-title{font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:0.6rem;}
+.streak-days{display:flex;gap:0.4rem;margin-bottom:0.6rem;flex-wrap:wrap;}
+.streak-day{width:28px;height:28px;border-radius:4px;border:1px solid rgba(255,215,0,0.2);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-family:'Share Tech Mono',monospace;color:var(--dim);}
+.streak-day.done{background:rgba(255,215,0,0.2);border-color:var(--gold);color:var(--gold);}
+.streak-day.today{background:rgba(255,215,0,0.1);border-color:var(--gold);color:var(--gold);animation:streakPulse 1.2s infinite;}
+@keyframes streakPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,0.4)}50%{box-shadow:0 0 0 5px rgba(255,215,0,0)}}
+.streak-bonus{font-size:0.78rem;color:var(--dim);}
+.streak-claim-btn{width:100%;margin-top:0.5rem;padding:0.5rem;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.4);color:var(--gold);font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:5px;cursor:pointer;transition:all 0.2s;}
+.streak-claim-btn:hover{background:rgba(255,215,0,0.2);}
+.streak-claim-btn:disabled{opacity:0.4;cursor:not-allowed;}
+.limited-mission{background:var(--card);border:1px solid rgba(255,107,43,0.4);border-radius:8px;padding:0.8rem;margin-bottom:0.5rem;position:relative;}
+.limited-badge{position:absolute;top:0.4rem;right:0.4rem;background:rgba(255,107,43,0.15);border:1px solid var(--orange);border-radius:3px;padding:0.1rem 0.4rem;font-size:0.62rem;color:var(--orange);font-family:'Orbitron',monospace;font-weight:700;}
+.limited-timer{font-size:0.72rem;color:var(--orange);font-family:'Share Tech Mono',monospace;margin-top:0.3rem;}
+.milestone-section{margin-top:1rem;background:var(--card);border:1px solid rgba(0,212,255,0.2);border-radius:10px;padding:1rem;}
+.milestone-title{font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.2em;color:var(--blue);text-transform:uppercase;margin-bottom:0.6rem;}
+.milestone-item{display:flex;justify-content:space-between;align-items:center;padding:0.35rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.78rem;}
+.milestone-item.reached{color:var(--neon);}
+.milestone-item:last-child{border-bottom:none;}
+.attack-notif{position:fixed;top:110px;right:20px;background:rgba(255,51,85,0.15);border:1px solid var(--red);border-radius:8px;padding:0.8rem 1.2rem;font-size:0.85rem;color:var(--red);z-index:201;animation:slideIn 0.3s ease;max-width:300px;}
 </style>
 </head>
 <body>
-  <div id="mobile-warning" style="display:none;position:fixed;inset:0;background:#050810;z-index:9999;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:2rem;">
-  <div style="font-size:3rem;margin-bottom:1rem">🖥️</div>
-  <div style="font-family:'Orbitron',monospace;font-size:1.2rem;color:#00ff88;margin-bottom:1rem">DESKTOP ONLY</div>
-  <div style="color:#5a7a99;font-size:0.95rem;line-height:1.6">NodeStrike richiede un monitor desktop.<br>Apri il gioco da PC per la migliore esperienza.</div>
-</div>
-<script>
-  if(window.innerWidth < 768) {
-    document.getElementById('mobile-warning').style.display='flex';
-  }
-</script>
 
 <div class="event-banner" id="event-banner"></div>
 
 <div class="wallet-bar">
   <div class="wallet-status">
     <div class="wallet-dot" id="wallet-dot"></div>
-    <span class="wallet-addr" id="wallet-addr">Non connesso</span>
+    <span class="wallet-addr" id="wallet-addr">Not connected</span>
   </div>
   <div style="display:flex;gap:0.8rem;align-items:center;">
     <span class="network-badge" id="network-badge" style="display:none"></span>
     <span id="token-balance" style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--dim);display:none"></span>
     <a href="index.html" class="home-btn">← HOME</a>
-    <button class="connect-btn" id="connect-btn" onclick="connectWallet()">CONNETTI WALLET</button>
+    <button class="connect-btn" id="connect-btn" onclick="connectWallet()">CONNECT WALLET</button>
   </div>
 </div>
 
 <header>
   <div class="logo">⬡ NODE<span style="color:var(--blue)">STRIKE</span></div>
   <div class="header-resources">
-    <div class="res"><span class="res-icon">⚡</span><div><div class="res-val" id="res-energy">250</div><div class="res-label">Energia</div></div></div>
+    <div class="res"><span class="res-icon">⚡</span><div><div class="res-val" id="res-energy">250</div><div class="res-label">Energy</div></div></div>
     <div class="res"><span class="res-icon">💾</span><div><div class="res-val" id="res-data">180</div><div class="res-label">Data</div></div></div>
     <div class="res"><span class="res-icon">🔧</span><div><div class="res-val" id="res-credits">320</div><div class="res-label">Credits</div></div></div>
-    <div class="res"><span class="res-icon">🛡️</span><div><div class="res-val" id="res-defense">45</div><div class="res-label">Difesa</div></div></div>
+    <div class="res"><span class="res-icon">🛡️</span><div><div class="res-val" id="res-defense">45</div><div class="res-label">Defense</div></div></div>
   </div>
   <div class="header-right">
     <div class="syndicate-badge">⬡ NullByte Syndicate</div>
-    <div class="game-time" id="game-time">GG 1 — 00:00</div>
+    <div class="game-time" id="game-time">DAY 1 — 00:00</div>
   </div>
 </header>
 
 <div class="layout">
   <div class="left-panel">
-    <div class="panel-title">Costruzioni</div>
+    <div class="panel-title">Buildings</div>
     <div class="build-grid" id="build-menu"></div>
-    <div class="panel-title">Statistiche Nodo</div>
+    <div class="panel-title">Node Stats</div>
     <div class="stats-section">
-      <div class="stat-row"><span class="stat-name">Edifici costruiti</span><span class="stat-val" id="stat-buildings">1</span></div>
-      <div class="stat-row"><span class="stat-name">Prod. Energia/s</span><span class="stat-val" id="stat-eprod">+2.0</span></div>
-      <div class="stat-row"><span class="stat-name">Prod. Data/s</span><span class="stat-val" id="stat-dprod">+1.5</span></div>
-      <div class="stat-row"><span class="stat-name">Attacchi subiti</span><span class="stat-val" id="stat-attacks">0</span></div>
-      <div class="stat-row"><span class="stat-name">Raid lanciati</span><span class="stat-val" id="stat-raids">0</span></div>
-      <div class="stat-row"><span class="stat-name">Missioni completate</span><span class="stat-val" id="stat-missions">0</span></div>
+      <div class="stat-row"><span class="stat-name">Buildings built</span><span class="stat-val" id="stat-buildings">1</span></div>
+      <div class="stat-row"><span class="stat-name">Energy prod/cons</span><span class="stat-val" id="stat-eprod">+2.0</span></div>
+      <div class="stat-row"><span class="stat-name">Data prod/cons</span><span class="stat-val" id="stat-dprod">+1.5</span></div>
+      <div class="stat-row"><span class="stat-name">Attacks received</span><span class="stat-val" id="stat-attacks">0</span></div>
+      <div class="stat-row"><span class="stat-name">Raids launched</span><span class="stat-val" id="stat-raids">0</span></div>
+      <div class="stat-row"><span class="stat-name">Missions completate</span><span class="stat-val" id="stat-missions">0</span></div>
     </div>
-    <div class="panel-title" style="margin-top:1rem;">Livello Nodo</div>
+    <div class="panel-title" style="margin-top:1rem;">Node Level</div>
     <div style="padding:0.5rem 0">
       <div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:0.4rem">
         <span style="color:var(--dim)">XP — Lv <span id="node-level">1</span></span>
@@ -228,26 +240,26 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
     <div class="grid-container"><div id="grid"></div></div>
     <div class="minimap-bar">
       <span class="minimap-label">LOG</span>
-      <div class="event-ticker" id="event-ticker">Sistema avviato. Connetti il wallet per abilitare il claim on-chain.</div>
+      <div class="event-ticker" id="event-ticker">System started. Connect wallet to enable on-chain claim.</div>
     </div>
   </div>
 
   <div class="right-panel">
-    <div class="panel-title">Selezione</div>
+    <div class="panel-title">Selection</div>
     <div class="selected-info" id="selected-info">
-      <div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Clicca una cella per costruire</span></div>
+      <div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Click a cell to build</span></div>
     </div>
 
-    <div class="panel-title">Missioni</div>
+    <div class="panel-title">Missions</div>
     <div class="mission-list" id="mission-list"></div>
 
     <div class="syndicate-section">
       <div class="panel-title">Syndicate</div>
       <div class="syndicate-card">
         <div class="syn-name">NullByte Syndicate</div>
-        <div class="syn-members">👥 <span id="syn-members">247</span> membri attivi</div>
+        <div class="syn-members">👥 <span id="syn-members">247</span> active members</div>
         <div class="syn-power">
-          <span style="font-size:0.75rem;color:var(--dim)">Potere</span>
+          <span style="font-size:0.75rem;color:var(--dim)">Power</span>
           <div class="syn-power-bar"><div class="syn-power-fill" id="syn-power-fill" style="width:62%"></div></div>
           <span style="font-family:'Share Tech Mono',monospace;font-size:0.75rem" id="syn-power-pct">62%</span>
         </div>
@@ -256,16 +268,16 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 
     <!-- PVP -->
     <div class="pvp-section">
-      <div class="pvp-title">⚔ Raid PvP</div>
-      <button class="pvp-btn" id="pvp-btn" onclick="launchRaid()">LANCIA RAID</button>
-      <div class="pvp-cooldown" id="pvp-cooldown">Pronto all'attacco</div>
+      <div class="pvp-title">⚔ PvP Raid</div>
+      <button class="pvp-btn" id="pvp-btn" onclick="launchRaid()">LAUNCH RAID</button>
+      <div class="pvp-cooldown" id="pvp-cooldown">Ready to attack</div>
     </div>
 
     <!-- TORNEO -->
     <div class="tournament-section">
-      <div class="tournament-title">🏆 Torneo Settimanale</div>
+      <div class="tournament-title">🏆 Weekly Tournament</div>
       <div class="tournament-timer" id="tournament-timer">--:--:--</div>
-      <div class="tournament-info">Top 3 ricevono bonus $GAME</div>
+      <div class="tournament-info">Top 3 receive $GAME bonus</div>
     </div>
 
     <!-- LEADERBOARD -->
@@ -274,19 +286,40 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
       <div id="leaderboard-list" style="display:flex;flex-direction:column;gap:0.4rem;"></div>
     </div>
 
+    
+    <!-- STREAK GIORNALIERE -->
+    <div class="streak-section">
+      <div class="streak-title">🔥 Daily Streak</div>
+      <div class="streak-days" id="streak-days"></div>
+      <div class="streak-bonus" id="streak-bonus">Log in every day for growing bonuses</div>
+      <button class="streak-claim-btn" id="streak-claim-btn" onclick="claimStreak()">CLAIM DAILY BONUS</button>
+    </div>
+
+    <!-- MISSIONI A TEMPO LIMITATO -->
+    <div style="margin-top:1rem;">
+      <div class="panel-title">⏱ Missions Limitate</div>
+      <div id="limited-missions"></div>
+    </div>
+
+    <!-- MILESTONE $GAME -->
+    <div class="milestone-section">
+      <div class="milestone-title">🏅 $GAME Milestones</div>
+      <div id="milestone-list"></div>
+    </div>
+
     <div class="game-token-section">
-      <div class="game-label">$GAME accumulato (in-game)</div>
+      <div class="game-label">$GAME accumulated (in-game)</div>
       <div class="game-bal" id="game-balance">0.00</div>
       <div class="game-label" id="game-rate">+0.00 / min</div>
       <div class="threshold-bar-wrap">
-        <div class="threshold-text"><span>Soglia claim</span><span id="threshold-pct">0%</span></div>
+        <div class="threshold-text"><span>Claim threshold</span><span id="threshold-pct">0%</span></div>
         <div class="threshold-bar"><div class="threshold-fill" id="threshold-fill" style="width:0%"></div></div>
         <div class="threshold-text" style="margin-top:0.2rem"><span>0</span><span style="color:var(--neon)">10.000 $GAME</span></div>
       </div>
       <button class="claim-btn" id="claim-btn" onclick="claimTokens()" disabled>CLAIM $GAME ON-CHAIN</button>
       <div id="last-tx" style="display:none"></div>
       <div style="margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--border)">
-        <div class="game-label">$GAME nel wallet on-chain</div>
+        <div class="game-label">$GAME in on-chain wallet</div>
         <div style="font-family:'Share Tech Mono',monospace;font-size:1rem;color:var(--blue);margin-top:0.3rem" id="onchain-balance">—</div>
       </div>
     </div>
@@ -295,9 +328,8 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 
 <script>
 const BACKEND_URL = 'https://game3-backend-production.up.railway.app';
-  let pvpCooldownEndTime = 0;
-const GAME_TOKEN_ADDR   = '0x300bF56FF2146B6BCA1F44e11CdDc38377a4d219';
-const GAME_REWARDS_ADDR = '0x346f472422A95C6213b3a06702F8397F3909ef3d';
+const GAME_TOKEN_ADDR   = '0xfbD7AC4a2B2E425b2E9Bd70694eEF1cA4Fe19464';
+const GAME_REWARDS_ADDR = '0x11F1716C27e6495EEcE3d35d25894Cdae40Ac557';
 const POLYGON_CHAIN_ID  = '0x89';
 
 const ERC20_ABI = ['function balanceOf(address) view returns (uint256)','function decimals() view returns (uint8)'];
@@ -306,27 +338,27 @@ const REWARDS_ABI = ['function claimReward(uint256 baseAmount, uint256 nonce, ui
 let provider=null,signer=null,userAddr=null,gameTokenContract=null,rewardsContract=null;
 
 async function connectWallet() {
-  if (!window.ethereum) { showNotif('❌ MetaMask non trovato.','error'); return; }
+  if (!window.ethereum) { showNotif('❌ MetaMask not found.','error'); return; }
   try {
     const btn=document.getElementById('connect-btn');
-    btn.textContent='Connessione...'; btn.disabled=true;
+    btn.textContent='Connecting...'; btn.disabled=true;
     const accounts=await window.ethereum.request({method:'eth_requestAccounts'});
     userAddr=accounts[0];
     provider=new ethers.BrowserProvider(window.ethereum);
     signer=await provider.getSigner();
     const network=await provider.getNetwork();
     const chainId='0x'+network.chainId.toString(16);
-    if(chainId!==POLYGON_CHAIN_ID){showNotif('⚠️ Cambia rete su Polygon','error');await switchToPolygon();}
+    if(chainId!==POLYGON_CHAIN_ID){showNotif('⚠️ Switch network to Polygon','error');await switchToPolygon();}
     gameTokenContract=new ethers.Contract(GAME_TOKEN_ADDR,ERC20_ABI,provider);
     rewardsContract=new ethers.Contract(GAME_REWARDS_ADDR,REWARDS_ABI,signer);
     updateWalletUI();
     await loadFromBackend();
     await fetchOnchainBalance();
-    addTicker(`✅ Wallet connesso: ${userAddr.slice(0,6)}...${userAddr.slice(-4)}`);
-    showNotif('✅ Wallet connesso!','info');
+    addTicker(`✅ Wallet connected: ${userAddr.slice(0,6)}...${userAddr.slice(-4)}`);
+    showNotif('✅ Wallet connected!','info');
     window.ethereum.on('accountsChanged',(accs)=>{userAddr=accs[0];updateWalletUI();});
     window.ethereum.on('chainChanged',()=>location.reload());
-  } catch(e){showNotif('❌ Connessione rifiutata','error');console.error(e);}
+  } catch(e){showNotif('❌ Connection rejected','error');console.error(e);}
   finally{document.getElementById('connect-btn').disabled=false;}
 }
 
@@ -337,7 +369,7 @@ async function switchToPolygon() {
 
 function updateWalletUI() {
   const dot=document.getElementById('wallet-dot'),addr=document.getElementById('wallet-addr'),badge=document.getElementById('network-badge'),btn=document.getElementById('connect-btn');
-  if(userAddr){dot.classList.add('connected');addr.classList.add('connected');addr.textContent=userAddr.slice(0,6)+'...'+userAddr.slice(-4);badge.style.display='inline';badge.className='network-badge polygon';badge.textContent='Polygon';btn.textContent='CONNESSO';btn.style.opacity='0.5';btn.style.cursor='default';}
+  if(userAddr){dot.classList.add('connected');addr.classList.add('connected');addr.textContent=userAddr.slice(0,6)+'...'+userAddr.slice(-4);badge.style.display='inline';badge.className='network-badge polygon';badge.textContent='Polygon';btn.textContent='CONNECTED';btn.style.opacity='0.5';btn.style.cursor='default';}
 }
 
 async function fetchOnchainBalance() {
@@ -347,8 +379,8 @@ async function fetchOnchainBalance() {
 }
 
 async function claimTokens() {
-  if(!signer||!userAddr){showNotif('❌ Connetti il wallet','error');return;}
-  if(state.gameToken<10000){showNotif('❌ Servono 10.000 $GAME','error');return;}
+  if(!signer||!userAddr){showNotif('❌ Connect wallet','error');return;}
+  if(state.gameToken<10000){showNotif('❌ Need 10.000 $GAME','error');return;}
   const btn=document.getElementById('claim-btn');btn.disabled=true;btn.textContent='Elaborazione...';
   try{
     const amountToMint=ethers.parseEther(Math.floor(state.gameToken).toString());
@@ -356,15 +388,15 @@ async function claimTokens() {
     const expiry=BigInt(Math.floor(Date.now()/1000)+300);
     const msgHash=ethers.solidityPackedKeccak256(['address','uint256','uint256','uint256'],[userAddr,amountToMint,nonce,expiry]);
     const signature=await signer.signMessage(ethers.getBytes(msgHash));
-    showNotif('⏳ Transazione in corso...','info');
+    showNotif('⏳ Transaction in progress...','info');
     const tx=await rewardsContract.claimReward(amountToMint,nonce,expiry,signature);
     const receipt=await tx.wait();
     const claimed=Math.floor(state.gameToken);state.gameToken=0;addXP(100);
     addTicker(`✅ ${claimed} $GAME mintati on-chain!`);showNotif(`🎉 ${claimed} $GAME mintati!`);
     document.getElementById('last-tx').style.display='block';
-    document.getElementById('last-tx').innerHTML=`<a class="tx-link" href="https://polygonscan.com/tx/${receipt.hash}" target="_blank">✅ Vedi TX su Polygonscan →</a>`;
+    document.getElementById('last-tx').innerHTML=`<a class="tx-link" href="https://polygonscan.com/tx/${receipt.hash}" target="_blank">✅ View TX on Polygonscan →</a>`;
     await fetchOnchainBalance();updateHUD();
-  }catch(e){console.error(e);if(e.code===4001)showNotif('❌ Transazione rifiutata','error');else showNotif('❌ Errore: '+(e.reason||e.message||'Sconosciuto'),'error');}
+  }catch(e){console.error(e);if(e.code===4001)showNotif('❌ Transaction rejected','error');else showNotif('❌ Error: '+(e.reason||e.message||'Unknown'),'error');}
   finally{btn.disabled=false;updateHUD();}
 }
 
@@ -372,7 +404,7 @@ async function claimTokens() {
 const GRID_SIZE=9;
 const state={
   grid:Array(GRID_SIZE*GRID_SIZE).fill(null),
-  resources:{energy:250,data:180,credits:320,defense:45},
+  resources:{energy:120,data:80,credits:200,defense:20},
   gameToken:0,xp:0,xpNext:100,level:1,
   day:1,seconds:0,selectedBuild:null,selectedCell:null,
   attacksReceived:0,missionsCompleted:0,raidsLaunched:0,ticker:[],
@@ -383,39 +415,39 @@ const center=Math.floor(GRID_SIZE/2)*GRID_SIZE+Math.floor(GRID_SIZE/2);
 state.grid[center]={type:'hq',level:1,hp:100,maxHp:100};
 
 const BUILDINGS=[
-  {id:'hq',       name:'Quartier Generale', icon:'🏛️', cost:{credits:0},                      prod:{energy:2,data:1.5}, maxLevel:5},
-  {id:'reactor',  name:'Reattore',           icon:'⚡',  cost:{credits:80},                     prod:{energy:5},          maxLevel:5},
-  {id:'server',   name:'Server Farm',        icon:'💾',  cost:{credits:60,energy:30},           prod:{data:4},            maxLevel:5},
-  {id:'turret',   name:'Torretta',           icon:'🔫',  cost:{credits:100,data:40},            prod:{defense:8},         maxLevel:4},
-  {id:'miner',    name:'Token Miner',        icon:'⛏️',  cost:{credits:150,energy:60,data:40},  prod:{game:0.5},          maxLevel:3},
-  {id:'lab',      name:'Laboratorio',        icon:'🧪',  cost:{credits:200,data:80},            prod:{xp:2},              maxLevel:3},
+  {id:'hq',       name:'Headquarters', icon:'🏛️', cost:{credits:0},                      prod:{energy:2,data:1.5}, maxLevel:5},
+  {id:'reactor',  name:'Reactor',           icon:'⚡',  cost:{credits:120},                    prod:{energy:5},          maxLevel:5},
+  {id:'server',   name:'Server Farm',        icon:'💾',  cost:{credits:100,energy:40},          prod:{data:4},            maxLevel:5},
+  {id:'turret',   name:'Turret',           icon:'🔫',  cost:{credits:100,data:40},            prod:{defense:8},         maxLevel:4},
+  {id:'miner',    name:'Token Miner',        icon:'⛏️',  cost:{credits:250,energy:80,data:60},  prod:{game:0.5},          maxLevel:3},
+  {id:'lab',      name:'Laboratory',        icon:'🧪',  cost:{credits:200,data:80},            prod:{xp:2},              maxLevel:3},
   {id:'vault',    name:'Vault',              icon:'🔒',  cost:{credits:180,energy:50},          prod:{},                  maxLevel:3},
   {id:'relay',    name:'Relay Node',         icon:'📡',  cost:{credits:120,data:50},            prod:{synergy:true},      maxLevel:2},
   {id:'drone',    name:'Drone Bay',          icon:'🚁',  cost:{credits:220,energy:80,data:60},  prod:{attack:2},          maxLevel:3},
   {id:'shield',   name:'Shield Generator',   icon:'🛡',  cost:{credits:250,data:100},           prod:{defense:15},        maxLevel:3},
-  {id:'quantum',  name:'Quantum Lab',        icon:'⚛️',  cost:{credits:300,energy:100,data:80}, prod:{xp:5,game:0.2},     maxLevel:2},
+  {id:'quantum',  name:'Quantum Lab',        icon:'⚛️',  cost:{credits:500,energy:150,data:120},prod:{xp:5,game:0.2},     maxLevel:2},
 ];
 
 // ── MISSIONI ─────────────────────────────────────────────
 const MISSIONS=[
-  {id:'m1',  name:'Prima Connessione',    desc:'Costruisci il primo edificio',        reward:50,   rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type!=='hq').length>=1,     done:false},
-  {id:'m2',  name:'Rete Energetica',      desc:'Raggiungi 500 di energia',            reward:100,  rewardType:'credits', condition:()=>state.resources.energy>=500,                           done:false},
-  {id:'m3',  name:'Data Miner',           desc:'Costruisci 2 Server Farm',            reward:200,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='server').length>=2,  done:false},
-  {id:'m4',  name:'Primo Token',          desc:'Accumula 100 $GAME',                  reward:500,  rewardType:'credits', condition:()=>state.gameToken>=100,                                  done:false},
-  {id:'m5',  name:'Nodo Difeso',          desc:'Raggiungi 50 di difesa',              reward:150,  rewardType:'data',    condition:()=>state.resources.defense>=50,                           done:false},
-  {id:'m6',  name:'Livello 2',            desc:'Raggiungi il livello 2',              reward:300,  rewardType:'credits', condition:()=>state.level>=2,                                        done:false},
-  {id:'m7',  name:'Espansione',           desc:'Costruisci 5 edifici',                reward:400,  rewardType:'credits', condition:()=>state.grid.filter(c=>c).length>=6,                     done:false},
-  {id:'m8',  name:'Primo Raid',           desc:'Lancia il tuo primo raid PvP',        reward:300,  rewardType:'credits', condition:()=>state.raidsLaunched>=1,                                done:false},
-  {id:'m9',  name:'Difensore',            desc:'Raggiungi 200 di difesa',             reward:600,  rewardType:'credits', condition:()=>state.resources.defense>=200,                          done:false},
-  {id:'m10', name:'Quantum Builder',      desc:'Costruisci un Quantum Lab',           reward:800,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='quantum').length>=1, done:false},
-  {id:'m11', name:'Operatore Senior',     desc:'Raggiungi il livello 5',              reward:1000, rewardType:'credits', condition:()=>state.level>=5,                                        done:false},
-  {id:'m12', name:'Crypto Whale',         desc:'Accumula 1000 $GAME',                 reward:2000, rewardType:'credits', condition:()=>state.gameToken>=1000,                                 done:false},
+  {id:'m1',  name:'First Connection',    desc:'Build your first building',        reward:50,   rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type!=='hq').length>=1,     done:false},
+  {id:'m2',  name:'Energy Network',      desc:'Reach 90% energy capacity',            reward:100,  rewardType:'credits', condition:()=>state.resources.energy>=energyCap()*0.9,                           done:false},
+  {id:'m3',  name:'Data Miner',           desc:'Build 2 Server Farms',            reward:200,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='server').length>=2,  done:false},
+  {id:'m4',  name:'First Token',          desc:'Accumulate 100 $GAME',                  reward:500,  rewardType:'credits', condition:()=>state.gameToken>=100,                                  done:false},
+  {id:'m5',  name:'Defended Node',          desc:'Reach 50 defense',              reward:150,  rewardType:'data',    condition:()=>state.resources.defense>=50,                           done:false},
+  {id:'m6',  name:'Level 2',            desc:'Reach level 2',              reward:300,  rewardType:'credits', condition:()=>state.level>=2,                                        done:false},
+  {id:'m7',  name:'Expansion',           desc:'Build 5 buildings',                reward:400,  rewardType:'credits', condition:()=>state.grid.filter(c=>c).length>=6,                     done:false},
+  {id:'m8',  name:'First Raid',           desc:'Launch your first PvP raid',        reward:300,  rewardType:'credits', condition:()=>state.raidsLaunched>=1,                                done:false},
+  {id:'m9',  name:'Defender',            desc:'Reach 200 defense',             reward:600,  rewardType:'credits', condition:()=>state.resources.defense>=200,                          done:false},
+  {id:'m10', name:'Quantum Builder',      desc:'Build a Quantum Lab',           reward:800,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='quantum').length>=1, done:false},
+  {id:'m11', name:'Senior Operator',     desc:'Reach level 5',              reward:1000, rewardType:'credits', condition:()=>state.level>=5,                                        done:false},
+  {id:'m12', name:'Crypto Whale',         desc:'Accumulate 1000 $GAME',                 reward:2000, rewardType:'credits', condition:()=>state.gameToken>=1000,                                 done:false},
 ];
 
 // ── GRID ──────────────────────────────────────────────────
 function renderGrid() {
   const grid=document.getElementById('grid');
-  grid.style.gridTemplateColumns=`repeat(${GRID_SIZE}, 64px)`;
+  grid.style.gridTemplateColumns=`repeat(${GRID_SIZE}, 56px)`;
   grid.innerHTML='';
   state.grid.forEach((cell,i)=>{
     const div=document.createElement('div');
@@ -436,31 +468,31 @@ function onCellClick(idx) {
 function tryBuild(idx) {
   const bld=BUILDINGS.find(b=>b.id===state.selectedBuild);
   if(!bld||bld.id==='hq')return;
-  for(const[res,amt]of Object.entries(bld.cost)){if((state.resources[res]||0)<amt){showNotif(`❌ Risorse insufficienti: ${res}`,'error');return;}}
+  for(const[res,amt]of Object.entries(bld.cost)){if((state.resources[res]||0)<amt){showNotif(`❌ Insufficient resources: ${res}`,'error');return;}}
   for(const[res,amt]of Object.entries(bld.cost))state.resources[res]-=amt;
   state.grid[idx]={type:bld.id,level:1,hp:100,maxHp:100};
-  addXP(20);addTicker(`✅ ${bld.name} costruito`);showNotif(`⚡ ${bld.name} costruito!`);
+  addXP(20);addTicker(`✅ ${bld.name} costruito`);showNotif(`⚡ ${bld.name} built!`);
   renderGrid();updateStats();updateHUD();checkMissions();
 }
 
 function renderSelected() {
   const panel=document.getElementById('selected-info');
   const cell=state.grid[state.selectedCell];
-  if(!cell){panel.innerHTML=`<div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Clicca una cella per costruire</span></div>`;return;}
+  if(!cell){panel.innerHTML=`<div class="sel-empty"><span style="font-size:2rem">⬡</span><span>Click a cell to build</span></div>`;return;}
   const bld=BUILDINGS.find(b=>b.id===cell.type);
   const canUp=cell.level<bld.maxLevel;
   const upgCost=getUpgradeCost(bld,cell.level);
   panel.innerHTML=`
     <div style="font-size:2rem;margin-bottom:0.5rem">${bld.icon}</div>
     <div class="sel-name">${bld.name}</div>
-    <div class="sel-level">Livello ${cell.level} / ${bld.maxLevel}</div>
+    <div class="sel-level">Level ${cell.level} / ${bld.maxLevel}</div>
     <div class="sel-stats">
       ${Object.entries(bld.prod).filter(([k])=>k!=='synergy').map(([k,v])=>`<div class="sel-stat"><span>${k}</span><span>+${v}/s × Lv</span></div>`).join('')}
       <div class="sel-stat"><span>HP</span><span>${cell.hp}/${cell.maxHp}</span></div>
     </div>
     <div class="action-btns">
       ${canUp?`<button class="btn btn-upgrade" onclick="upgradeBuilding(${state.selectedCell})">⬆ UPGRADE (${upgCost}cr)</button>`:''}
-      ${cell.type!=='hq'?`<button class="btn btn-demolish" onclick="demolish(${state.selectedCell})">🗑 DEMOLI</button>`:''}
+      ${cell.type!=='hq'?`<button class="btn btn-demolish" onclick="demolish(${state.selectedCell})">🗑 DEMOLISH</button>`:''}
     </div>`;
 }
 
@@ -470,9 +502,9 @@ function upgradeBuilding(idx) {
   const cell=state.grid[idx];const bld=BUILDINGS.find(b=>b.id===cell.type);
   if(cell.level>=bld.maxLevel)return;
   const cost=getUpgradeCost(bld,cell.level);
-  if(state.resources.credits<cost){showNotif(`❌ Servono ${cost} credits`,'error');return;}
+  if(state.resources.credits<cost){showNotif(`❌ Need ${cost} credits`,'error');return;}
   state.resources.credits-=cost;cell.level++;cell.maxHp+=50;cell.hp=cell.maxHp;
-  addXP(40);addTicker(`⬆ ${bld.name} → Lv${cell.level}`);showNotif(`✨ ${bld.name} → Livello ${cell.level}!`);
+  addXP(40);addTicker(`⬆ ${bld.name} → Lv${cell.level}`);showNotif(`✨ ${bld.name} → Level ${cell.level}!`);
   renderGrid();renderSelected();updateStats();updateHUD();
 }
 
@@ -481,7 +513,7 @@ function demolish(idx) {
   const bld=BUILDINGS.find(b=>b.id===cell.type);
   state.resources.credits+=Math.floor(Object.values(bld.cost).reduce((a,b)=>a+b,0)*0.5);
   state.grid[idx]=null;state.selectedCell=null;
-  addTicker(`🗑 ${bld.name} demolito`);renderGrid();renderSelected();updateStats();
+  addTicker(`🗑 ${bld.name} demolished`);renderGrid();renderSelected();updateStats();
 }
 
 function renderBuildMenu() {
@@ -514,7 +546,7 @@ function claimMission(id) {
   const m=MISSIONS.find(x=>x.id===id);if(!m||m.done||!m.condition())return;
   m.done=true;state.resources[m.rewardType]=(state.resources[m.rewardType]||0)+m.reward;
   state.missionsCompleted++;addXP(50);
-  addTicker(`🏆 Missione: ${m.name} (+${m.reward} ${m.rewardType})`);
+  addTicker(`🏆 Mission: ${m.name} (+${m.reward} ${m.rewardType})`);
   showNotif(`🏆 +${m.reward} ${m.rewardType}!`,'gold');
   updateHUD();renderMissions();document.getElementById('stat-missions').textContent=state.missionsCompleted;
 }
@@ -527,26 +559,26 @@ const PVP_COOLDOWN_SECONDS=300; // 5 minuti
 function launchRaid() {
   if(state.pvpCooldown>0){showNotif(`⏳ Cooldown: ${state.pvpCooldown}s`,'error');return;}
   const attackPower=calcAttackPower();
-  if(attackPower===0){showNotif('❌ Costruisci un Drone Bay per attaccare!','error');return;}
+  if(attackPower===0){showNotif('❌ Build a Drone Bay to attack!','error');return;}
 
-  // Simula un nodo nemico
+  // Simulate enemy node
   const enemyDefense=Math.floor(Math.random()*100)+20;
   const success=attackPower>enemyDefense*0.7;
   const stolen=success?Math.floor(Math.random()*50)+10:0;
 
   state.raidsLaunched++;
-  pvpCooldownEndTime = Date.now() + PVP_COOLDOWN_SECONDS * 1000;
+  state.pvpCooldown=PVP_COOLDOWN_SECONDS;
   state.tournamentScore+=success?10:2;
   document.getElementById('stat-raids').textContent=state.raidsLaunched;
 
   if(success){
     state.resources.credits+=stolen;
-    addTicker(`⚔ Raid riuscito! Rubati ${stolen} credits al nodo nemico`);
+    addTicker(`⚔ Raid successful! Stolen ${stolen} credits from enemy node`);
     showNotif(`⚔ Raid riuscito! +${stolen} credits!`,'gold');
   } else {
     state.attacksReceived++;
-    addTicker(`❌ Raid fallito — difesa nemica troppo alta (${enemyDefense})`);
-    showNotif('❌ Raid fallito! Difesa nemica superiore.','error');
+    addTicker(`❌ Raid failed — enemy defense too high (${enemyDefense})`);
+    showNotif('❌ Raid fallito! Defense nemica superiore.','error');
   }
   addXP(30);updateHUD();checkMissions();
 }
@@ -561,9 +593,9 @@ function calcAttackPower() {
 }
 
 function updatePvpCooldown() {
-  const remaining = Math.max(0, Math.ceil((pvpCooldownEndTime - Date.now()) / 1000));
-  if(remaining > 0){
-    document.getElementById('pvp-cooldown').textContent=`Cooldown: ${remaining}s`;
+  if(state.pvpCooldown>0){
+    state.pvpCooldown--;
+    document.getElementById('pvp-cooldown').textContent=`Cooldown: ${state.pvpCooldown}s`;
     document.getElementById('pvp-btn').disabled=true;
   } else {
     document.getElementById('pvp-cooldown').textContent='Pronto all\'attacco';
@@ -573,11 +605,11 @@ function updatePvpCooldown() {
 
 // ── EVENTI SPECIALI ───────────────────────────────────────
 const SPECIAL_EVENTS=[
-  {id:'surge',   name:'⚡ ENERGY SURGE',    desc:'Produzione energia x2 per 60s!',  type:'surge',   duration:60, effect:()=>{state.activeEvent='surge';showNotif('⚡ Energy Surge! Produzione x2 per 60s!','gold');}},
-  {id:'blackout',name:'🔴 BLACKOUT',        desc:'Produzione energia dimezzata!',    type:'blackout',duration:30, effect:()=>{state.activeEvent='blackout';showNotif('🔴 Blackout! Energia dimezzata per 30s.','error');}},
+  {id:'surge',   name:'⚡ ENERGY SURGE',    desc:'Energy production x2 for 60s!',  type:'surge',   duration:60, effect:()=>{state.activeEvent='surge';showNotif('⚡ Energy Surge! Produzione x2 per 60s!','gold');}},
+  {id:'blackout',name:'🔴 BLACKOUT',        desc:'Energy production halved!',    type:'blackout',duration:30, effect:()=>{state.activeEvent='blackout';showNotif('🔴 Blackout! Energy dimezzata per 30s.','error');}},
   {id:'storm',   name:'💾 DATA STORM',      desc:'+200 Data bonus!',               type:'storm',   duration:0,  effect:()=>{state.resources.data+=200;showNotif('💾 Data Storm! +200 Data!','info');}},
-  {id:'raid',    name:'⚔ SYNDICATE RAID',   desc:'La Syndicate ti protegge! +50 difesa', type:'raid', duration:0, effect:()=>{state.resources.defense+=50;showNotif('⚔ Syndicate Raid respinto! +50 difesa!','gold');}},
-  {id:'bonus',   name:'💰 AIRDROP',         desc:'+100 Credits dalla DAO!',        type:'surge',   duration:0,  effect:()=>{state.resources.credits+=100;showNotif('💰 DAO Airdrop! +100 Credits!','gold');}},
+  {id:'raid',    name:'⚔ SYNDICATE RAID',   desc:'The Syndicate protects you! +50 defense', type:'raid', duration:0, effect:()=>{state.resources.defense+=50;showNotif('⚔ Syndicate Raid respinto! +50 difesa!','gold');}},
+  {id:'bonus',   name:'💰 AIRDROP',         desc:'+100 Credits from the DAO!',        type:'surge',   duration:0,  effect:()=>{state.resources.credits+=100;showNotif('💰 DAO Airdrop! +100 Credits!','gold');}},
 ];
 
 let nextEventIn=300; // primo evento dopo 5 minuti
@@ -628,6 +660,57 @@ function updateSyndicate() {
 
 // ── PRODUCTION TICK ───────────────────────────────────────
 let gameTokenRate=0;
+
+// ── RESOURCE CAPS ─────────────────────────────────────────────
+function energyCap() {
+  // Cap base 300, +50 per ogni Vault costruito
+  const vaults = state.grid.filter(c=>c&&c.type==='vault').length;
+  return 300 + vaults * 100;
+}
+function dataCap() {
+  // Cap base 200, +80 per ogni Server Farm
+  const servers = state.grid.filter(c=>c&&c.type==='server').length;
+  return 200 + servers * 80;
+}
+
+// ── RESOURCE CONSUMPTION ──────────────────────────────────────
+function energyConsumption() {
+  // Each building (not HQ) consumes energy to operate
+  let consume = 0;
+  state.grid.forEach(cell => {
+    if (!cell || cell.type === 'hq') return;
+    const consumeMap = {
+      reactor: 0,       // produce energia, non ne consuma
+      server: 0.08,     // server consumano energia
+      turret: 0.12,     // torrette costose
+      miner: 0.20,      // miner sono voraci
+      lab: 0.10,
+      vault: 0.05,
+      relay: 0.06,
+      drone: 0.18,      // droni consumano molto
+      shield: 0.15,
+      quantum: 0.25,    // quantum lab costosissimo
+    };
+    consume += (consumeMap[cell.type] || 0.05) * cell.level * 0.1;
+  });
+  return consume;
+}
+
+function dataConsumption() {
+  // Quantum lab e Lab consumano data continuamente
+  let consume = 0;
+  state.grid.forEach(cell => {
+    if (!cell) return;
+    const consumeMap = { quantum: 0.15, lab: 0.08, relay: 0.05 };
+    if (consumeMap[cell.type]) consume += consumeMap[cell.type] * cell.level * 0.1;
+  });
+  return consume;
+}
+
+function isEnergyLow() { return state.resources.energy < energyCap() * 0.2; }
+function isDataLow()   { return state.resources.data   < dataCap()   * 0.2; }
+
+
 function tick() {
   state.seconds++;
   if(state.seconds%60===0)state.day++;
@@ -646,12 +729,12 @@ function tick() {
     const mult=cell.level;
     if(bld.prod.energy)  eprod+=bld.prod.energy*mult*0.1*energyMult;
     if(bld.prod.data)    dprod+=bld.prod.data*mult*0.1;
-    if(bld.prod.game)    gameRate+=bld.prod.game*mult*0.1;
+    if(bld.prod.game)    gameRate+=bld.prod.game*mult*0.1*(state.resources.energy>0?1:0);
     if(bld.prod.xp)      xpRate+=bld.prod.xp*mult*0.1;
   });
 
-  state.resources.energy=Math.min(9999,state.resources.energy+eprod);
-  state.resources.data=Math.min(9999,state.resources.data+dprod);
+  state.resources.energy=Math.min(energyCap(),state.resources.energy+eprod-energyConsumption());
+  state.resources.data=Math.min(dataCap(),state.resources.data+dprod-dataConsumption());
   state.resources.credits+=0.5;
   state.gameToken+=gameRate;
   state.tournamentScore+=gameRate*0.1;
@@ -659,6 +742,12 @@ function tick() {
 
   if(xpRate>0)addXP(xpRate);
   if(state.seconds%30===0)randomEvent();
+  // Warn if resources low
+  if(state.seconds%60===0){
+    if(isEnergyLow())addTicker('⚠️ LOW ENERGY! Miners slowing down. Build a Reactor.');
+    if(isDataLow())addTicker('⚠️ LOW DATA! Build Server Farms to increase capacity.');
+    if(state.resources.energy<=0){gameTokenRate=0;addTicker('🔴 BLACKOUT! No $GAME production. Recharge energy!');}
+  }
 
   updatePvpCooldown();
   updateHUD();checkMissions();updateTime();
@@ -667,18 +756,18 @@ function tick() {
 
 function randomEvent() {
   const events=[
-    ()=>{const b=Math.floor(Math.random()*50)+20;state.resources.credits+=b;addTicker(`💰 Transazione anonima: +${b} credits`);},
+    ()=>{const b=Math.floor(Math.random()*50)+20;state.resources.credits+=b;addTicker(`💰 Anonymous transaction: +${b} credits`);},
     ()=>{const b=Math.floor(Math.random()*30)+10;state.resources.data+=b;addTicker(`📡 Data packet: +${b} data`);},
-    ()=>{state.attacksReceived++;document.getElementById('stat-attacks').textContent=state.attacksReceived;addTicker(`⚠️ Attacco hacker respinto!`);showNotif('⚠️ Attacco respinto!','error');},
-    ()=>{state.resources.energy+=50;addTicker(`🤝 Syndicate invia supporto: +50 energia`);},
-    ()=>{addXP(25);addTicker(`🧪 Ricerca completata: +25 XP`);},
+    ()=>{state.attacksReceived++;document.getElementById('stat-attacks').textContent=state.attacksReceived;addTicker(`⚠️ Hacker attack repelled!`);showNotif('⚠️ Attack repelled!','error');notifyPvpAttack();},,
+    ()=>{state.resources.energy+=50;addTicker(`🤝 Syndicate sends support: +50 energy`);},
+    ()=>{addXP(25);addTicker(`🧪 Research completed: +25 XP`);},
   ];
   events[Math.floor(Math.random()*events.length)]();
 }
 
 function addXP(amount) {
   state.xp+=amount;
-  while(state.xp>=state.xpNext){state.xp-=state.xpNext;state.level++;state.xpNext=Math.floor(state.xpNext*1.5);showNotif(`🎉 Livello ${state.level}!`,'gold');addTicker(`⬆ Nodo → Livello ${state.level}`);}
+  while(state.xp>=state.xpNext){state.xp-=state.xpNext;state.level++;state.xpNext=Math.floor(state.xpNext*1.5);showNotif(`🎉 Level ${state.level}!`,'gold');addTicker(`⬆ Nodo → Level ${state.level}`);}
   const pct=(state.xp/state.xpNext*100).toFixed(0);
   document.getElementById('xp-bar').style.width=pct+'%';
   document.getElementById('xp-text').textContent=`${Math.floor(state.xp)} / ${state.xpNext}`;
@@ -686,8 +775,12 @@ function addXP(amount) {
 }
 
 function updateHUD() {
-  document.getElementById('res-energy').textContent=Math.floor(state.resources.energy);
-  document.getElementById('res-data').textContent=Math.floor(state.resources.data);
+  const eEl=document.getElementById('res-energy');
+  eEl.textContent=Math.floor(state.resources.energy);
+  eEl.style.color=state.resources.energy<=0?'var(--red)':isEnergyLow()?'var(--orange)':'var(--neon)';
+  const dEl=document.getElementById('res-data');
+  dEl.textContent=Math.floor(state.resources.data);
+  dEl.style.color=state.resources.data<=0?'var(--red)':isDataLow()?'var(--orange)':'var(--neon)';
   document.getElementById('res-credits').textContent=Math.floor(state.resources.credits);
   document.getElementById('res-defense').textContent=Math.floor(state.resources.defense);
   document.getElementById('game-balance').textContent=state.gameToken.toFixed(2);
@@ -698,22 +791,22 @@ function updateHUD() {
   const btn=document.getElementById('claim-btn');
   const canClaim=state.gameToken>=10000&&userAddr;
   btn.disabled=!canClaim;
-  if(!userAddr)btn.textContent='CONNETTI WALLET PER CLAIM';
+  if(!userAddr)btn.textContent='CONNECT WALLET PER CLAIM';
   else if(state.gameToken<10000)btn.textContent=`CLAIM $GAME (${state.gameToken.toFixed(0)}/10.000)`;
   else btn.textContent=`CLAIM ${Math.floor(state.gameToken)} $GAME ON-CHAIN`;
 }
 
 function updateTime() {
   const mins=Math.floor(state.seconds/60)%60;const secs=state.seconds%60;
-  document.getElementById('game-time').textContent=`GG ${state.day} — ${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+  document.getElementById('game-time').textContent=`DAY ${state.day} — ${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
 }
 
 function updateStats() {
   document.getElementById('stat-buildings').textContent=state.grid.filter(c=>c).length;
   let ep=0,dp=0;
   state.grid.forEach(cell=>{if(!cell)return;const bld=BUILDINGS.find(b=>b.id===cell.type);if(bld.prod.energy)ep+=bld.prod.energy*cell.level;if(bld.prod.data)dp+=bld.prod.data*cell.level;});
-  document.getElementById('stat-eprod').textContent=`+${(ep*0.1).toFixed(1)}/s`;
-  document.getElementById('stat-dprod').textContent=`+${(dp*0.1).toFixed(1)}/s`;
+  const econs=energyConsumption();document.getElementById('stat-eprod').textContent=`+${(ep*0.1).toFixed(1)} -${econs.toFixed(2)}/s`;
+  const dcons=dataConsumption();document.getElementById('stat-dprod').textContent=`+${(dp*0.1).toFixed(1)} -${dcons.toFixed(2)}/s`;
 }
 
 function addTicker(msg) {
@@ -732,7 +825,7 @@ function showNotif(msg,type='') {
 
 // ── SAVE/LOAD ─────────────────────────────────────────────
 function saveGame() {
-  localStorage.setItem('nodestrike',JSON.stringify({
+  localStorage.setItem('cybergrid',JSON.stringify({
     grid:state.grid,resources:state.resources,gameToken:state.gameToken,
     xp:state.xp,xpNext:state.xpNext,level:state.level,day:state.day,
     raidsLaunched:state.raidsLaunched,tournamentScore:state.tournamentScore,
@@ -741,7 +834,7 @@ function saveGame() {
 }
 
 function loadGame() {
-  const saved=localStorage.getItem('nodestrike');if(!saved)return;
+  const saved=localStorage.getItem('cybergrid');if(!saved)return;
   const data=JSON.parse(saved);
   state.grid=data.grid;state.resources=data.resources;
   state.gameToken=data.gameToken||0;state.xp=data.xp||0;
@@ -783,7 +876,7 @@ async function loadLeaderboard() {
     const res=await fetch(`${BACKEND_URL}/api/leaderboard`);
     const data=await res.json();
     const el=document.getElementById('leaderboard-list');
-    if(!data.length){el.innerHTML='<div style="font-size:0.8rem;color:var(--dim);text-align:center;padding:0.5rem">Nessun giocatore ancora</div>';return;}
+    if(!data.length){el.innerHTML='<div style="font-size:0.8rem;color:var(--dim);text-align:center;padding:0.5rem">No players yet</div>';return;}
     el.innerHTML=data.map((p,i)=>`
       <div style="display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0.6rem;background:var(--card);border:1px solid var(--border);border-radius:6px;">
         <span style="font-family:'Orbitron',monospace;font-size:0.7rem;color:${i===0?'var(--gold)':i===1?'#c0c0c0':i===2?'var(--orange)':'var(--dim)'};">#${i+1}</span>
@@ -793,53 +886,173 @@ async function loadLeaderboard() {
   }catch(e){console.error('Leaderboard error:',e);}
 }
 
+
+// ── STREAK SYSTEM ─────────────────────────────────────────────
+const STREAK_REWARDS = [50, 100, 150, 200, 300, 500, 1000]; // credits per day
+
+function initStreak() {
+  const today = new Date().toDateString();
+  const data = JSON.parse(localStorage.getItem('streak') || '{}');
+  if (!data.lastDay) { data.lastDay = null; data.count = 0; data.claimed = false; }
+  
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (data.lastDay !== today) {
+    if (data.lastDay !== yesterday) data.count = 0; // streak rotta
+    data.claimed = false;
+  }
+  localStorage.setItem('streak', JSON.stringify(data));
+  renderStreak(data);
+}
+
+function renderStreak(data) {
+  const today = new Date().toDateString();
+  const days = document.getElementById('streak-days');
+  const btn = document.getElementById('streak-claim-btn');
+  const bonus = document.getElementById('streak-bonus');
+  
+  if (!days) return;
+  days.innerHTML = '';
+  for (let i = 0; i < 7; i++) {
+    const d = document.createElement('div');
+    d.className = 'streak-day' + (i < data.count ? ' done' : i === data.count && data.lastDay !== today ? ' today' : '');
+    d.textContent = i + 1;
+    days.appendChild(d);
+  }
+  
+  const reward = STREAK_REWARDS[Math.min(data.count, 6)];
+  bonus.textContent = data.claimed ? `✅ Day bonus ${data.count} claimed!` : `🎁 Today's bonus: +${reward} credits`;
+  btn.disabled = data.claimed || data.lastDay === today;
+  btn.textContent = data.claimed ? 'ALREADY CLAIMED TODAY' : `CLAIM +${reward} CREDITS`;
+}
+
+function claimStreak() {
+  const today = new Date().toDateString();
+  const data = JSON.parse(localStorage.getItem('streak') || '{}');
+  if (data.claimed || data.lastDay === today) return;
+  
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (data.lastDay !== yesterday && data.lastDay !== null) data.count = 0;
+  
+  data.count = Math.min((data.count || 0) + 1, 7);
+  data.lastDay = today;
+  data.claimed = true;
+  localStorage.setItem('streak', JSON.stringify(data));
+  
+  const reward = STREAK_REWARDS[data.count - 1];
+  state.resources.credits += reward;
+  addXP(20);
+  showNotif(`🔥 Streak ${data.count}/7! +${reward} credits!`, 'gold');
+  addTicker(`🔥 Daily streak ${data.count}: +${reward} credits`);
+  renderStreak(data);
+  updateHUD();
+}
+
+// ── LIMITED MISSIONS ───────────────────────────────────────────
+const LIMITED_MISSIONS = [
+  { id: 'lm1', name: '⚡ Surge Protocol', desc: 'Accumulate 50 credits in the next 24 hours', reward: 200, rewardType: 'credits', hours: 24, condition: () => state.resources.credits >= 50 },
+  { id: 'lm2', name: '🔫 Raid Blitz', desc: 'Launch 3 raids in the next 48 hours', reward: 500, rewardType: 'credits', hours: 48, condition: () => state.raidsLaunched >= 3 },
+  { id: 'lm3', name: '🏗️ Builder Rush', desc: 'Build 3 buildings in the next 24 hours', reward: 300, rewardType: 'credits', hours: 24, condition: () => state.grid.filter(c=>c&&c.type!=='hq').length >= 3 },
+];
+
+let limitedMissionStart = Date.now();
+
+function renderLimitedMissions() {
+  const el = document.getElementById('limited-missions');
+  if (!el) return;
+  el.innerHTML = LIMITED_MISSIONS.map(m => {
+    const elapsed = (Date.now() - limitedMissionStart) / 3600000;
+    const remaining = Math.max(0, m.hours - elapsed);
+    const hh = Math.floor(remaining);
+    const mm = Math.floor((remaining % 1) * 60);
+    const done = m.condition();
+    return `<div class="limited-mission ${done ? 'completed' : ''}">
+      <span class="limited-badge">LIMITED</span>
+      <div class="mission-name">${done ? '✅' : '○'} ${m.name}</div>
+      <div class="mission-desc" style="font-size:0.75rem;color:var(--dim);margin:0.2rem 0">${m.desc}</div>
+      <div class="limited-timer">⏱ ${hh}h ${mm}m rimanenti</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.4rem">
+        <div class="mission-reward" style="font-size:0.75rem;color:var(--neon);font-family:'Share Tech Mono',monospace">+${m.reward} ${m.rewardType}</div>
+        ${done ? `<button class="btn btn-upgrade" style="font-size:0.65rem;padding:0.25rem 0.6rem" onclick="claimLimited('${m.id}')">CLAIM</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+const claimedLimited = new Set();
+function claimLimited(id) {
+  if (claimedLimited.has(id)) return;
+  const m = LIMITED_MISSIONS.find(x => x.id === id);
+  if (!m || !m.condition()) return;
+  claimedLimited.add(id);
+  state.resources[m.rewardType] = (state.resources[m.rewardType] || 0) + m.reward;
+  addXP(60);
+  showNotif(`⏱ Limited mission completed! +${m.reward} ${m.rewardType}`, 'gold');
+  addTicker(`⏱ ${m.name} completata! +${m.reward} ${m.rewardType}`);
+  updateHUD();
+  renderLimitedMissions();
+}
+
+// ── MILESTONES $GAME ───────────────────────────────────────────
+const MILESTONES = [
+  { tokens: 100,    label: '100 $GAME',    bonus: '+200 credits', claimed: false },
+  { tokens: 500,    label: '500 $GAME',    bonus: '+500 credits', claimed: false },
+  { tokens: 1000,   label: '1.000 $GAME',  bonus: '+1.000 credits', claimed: false },
+  { tokens: 5000,   label: '5.000 $GAME',  bonus: '+100 XP', claimed: false },
+  { tokens: 10000,  label: '10.000 $GAME', bonus: 'CLAIM ON-CHAIN!', claimed: false },
+];
+
+function renderMilestones() {
+  const el = document.getElementById('milestone-list');
+  if (!el) return;
+  el.innerHTML = MILESTONES.map(m => {
+    const reached = state.gameToken >= m.tokens;
+    if (reached && !m.claimed) {
+      m.claimed = true;
+      if (m.bonus.includes('credits')) {
+        const amt = parseInt(m.bonus.replace(/\D/g,''));
+        state.resources.credits += amt;
+        showNotif(`🏅 Milestone ${m.label}! ${m.bonus}`, 'gold');
+        addTicker(`🏅 Milestone ${m.label} reached!`);
+      } else if (m.bonus.includes('XP')) {
+        addXP(100);
+        showNotif(`🏅 Milestone ${m.label}! +100 XP`, 'gold');
+      }
+    }
+    return `<div class="milestone-item ${reached ? 'reached' : ''}">
+      <span>${reached ? '✅' : '○'} ${m.label}</span>
+      <span style="font-size:0.72rem;color:${reached ? 'var(--neon)' : 'var(--dim)'}">${m.bonus}</span>
+    </div>`;
+  }).join('');
+}
+
+// ── NOTIFICHE ATTACCO PVP ──────────────────────────────────────
+function notifyPvpAttack() {
+  const div = document.createElement('div');
+  div.className = 'attack-notif';
+  div.innerHTML = `⚔️ <strong>YOUR NODE IS UNDER ATTACK!</strong><br><span style="font-size:0.78rem">An enemy node is raiding you. Build a Shield Generator to defend.</span>`;
+  document.body.appendChild(div);
+  setTimeout(() => div.remove(), 5000);
+}
+
 // ── INIT ─────────────────────────────────────────────────
 async function init() {
   renderGrid();renderBuildMenu();renderMissions();
   updateHUD();updateStats();updateTournamentTimer();
-  addTicker('🔌 NodeStrike avviato. Connetti il wallet per il claim on-chain.');
+  addTicker('🔌 NodeStrike started. Connect wallet for on-chain claim.');
   if(userAddr){await loadFromBackend();}else{loadGame();}
   await loadLeaderboard();
+  initStreak();
   setInterval(tick,100);
   setInterval(renderMissions,5000);
+  setInterval(renderLimitedMissions,10000);
+  setInterval(renderMilestones,3000);
+  renderLimitedMissions();
+  renderMilestones();
   setInterval(saveGame,30000);
   setInterval(loadLeaderboard,60000);
   setInterval(async()=>{if(userAddr){await saveToBackend();await fetchOnchainBalance();}},30000);
 }
 init();
-</script>
-<!-- COOKIE BANNER -->
-<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0a0f1e;border-top:1px solid rgba(0,212,255,0.2);padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-family:'Rajdhani',sans-serif;">
-  <div style="max-width:600px;">
-    <div style="font-family:'Orbitron',monospace;font-size:0.8rem;color:#00ff88;margin-bottom:0.4rem;letter-spacing:0.1em;">🍪 COOKIE POLICY</div>
-    <div style="font-size:0.85rem;color:#7a8aaa;line-height:1.5;">Questo sito usa cookie <strong style="color:#e8f0fe">necessari</strong> per il funzionamento e cookie <strong style="color:#e8f0fe">analitici</strong> (Google Analytics) per migliorare l'esperienza. Puoi accettare tutti o solo i necessari.</div>
-  </div>
-  <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
-    <button onclick="acceptCookies('necessary')" style="padding:0.5rem 1.2rem;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#7a8aaa;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">SOLO NECESSARI</button>
-    <button onclick="acceptCookies('all')" style="padding:0.5rem 1.2rem;background:linear-gradient(135deg,#00ff88,#00d4ff);border:none;color:#060811;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">ACCETTA TUTTI</button>
-  </div>
-</div>
-
-<script>
-function initCookieBanner() {
-  const consent = localStorage.getItem('cookieConsent');
-  if (!consent) {
-    document.getElementById('cookie-banner').style.display = 'flex';
-  } else if (consent === 'necessary') {
-    // Disabilita Google Analytics
-    window['ga-disable-G-657X13ZZ28'] = true;
-  }
-}
-
-function acceptCookies(type) {
-  localStorage.setItem('cookieConsent', type);
-  document.getElementById('cookie-banner').style.display = 'none';
-  if (type === 'necessary') {
-    window['ga-disable-G-657X13ZZ28'] = true;
-  }
-}
-
-initCookieBanner();
 </script>
 </body>
 </html>

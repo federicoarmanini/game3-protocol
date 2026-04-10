@@ -211,6 +211,8 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
     <span class="network-badge" id="network-badge" style="display:none"></span>
     <span id="token-balance" style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--dim);display:none"></span>
     <a href="index.html" class="home-btn">← HOME</a>
+    <button onclick="adminReset()" style="padding:0.4rem 0.8rem;background:rgba(255,51,85,0.1);
+  border:1px solid rgba(255,51,85,0.3);color:var(--red);font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:700;border-radius:4px;cursor:pointer;opacity:0.4;" title="Admin Reset">⟳</button>
     <button class="connect-btn" id="connect-btn" onclick="connectWallet()">CONNECT WALLET</button>
   </div>
 </div>
@@ -1135,6 +1137,12 @@ async function handleBoostReturn() {
       await checkBoostStatus();
     } catch(e) {}
   }
+}
+  function adminReset() {
+  if(!confirm('Full reset? You will lose all progress.')) return;
+  localStorage.removeItem('cybergrid');
+  localStorage.removeItem('streak');
+  location.reload();
 }
 // ── INIT ─────────────────────────────────────────────────
 async function init() {

@@ -1144,7 +1144,7 @@ async function init() {
   if(userAddr){await loadFromBackend();}else{loadGame();}
   await loadLeaderboard();
   initStreak();
-  setInterval(tick,100);
+  setInterval(tick,500);
   setInterval(renderMissions,5000);
   setInterval(renderLimitedMissions,10000);
   setInterval(renderMilestones,3000);

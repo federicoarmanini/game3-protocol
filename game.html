@@ -151,15 +151,17 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .threshold-fill{height:100%;background:linear-gradient(90deg,var(--neon),var(--blue));border-radius:3px;transition:width 0.5s ease;}
 .threshold-text{display:flex;justify-content:space-between;font-size:0.7rem;font-family:'Share Tech Mono',monospace;color:var(--dim);}
 
-.attack-notif{position:fixed;top:100px;right:20px;background:rgba(255,51,85,0.12);border:1px solid var(--red);border-radius:6px;padding:0.4rem 0.8rem;
-font-size:0.75rem;color:var(--red);z-index:199;animation:slideIn 0.3s ease;max-width:220px;pointer-events:none;opacity:0.85;}
+.attack-notif{position:fixed;bottom:120px;right:20px;background:rgba(255,51,85,0.08);border:1px solid rgba(255,51,85,0.4);
+border-radius:4px;padding:0.3rem 0.6rem;font-size:0.7rem;color:var(--red);z-index:199;animation:slideIn 0.3s ease;
+max-width:180px;pointer-events:none;opacity:0.7;}
 .notif.error{border-color:var(--red);color:var(--red);}
 .notif.info{border-color:var(--blue);color:var(--blue);}
 .notif.gold{border-color:var(--gold);color:var(--gold);}
 @keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
 
-.home-btn{padding:0.4rem 1rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:var(--blue);font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;text-decoration:none;display:inline-block;transition:all 0.2s;}
+.home-btn{padding:0.4rem 1rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:var(--blue);
+font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;text-decoration:none;display:inline-block;transition:all 0.2s;}
 .home-btn:hover{background:rgba(0,212,255,0.2);}
 .streak-section{margin-top:1rem;background:var(--card);border:1px solid rgba(255,215,0,0.3);border-radius:10px;padding:1rem;}
 .streak-title{font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:0.6rem;}
@@ -423,7 +425,7 @@ const BUILDINGS=[
   {id:'reactor',  name:'Reactor',           icon:'⚡',  cost:{credits:120},                    prod:{energy:5},          maxLevel:5},
   {id:'server',   name:'Server Farm',        icon:'💾',  cost:{credits:100,energy:40},          prod:{data:4},            maxLevel:5},
   {id:'turret',   name:'Turret',           icon:'🔫',  cost:{credits:100,data:40},            prod:{defense:8},         maxLevel:4},
-  {id:'miner',    name:'Token Miner',        icon:'⛏️',  cost:{credits:250,energy:80,data:60},  prod:{game:0.5},          maxLevel:3},
+  {id:'miner',    name:'Token Miner',        icon:'⛏️',  cost:{credits:250,energy:80,data:60},  prod:{game:0.1},          maxLevel:3},
   {id:'lab',      name:'Laboratory',        icon:'🧪',  cost:{credits:200,data:80},            prod:{xp:2},              maxLevel:3},
   {id:'vault',    name:'Vault',              icon:'🔒',  cost:{credits:180,energy:50},          prod:{},                  maxLevel:3},
   {id:'relay',    name:'Relay Node',         icon:'📡',  cost:{credits:120,data:50},            prod:{synergy:true},      maxLevel:2},

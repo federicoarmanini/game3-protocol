@@ -1087,12 +1087,42 @@ function notifyPvpAttack() {
 // ── BOOST SYSTEM ──────────────────────────────────────────
 let activeBoost = null;
 
-const BOOST_PRICES_POL = {
-  energy_rush:    0.45,
-  token_surge:    0.90,
-  full_power:     2.25,
-  node_overdrive: 4.50,
+const BOOST_PRICES_EUR = {
+  energy_rush:    0.89,
+  token_surge:    1.79,
+  full_power:     4.49,
+  node_overdrive: 8.99,
 };
+
+const BOOST_PRICES_POL = {
+  energy_rush:    0,
+  token_surge:    0,
+  full_power:     0,
+  node_overdrive: 0,
+};
+
+async function fetchPolPrice() {
+  try {
+    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=eur');
+    const data = await res.json();
+    const polEur = data['matic-network'].eur;
+    BOOST_PRICES_POL.energy_rush    = +(BOOST_PRICES_EUR.energy_rush    / polEur).toFixed(4);
+    BOOST_PRICES_POL.token_surge    = +(BOOST_PRICES_EUR.token_surge    / polEur).toFixed(4);
+    BOOST_PRICES_POL.full_power     = +(BOOST_PRICES_EUR.full_power     / polEur).toFixed(4);
+    BOOST_PRICES_POL.node_overdrive = +(BOOST_PRICES_EUR.node_overdrive / polEur).toFixed(4);
+    updateBoostPrices();
+  } catch(e) {
+    console.error('POL price fetch failed', e);
+  }
+}
+
+function updateBoostPrices() {
+  const btns = document.querySelectorAll('.boost-btn-crypto');
+  const ids = ['energy_rush','token_surge','full_power','node_overdrive'];
+  btns.forEach((btn, i) => {
+    btn.textContent = `${BOOST_PRICES_POL[ids[i]]} POL`;
+  });
+}
 
 const ADMIN_WALLET = '0x35e5D4cFA21B056414eAcF74C20dE5039caBc996';
 
@@ -1205,6 +1235,8 @@ async function init() {
   await handleBoostReturn();
   await checkBoostStatus();
   setInterval(checkBoostStatus, 60000);
+  await fetchPolPrice();
+setInterval(fetchPolPrice, 300000);
 }
 init();
 </script>

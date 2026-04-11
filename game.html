@@ -1153,6 +1153,7 @@ async function buyBoost(boostId, method) {
    // Pagamento in POL
 if (!signer) { showNotif('❌ Connect wallet first', 'error'); return; }
 const polAmount = BOOST_PRICES_POL[boostId];
+  console.log('boostId:', boostId, 'polAmount:', polAmount, 'allPrices:', JSON.stringify(BOOST_PRICES_POL));
 if (!polAmount || polAmount === 0) {
   showNotif('⏳ Loading POL price... try again', 'info');
   await fetchPolPrice();

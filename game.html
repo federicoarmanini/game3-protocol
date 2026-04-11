@@ -1094,28 +1094,32 @@ const BOOST_PRICES_EUR = {   // ← Prezzi pieni Stripe / Card
   node_overdrive: 9.99,
 };
 
-  async function fetchPolPrice() {
+ async function fetchPolPrice() {
   try {
     const res = await fetch('https://min-api.cryptocompare.com/data/price?fsym=POL&tsyms=EUR');
     const data = await res.json();
     const polEur = data.EUR;
 
-    if (!polEur) throw new Error('No price');
+    if (!polEur || polEur <= 0) throw new Error('No price');
 
-    const DISCOUNT = 0.9;   // ← 10% di sconto per chi paga in POL
+    const DISCOUNT = 0.9;   // 10% di sconto per pagamento in POL
 
+    // Calcolo corretto per OGNI boost (questo era l'errore!)
     BOOST_PRICES_POL.energy_rush    = +((BOOST_PRICES_EUR.energy_rush    * DISCOUNT) / polEur).toFixed(4);
     BOOST_PRICES_POL.token_surge    = +((BOOST_PRICES_EUR.token_surge    * DISCOUNT) / polEur).toFixed(4);
     BOOST_PRICES_POL.full_power     = +((BOOST_PRICES_EUR.full_power     * DISCOUNT) / polEur).toFixed(4);
     BOOST_PRICES_POL.node_overdrive = +((BOOST_PRICES_EUR.node_overdrive * DISCOUNT) / polEur).toFixed(4);
 
     updateBoostPrices();
+    console.log('✅ POL prices updated with 10% discount:', BOOST_PRICES_POL);
+
   } catch(e) {
-    // Fallback (prezzi POL scontati del 10% – valori di esempio)
-    BOOST_PRICES_POL.energy_rush    = 0.0123;   // ≈ 0.99 * 0.9 / ~0.72 EUR (POL price)
-    BOOST_PRICES_POL.token_surge    = 0.0247;
-    BOOST_PRICES_POL.full_power     = 0.0617;
-    BOOST_PRICES_POL.node_overdrive = 0.1235;
+    console.warn('⚠️ CryptoCompare API error → using fallback prices');
+    // Fallback realistico (POL ≈ 0.075 €)
+    BOOST_PRICES_POL.energy_rush    = 11.88;
+    BOOST_PRICES_POL.token_surge    = 23.88;
+    BOOST_PRICES_POL.full_power     = 59.88;
+    BOOST_PRICES_POL.node_overdrive = 119.88;
     updateBoostPrices();
   }
 }

@@ -1103,16 +1103,22 @@ const BOOST_PRICES_POL = {
 
 async function fetchPolPrice() {
   try {
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=matic-network&vs_currencies=eur');
+    const res = await fetch('https://min-api.cryptocompare.com/data/price?fsym=POL&tsyms=EUR');
     const data = await res.json();
-    const polEur = data['matic-network'].eur;
+    const polEur = data.EUR;
+    if (!polEur) throw new Error('No price');
     BOOST_PRICES_POL.energy_rush    = +(BOOST_PRICES_EUR.energy_rush    / polEur).toFixed(4);
     BOOST_PRICES_POL.token_surge    = +(BOOST_PRICES_EUR.token_surge    / polEur).toFixed(4);
     BOOST_PRICES_POL.full_power     = +(BOOST_PRICES_EUR.full_power     / polEur).toFixed(4);
     BOOST_PRICES_POL.node_overdrive = +(BOOST_PRICES_EUR.node_overdrive / polEur).toFixed(4);
     updateBoostPrices();
   } catch(e) {
-    console.error('POL price fetch failed', e);
+    // Fallback con prezzo fisso se API non risponde
+    BOOST_PRICES_POL.energy_rush    = 9.9;
+    BOOST_PRICES_POL.token_surge    = 19.9;
+    BOOST_PRICES_POL.full_power     = 49.9;
+    BOOST_PRICES_POL.node_overdrive = 99.9;
+    updateBoostPrices();
   }
 }
 

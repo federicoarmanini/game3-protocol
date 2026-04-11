@@ -1147,10 +1147,14 @@ async function buyBoost(boostId, method) {
     } catch(e) { showNotif('❌ Checkout error', 'error'); }
   
   } else {
-    // Pagamento in POL
-    if (!signer) { showNotif('❌ Connect wallet first', 'error'); return; }
-    const polAmount = BOOST_PRICES_POL[boostId];
-    if (!polAmount) return;
+   // Pagamento in POL
+if (!signer) { showNotif('❌ Connect wallet first', 'error'); return; }
+const polAmount = BOOST_PRICES_POL[boostId];
+if (!polAmount || polAmount === 0) {
+  showNotif('⏳ Loading POL price... try again', 'info');
+  await fetchPolPrice();
+  return;
+}
     
     try {
       showNotif('⏳ Confirm transaction in MetaMask...', 'info');

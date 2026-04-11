@@ -1123,10 +1123,13 @@ async function fetchPolPrice() {
 }
 
 function updateBoostPrices() {
-  const btns = document.querySelectorAll('.boost-btn-crypto');
-  const ids = ['energy_rush','token_surge','full_power','node_overdrive'];
-  btns.forEach((btn, i) => {
-    btn.textContent = `${BOOST_PRICES_POL[ids[i]]} POL`;
+  document.querySelectorAll('.boost-btn-crypto').forEach(btn => {
+    const onclick = btn.getAttribute('onclick');
+    const match = onclick && onclick.match(/buyBoost\('(\w+)'/);
+    if (match) {
+      const id = match[1];
+      btn.textContent = `${BOOST_PRICES_POL[id]} POL`;
+    }
   });
 }
 

@@ -1087,37 +1087,35 @@ function notifyPvpAttack() {
 // ── BOOST SYSTEM ──────────────────────────────────────────
 let activeBoost = null;
 
-const BOOST_PRICES_EUR = {
-  energy_rush:    0.01,
-  token_surge:    0.01,
-  full_power:     0.01,
-  node_overdrive: 0.01,
+const BOOST_PRICES_EUR = {   // ← Prezzi pieni Stripe / Card
+  energy_rush:    0.99,
+  token_surge:    1.99,
+  full_power:     4.99,
+  node_overdrive: 9.99,
 };
 
-const BOOST_PRICES_POL = {
-  energy_rush:    0,
-  token_surge:    0,
-  full_power:     0,
-  node_overdrive: 0,
-};
-
-async function fetchPolPrice() {
+  async function fetchPolPrice() {
   try {
     const res = await fetch('https://min-api.cryptocompare.com/data/price?fsym=POL&tsyms=EUR');
     const data = await res.json();
     const polEur = data.EUR;
+
     if (!polEur) throw new Error('No price');
-    BOOST_PRICES_POL.energy_rush    = +(BOOST_PRICES_EUR.energy_rush    / polEur).toFixed(4);
-    BOOST_PRICES_POL.token_surge    = +(BOOST_PRICES_EUR.token_surge    / polEur).toFixed(4);
-    BOOST_PRICES_POL.full_power     = +(BOOST_PRICES_EUR.full_power     / polEur).toFixed(4);
-    BOOST_PRICES_POL.node_overdrive = +(BOOST_PRICES_EUR.node_overdrive / polEur).toFixed(4);
+
+    const DISCOUNT = 0.9;   // ← 10% di sconto per chi paga in POL
+
+    BOOST_PRICES_POL.energy_rush    = +((BOOST_PRICES_EUR.energy_rush    * DISCOUNT) / polEur).toFixed(4);
+    BOOST_PRICES_POL.token_surge    = +((BOOST_PRICES_EUR.token_surge    * DISCOUNT) / polEur).toFixed(4);
+    BOOST_PRICES_POL.full_power     = +((BOOST_PRICES_EUR.full_power     * DISCOUNT) / polEur).toFixed(4);
+    BOOST_PRICES_POL.node_overdrive = +((BOOST_PRICES_EUR.node_overdrive * DISCOUNT) / polEur).toFixed(4);
+
     updateBoostPrices();
   } catch(e) {
-    // Fallback con prezzo fisso se API non risponde
-    BOOST_PRICES_POL.energy_rush    = 9.9;
-    BOOST_PRICES_POL.token_surge    = 19.9;
-    BOOST_PRICES_POL.full_power     = 49.9;
-    BOOST_PRICES_POL.node_overdrive = 99.9;
+    // Fallback (prezzi POL scontati del 10% – valori di esempio)
+    BOOST_PRICES_POL.energy_rush    = 0.0123;   // ≈ 0.99 * 0.9 / ~0.72 EUR (POL price)
+    BOOST_PRICES_POL.token_surge    = 0.0247;
+    BOOST_PRICES_POL.full_power     = 0.0617;
+    BOOST_PRICES_POL.node_overdrive = 0.1235;
     updateBoostPrices();
   }
 }

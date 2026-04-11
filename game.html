@@ -809,7 +809,7 @@ function randomEvent() {
   const events=[
     ()=>{const b=Math.floor(Math.random()*50)+20;state.resources.credits+=b;addTicker(`💰 Anonymous transaction: +${b} credits`);},
     ()=>{const b=Math.floor(Math.random()*30)+10;state.resources.data+=b;addTicker(`📡 Data packet: +${b} data`);},
-    ()=>{state.attacksReceived++;document.getElementById('stat-attacks').textContent=state.attacksReceived;addTicker(`⚠️ Hacker attack repelled!`);showNotif('⚠️ Attack repelled!','error');notifyPvpAttack();},,
+    ()=>{state.attacksReceived++;document.getElementById('stat-attacks').textContent=state.attacksReceived;addTicker(`⚠️ Hacker attack repelled!`);showNotif('⚠️ Attack repelled!','error');notifyPvpAttack();},
     ()=>{state.resources.energy+=50;addTicker(`🤝 Syndicate sends support: +50 energy`);},
     ()=>{addXP(25);addTicker(`🧪 Research completed: +25 XP`);},
   ];
@@ -1088,10 +1088,10 @@ function notifyPvpAttack() {
 let activeBoost = null;
 
 const BOOST_PRICES_EUR = {
-  energy_rush:    0.89,
-  token_surge:    1.79,
-  full_power:     4.49,
-  node_overdrive: 8.99,
+  energy_rush:    0.01,
+  token_surge:    0.01,
+  full_power:     0.01,
+  node_overdrive: 0.01,
 };
 
 const BOOST_PRICES_POL = {

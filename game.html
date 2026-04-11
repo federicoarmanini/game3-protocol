@@ -295,7 +295,7 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
     <div class="tournament-section">
       <div class="tournament-title">🏆 Weekly Tournament</div>
       <div class="tournament-timer" id="tournament-timer">--:--:--</div>
-      <div class="tournament-info">Top 3 receive $GAME bonus</div>
+      <div class="tournament-info">Top 3 receive $NODE bonus</div>
     </div>
 
     <!-- LEADERBOARD -->
@@ -319,9 +319,9 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
       <div id="limited-missions"></div>
     </div>
 
-    <!-- MILESTONE $GAME -->
+    <!-- MILESTONE $NODE -->
     <div class="milestone-section">
-      <div class="milestone-title">🏅 $GAME Milestones</div>
+      <div class="milestone-title">🏅 $NODE Milestones</div>
       <div id="milestone-list"></div>
     </div>
 <!-- BOOST STORE -->
@@ -337,7 +337,7 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
       </div>
     </div>
     <div class="boost-item">
-      <div><div class="boost-name">💰 Token Surge</div><div class="boost-duration">1 ora — $GAME +200%</div></div>
+      <div><div class="boost-name">💰 Token Surge</div><div class="boost-duration">1 ora — $NODE +200%</div></div>
       <div class="boost-btns">
         <button class="boost-btn-card" onclick="buyBoost('token_surge','card')">€1.99</button>
         <button class="boost-btn-crypto" onclick="buyBoost('token_surge','crypto')">€1.79 POL</button>
@@ -360,18 +360,18 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
   </div>
 </div>
     <div class="game-token-section">
-      <div class="game-label">$GAME accumulated (in-game)</div>
+      <div class="game-label">$NODE accumulated (in-game)</div>
       <div class="game-bal" id="game-balance">0.00</div>
       <div class="game-label" id="game-rate">+0.00 / min</div>
       <div class="threshold-bar-wrap">
         <div class="threshold-text"><span>Claim threshold</span><span id="threshold-pct">0%</span></div>
         <div class="threshold-bar"><div class="threshold-fill" id="threshold-fill" style="width:0%"></div></div>
-        <div class="threshold-text" style="margin-top:0.2rem"><span>0</span><span style="color:var(--neon)">10.000 $GAME</span></div>
+        <div class="threshold-text" style="margin-top:0.2rem"><span>0</span><span style="color:var(--neon)">10.000 $NODE</span></div>
       </div>
-      <button class="claim-btn" id="claim-btn" onclick="claimTokens()" disabled>CLAIM $GAME ON-CHAIN</button>
+      <button class="claim-btn" id="claim-btn" onclick="claimTokens()" disabled>CLAIM $NODE ON-CHAIN</button>
       <div id="last-tx" style="display:none"></div>
       <div style="margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--border)">
-        <div class="game-label">$GAME in on-chain wallet</div>
+        <div class="game-label">$NODE in on-chain wallet</div>
         <div style="font-family:'Share Tech Mono',monospace;font-size:1rem;color:var(--blue);margin-top:0.3rem" id="onchain-balance">—</div>
       </div>
     </div>
@@ -427,13 +427,13 @@ function updateWalletUI() {
 
 async function fetchOnchainBalance() {
   if(!gameTokenContract||!userAddr)return;
-  try{const bal=await gameTokenContract.balanceOf(userAddr);const dec=await gameTokenContract.decimals();const f=ethers.formatUnits(bal,dec);document.getElementById('onchain-balance').textContent=parseFloat(f).toFixed(2)+' $GAME';document.getElementById('token-balance').style.display='inline';document.getElementById('token-balance').textContent=parseFloat(f).toFixed(2)+' $GAME on-chain';}
+  try{const bal=await gameTokenContract.balanceOf(userAddr);const dec=await gameTokenContract.decimals();const f=ethers.formatUnits(bal,dec);document.getElementById('onchain-balance').textContent=parseFloat(f).toFixed(2)+' $NODE';document.getElementById('token-balance').style.display='inline';document.getElementById('token-balance').textContent=parseFloat(f).toFixed(2)+' $NODE on-chain';}
   catch(e){console.error(e);}
 }
 
 async function claimTokens() {
   if(!signer||!userAddr){showNotif('❌ Connect wallet','error');return;}
-  if(state.gameToken<10000){showNotif('❌ Need 10.000 $GAME','error');return;}
+  if(state.gameToken<10000){showNotif('❌ Need 10.000 $NODE','error');return;}
   const btn=document.getElementById('claim-btn');btn.disabled=true;btn.textContent='Elaborazione...';
   try{
     const amountToMint=ethers.parseEther(Math.floor(state.gameToken).toString());
@@ -445,7 +445,7 @@ async function claimTokens() {
     const tx=await rewardsContract.claimReward(amountToMint,nonce,expiry,signature);
     const receipt=await tx.wait();
     const claimed=Math.floor(state.gameToken);state.gameToken=0;addXP(100);
-    addTicker(`✅ ${claimed} $GAME mintati on-chain!`);showNotif(`🎉 ${claimed} $GAME mintati!`);
+    addTicker(`✅ ${claimed} $NODE mintati on-chain!`);showNotif(`🎉 ${claimed} $NODE mintati!`);
     document.getElementById('last-tx').style.display='block';
     document.getElementById('last-tx').innerHTML=`<a class="tx-link" href="https://polygonscan.com/tx/${receipt.hash}" target="_blank">✅ View TX on Polygonscan →</a>`;
     await fetchOnchainBalance();updateHUD();
@@ -486,7 +486,7 @@ const MISSIONS=[
   {id:'m1',  name:'First Connection',    desc:'Build your first building',        reward:50,   rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type!=='hq').length>=1,     done:false},
   {id:'m2',  name:'Energy Network',      desc:'Reach 90% energy capacity',            reward:100,  rewardType:'credits', condition:()=>state.resources.energy>=energyCap()*0.9,                           done:false},
   {id:'m3',  name:'Data Miner',           desc:'Build 2 Server Farms',            reward:200,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='server').length>=2,  done:false},
-  {id:'m4',  name:'First Token',          desc:'Accumulate 100 $GAME',                  reward:500,  rewardType:'credits', condition:()=>state.gameToken>=100,                                  done:false},
+  {id:'m4',  name:'First Token',          desc:'Accumulate 100 $NODE',                  reward:500,  rewardType:'credits', condition:()=>state.gameToken>=100,                                  done:false},
   {id:'m5',  name:'Defended Node',          desc:'Reach 50 defense',              reward:150,  rewardType:'data',    condition:()=>state.resources.defense>=50,                           done:false},
   {id:'m6',  name:'Level 2',            desc:'Reach level 2',              reward:300,  rewardType:'credits', condition:()=>state.level>=2,                                        done:false},
   {id:'m7',  name:'Expansion',           desc:'Build 5 buildings',                reward:400,  rewardType:'credits', condition:()=>state.grid.filter(c=>c).length>=6,                     done:false},
@@ -494,7 +494,7 @@ const MISSIONS=[
   {id:'m9',  name:'Defender',            desc:'Reach 200 defense',             reward:600,  rewardType:'credits', condition:()=>state.resources.defense>=200,                          done:false},
   {id:'m10', name:'Quantum Builder',      desc:'Build a Quantum Lab',           reward:800,  rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type==='quantum').length>=1, done:false},
   {id:'m11', name:'Senior Operator',     desc:'Reach level 5',              reward:1000, rewardType:'credits', condition:()=>state.level>=5,                                        done:false},
-  {id:'m12', name:'Crypto Whale',         desc:'Accumulate 1000 $GAME',                 reward:2000, rewardType:'credits', condition:()=>state.gameToken>=1000,                                 done:false},
+  {id:'m12', name:'Crypto Whale',         desc:'Accumulate 1000 $NODE',                 reward:2000, rewardType:'credits', condition:()=>state.gameToken>=1000,                                 done:false},
 ];
 
 // ── GRID ──────────────────────────────────────────────────
@@ -797,7 +797,7 @@ function tick() {
   if(state.seconds%60===0){
     if(isEnergyLow())addTicker('⚠️ LOW ENERGY! Miners slowing down. Build a Reactor.');
     if(isDataLow())addTicker('⚠️ LOW DATA! Build Server Farms to increase capacity.');
-    if(state.resources.energy<=0){gameTokenRate=0;addTicker('🔴 BLACKOUT! No $GAME production. Recharge energy!');}
+    if(state.resources.energy<=0){gameTokenRate=0;addTicker('🔴 BLACKOUT! No $NODE production. Recharge energy!');}
   }
 
   updatePvpCooldown();
@@ -843,8 +843,8 @@ function updateHUD() {
   const canClaim=state.gameToken>=10000&&userAddr;
   btn.disabled=!canClaim;
   if(!userAddr)btn.textContent='CONNECT WALLET PER CLAIM';
-  else if(state.gameToken<10000)btn.textContent=`CLAIM $GAME (${state.gameToken.toFixed(0)}/10.000)`;
-  else btn.textContent=`CLAIM ${Math.floor(state.gameToken)} $GAME ON-CHAIN`;
+  else if(state.gameToken<10000)btn.textContent=`CLAIM $NODE (${state.gameToken.toFixed(0)}/10.000)`;
+  else btn.textContent=`CLAIM ${Math.floor(state.gameToken)} $NODE ON-CHAIN`;
 }
 
 function updateTime() {
@@ -896,7 +896,7 @@ function loadGame() {
     let gameOffline=0;
     state.grid.forEach(cell=>{if(!cell)return;const bld=BUILDINGS.find(b=>b.id===cell.type);if(bld.prod.game)gameOffline+=bld.prod.game*cell.level*0.1*elapsed;});
     state.gameToken+=gameOffline;
-    if(gameOffline>0)setTimeout(()=>showNotif(`💤 Offline ${Math.floor(elapsed/60)}min — +${gameOffline.toFixed(2)} $GAME!`,'gold'),1000);
+    if(gameOffline>0)setTimeout(()=>showNotif(`💤 Offline ${Math.floor(elapsed/60)}min — +${gameOffline.toFixed(2)} $NODE!`,'gold'),1000);
   }
 }
 
@@ -917,7 +917,7 @@ async function loadFromBackend() {
       state.xpNext=data.state.xpNext||100;state.level=data.state.level||1;state.day=data.state.day||1;
       state.raidsLaunched=data.state.raidsLaunched||0;
       renderGrid();updateHUD();updateStats();
-      if(data.offlineTokens>0)setTimeout(()=>showNotif(`💤 Offline ${Math.floor(data.elapsedSeconds/60)}min — +${data.offlineTokens.toFixed(2)} $GAME!`,'gold'),1000);
+      if(data.offlineTokens>0)setTimeout(()=>showNotif(`💤 Offline ${Math.floor(data.elapsedSeconds/60)}min — +${data.offlineTokens.toFixed(2)} $NODE!`,'gold'),1000);
     }
   }catch(e){console.error('Load failed:',e);}
 }
@@ -1043,13 +1043,13 @@ function claimLimited(id) {
   renderLimitedMissions();
 }
 
-// ── MILESTONES $GAME ───────────────────────────────────────────
+// ── MILESTONES $NODE ───────────────────────────────────────────
 const MILESTONES = [
-  { tokens: 100,    label: '100 $GAME',    bonus: '+200 credits', claimed: false },
-  { tokens: 500,    label: '500 $GAME',    bonus: '+500 credits', claimed: false },
-  { tokens: 1000,   label: '1.000 $GAME',  bonus: '+1.000 credits', claimed: false },
-  { tokens: 5000,   label: '5.000 $GAME',  bonus: '+100 XP', claimed: false },
-  { tokens: 10000,  label: '10.000 $GAME', bonus: 'CLAIM ON-CHAIN!', claimed: false },
+  { tokens: 100,    label: '100 $NODE',    bonus: '+200 credits', claimed: false },
+  { tokens: 500,    label: '500 $NODE',    bonus: '+500 credits', claimed: false },
+  { tokens: 1000,   label: '1.000 $NODE',  bonus: '+1.000 credits', claimed: false },
+  { tokens: 5000,   label: '5.000 $NODE',  bonus: '+100 XP', claimed: false },
+  { tokens: 10000,  label: '10.000 $NODE', bonus: 'CLAIM ON-CHAIN!', claimed: false },
 ];
 
 function renderMilestones() {

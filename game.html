@@ -1087,8 +1087,18 @@ function notifyPvpAttack() {
 // ── BOOST SYSTEM ──────────────────────────────────────────
 let activeBoost = null;
 
+const BOOST_PRICES_POL = {
+  energy_rush:    0.45,
+  token_surge:    0.90,
+  full_power:     2.25,
+  node_overdrive: 4.50,
+};
+
+const ADMIN_WALLET = '0x35e5D4cFA21B056414eAcF74C20dE5039caBc996';
+
 async function buyBoost(boostId, method) {
   if (!userAddr) { showNotif('❌ Connect wallet first', 'error'); return; }
+  
   if (method === 'card') {
     try {
       const res = await fetch(`${BACKEND_URL}/api/boost/checkout`, {
@@ -1099,8 +1109,39 @@ async function buyBoost(boostId, method) {
       const data = await res.json();
       if (data.url) window.location.href = data.url;
     } catch(e) { showNotif('❌ Checkout error', 'error'); }
+  
   } else {
-    showNotif('🔜 Crypto payment coming soon!', 'info');
+    // Pagamento in POL
+    if (!signer) { showNotif('❌ Connect wallet first', 'error'); return; }
+    const polAmount = BOOST_PRICES_POL[boostId];
+    if (!polAmount) return;
+    
+    try {
+      showNotif('⏳ Confirm transaction in MetaMask...', 'info');
+      const tx = await signer.sendTransaction({
+        to: ADMIN_WALLET,
+        value: ethers.parseEther(polAmount.toString()),
+      });
+      showNotif('⏳ Transaction pending...', 'info');
+      await tx.wait();
+      
+      // Attiva boost dopo pagamento confermato
+      const res = await fetch(`${BACKEND_URL}/api/boost/activate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ boostId, address: userAddr })
+      });
+      const data = await res.json();
+      if (data.success) {
+        showNotif('🎉 Boost attivato! TX: ' + tx.hash.slice(0,10) + '...', 'gold');
+        await checkBoostStatus();
+        addTicker(`⚡ Boost ${boostId} attivato con POL!`);
+      }
+    } catch(e) {
+      if (e.code === 4001) showNotif('❌ Transaction rejected', 'error');
+      else showNotif('❌ Payment failed', 'error');
+      console.error(e);
+    }
   }
 }
 

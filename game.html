@@ -1279,5 +1279,194 @@ setInterval(fetchPolPrice, 300000);
 }
 init();
 </script>
+  <!-- GDPR COOKIE BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0a0f1e;border-top:1px solid rgba(0,212,255,0.2);padding:1.5rem 2rem;font-family:'Rajdhani',sans-serif;">
+  <div style="max-width:900px;margin:0 auto;">
+    <div style="font-family:'Orbitron',monospace;font-size:0.85rem;color:#00ff88;margin-bottom:0.5rem;letter-spacing:0.1em;">🍪 COOKIE SETTINGS</div>
+    <p style="font-size:0.85rem;color:#7a8aaa;margin-bottom:1.2rem;line-height:1.5;">We use cookies to operate this website and improve your experience. Toggle each category below. <strong style="color:#e8f0fe">Technical cookies</strong> are always active as they are necessary for the site to function.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.8rem;margin-bottom:1.5rem;">
+
+      <div style="background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.2);border-radius:8px;padding:0.8rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Technical</span>
+          <span style="font-size:0.7rem;color:#00ff88;font-family:'Orbitron',monospace;">ALWAYS ON</span>
+        </div>
+        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Essential for navigation and security. Cannot be disabled.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.8rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Preferences</span>
+          <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+            <input type="checkbox" id="pref-toggle" style="opacity:0;width:0;height:0;" onchange="updateToggle(this,'pref')">
+            <span id="pref-slider" style="position:absolute;inset:0;background:#333;border-radius:20px;transition:0.3s;"></span>
+            <span id="pref-knob" style="position:absolute;left:2px;bottom:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.3s;"></span>
+          </label>
+        </div>
+        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Remember language, theme and display preferences.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.8rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Analytics</span>
+          <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+            <input type="checkbox" id="analytics-toggle" style="opacity:0;width:0;height:0;" onchange="updateToggle(this,'analytics')">
+            <span id="analytics-slider" style="position:absolute;inset:0;background:#333;border-radius:20px;transition:0.3s;"></span>
+            <span id="analytics-knob" style="position:absolute;left:2px;bottom:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.3s;"></span>
+          </label>
+        </div>
+        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Google Analytics — understand how users interact with the site.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.8rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Marketing</span>
+          <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+            <input type="checkbox" id="marketing-toggle" style="opacity:0;width:0;height:0;" onchange="updateToggle(this,'marketing')">
+            <span id="marketing-slider" style="position:absolute;inset:0;background:#333;border-radius:20px;transition:0.3s;"></span>
+            <span id="marketing-knob" style="position:absolute;left:2px;bottom:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.3s;"></span>
+          </label>
+        </div>
+        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Personalized content and promotional communications.</p>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.8rem;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
+          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Profiling</span>
+          <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
+            <input type="checkbox" id="profiling-toggle" style="opacity:0;width:0;height:0;" onchange="updateToggle(this,'profiling')">
+            <span id="profiling-slider" style="position:absolute;inset:0;background:#333;border-radius:20px;transition:0.3s;"></span>
+            <span id="profiling-knob" style="position:absolute;left:2px;bottom:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.3s;"></span>
+          </label>
+        </div>
+        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Build profiles to show targeted content based on behaviour.</p>
+      </div>
+
+    </div>
+
+    <div style="display:flex;gap:0.8rem;flex-wrap:wrap;align-items:center;">
+      <button onclick="saveCookies('none')" style="padding:0.5rem 1.2rem;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#7a8aaa;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">REJECT ALL</button>
+      <button onclick="saveCookies('custom')" style="padding:0.5rem 1.2rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">SAVE PREFERENCES</button>
+      <button onclick="saveCookies('all')" style="padding:0.5rem 1.2rem;background:linear-gradient(135deg,#00ff88,#00d4ff);border:none;color:#060811;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">ACCEPT ALL</button>
+      <button onclick="showPrivacyModal()" style="padding:0.5rem 1rem;background:transparent;border:none;color:#5a7a99;font-family:'Rajdhani',sans-serif;font-size:0.8rem;cursor:pointer;text-decoration:underline;">Privacy Policy</button>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING COOKIE BUTTON -->
+<button id="cookie-fab" onclick="reopenBanner()" style="display:none;position:fixed;bottom:20px;right:20px;z-index:9998;background:#0a0f1e;border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:50px;padding:0.5rem 1rem;cursor:pointer;letter-spacing:0.05em;">🍪 COOKIES</button>
+
+<!-- PRIVACY MODAL -->
+<div id="privacy-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.85);overflow-y:auto;padding:2rem 1rem;">
+  <div style="max-width:800px;margin:0 auto;background:#0a0f1e;border:1px solid rgba(0,212,255,0.2);border-radius:12px;padding:2rem;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;border-bottom:1px solid rgba(0,212,255,0.1);padding-bottom:1rem;">
+      <div style="font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;color:#00ff88;">Privacy Policy & Cookie Notice</div>
+      <button onclick="closePrivacyModal()" style="background:transparent;border:none;color:#5a7a99;font-size:1.5rem;cursor:pointer;line-height:1;">×</button>
+    </div>
+    <div style="font-size:0.85rem;color:#7a8aaa;line-height:1.7;">
+
+      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">1. Data Controller</p>
+      <p style="margin-bottom:1rem;">NodeStrike — nodestrike.io. For any privacy-related request, contact: <span style="color:#00d4ff;">privacy@nodestrike.io</span></p>
+
+      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">2. Cookies used</p>
+      <table style="width:100%;font-size:0.8rem;border-collapse:collapse;margin-bottom:1rem;">
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+          <th style="text-align:left;padding:0.5rem;color:#e8f0fe;">Name</th>
+          <th style="text-align:left;padding:0.5rem;color:#e8f0fe;">Category</th>
+          <th style="text-align:left;padding:0.5rem;color:#e8f0fe;">Purpose</th>
+          <th style="text-align:left;padding:0.5rem;color:#e8f0fe;">Duration</th>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+          <td style="padding:0.5rem;">cookieConsent</td><td style="padding:0.5rem;">Technical</td><td style="padding:0.5rem;">Saves your cookie choices</td><td style="padding:0.5rem;">1 year</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+          <td style="padding:0.5rem;">cybergrid</td><td style="padding:0.5rem;">Technical</td><td style="padding:0.5rem;">Saves game state locally</td><td style="padding:0.5rem;">Session</td>
+        </tr>
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
+          <td style="padding:0.5rem;">_ga, _gid</td><td style="padding:0.5rem;">Analytics</td><td style="padding:0.5rem;">Google Analytics — traffic analysis</td><td style="padding:0.5rem;">2 years / 24h</td>
+        </tr>
+        <tr>
+          <td style="padding:0.5rem;">streak</td><td style="padding:0.5rem;">Preferences</td><td style="padding:0.5rem;">Saves daily streak progress</td><td style="padding:0.5rem;">Persistent</td>
+        </tr>
+      </table>
+
+      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">3. Your rights (GDPR Arts. 13–22)</p>
+      <p style="margin-bottom:1rem;">Under the GDPR (EU 2016/679) and the Italian Privacy Code (D.Lgs. 196/2003 as amended by D.Lgs. 101/2018), you have the right to: <strong style="color:#e8f0fe;">access</strong> your data (Art. 15), <strong style="color:#e8f0fe;">rectify</strong> inaccurate data (Art. 16), request <strong style="color:#e8f0fe;">erasure</strong> (Art. 17), <strong style="color:#e8f0fe;">restrict</strong> processing (Art. 18), <strong style="color:#e8f0fe;">data portability</strong> (Art. 20), and <strong style="color:#e8f0fe;">object</strong> to processing (Art. 21). You may also withdraw consent at any time without affecting prior lawful processing.</p>
+
+      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">4. Legal basis</p>
+      <p style="margin-bottom:1rem;">Technical cookies: legitimate interest (Art. 6(1)(f)). All other cookies: your explicit consent (Art. 6(1)(a)), as required by the Italian Data Protection Authority (Garante) Cookie Guidelines 2021 and the ePrivacy Directive 2002/58/EC.</p>
+
+      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">5. Third parties</p>
+      <p style="margin-bottom:1rem;">Google Analytics (Google LLC, USA) — data processed under Standard Contractual Clauses (SCCs). Stripe (Stripe Inc., USA) — payment processing under SCCs. Alchemy (Alchemy Insights Inc.) — blockchain RPC provider.</p>
+
+      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">6. Complaints</p>
+      <p style="margin-bottom:0;">You have the right to lodge a complaint with the Italian Data Protection Authority (Garante per la Protezione dei Dati Personali) at <span style="color:#00d4ff;">www.garanteprivacy.it</span> or with the supervisory authority of your country of residence.</p>
+    </div>
+    <div style="margin-top:1.5rem;text-align:center;">
+      <button onclick="closePrivacyModal()" style="padding:0.6rem 2rem;background:linear-gradient(135deg,#00ff88,#00d4ff);border:none;color:#060811;font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;border-radius:4px;cursor:pointer;">CLOSE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function updateToggle(checkbox, id) {
+  const slider = document.getElementById(id+'-slider');
+  const knob = document.getElementById(id+'-knob');
+  if (checkbox.checked) {
+    slider.style.background = '#00ff88';
+    knob.style.transform = 'translateX(16px)';
+  } else {
+    slider.style.background = '#333';
+    knob.style.transform = 'translateX(0)';
+  }
+}
+
+function saveCookies(mode) {
+  const consent = {
+    timestamp: new Date().toISOString(),
+    technical: true,
+    preferences: mode === 'all' || (mode === 'custom' && document.getElementById('pref-toggle').checked),
+    analytics: mode === 'all' || (mode === 'custom' && document.getElementById('analytics-toggle').checked),
+    marketing: mode === 'all' || (mode === 'custom' && document.getElementById('marketing-toggle').checked),
+    profiling: mode === 'all' || (mode === 'custom' && document.getElementById('profiling-toggle').checked),
+  };
+  localStorage.setItem('cookieConsent', JSON.stringify(consent));
+  if (!consent.analytics) window['ga-disable-G-657X132Z28'] = true;
+  document.getElementById('cookie-banner').style.display = 'none';
+  document.getElementById('cookie-fab').style.display = 'block';
+}
+
+function reopenBanner() {
+  document.getElementById('cookie-banner').style.display = 'block';
+  document.getElementById('cookie-fab').style.display = 'none';
+  const saved = JSON.parse(localStorage.getItem('cookieConsent') || '{}');
+  ['pref','analytics','marketing','profiling'].forEach(id => {
+    const key = id === 'pref' ? 'preferences' : id;
+    const cb = document.getElementById(id+'-toggle');
+    if (saved[key]) { cb.checked = true; updateToggle(cb, id); }
+  });
+}
+
+function showPrivacyModal() {
+  document.getElementById('privacy-modal').style.display = 'block';
+}
+
+function closePrivacyModal() {
+  document.getElementById('privacy-modal').style.display = 'none';
+}
+
+function initCookieBanner() {
+  const saved = localStorage.getItem('cookieConsent');
+  if (!saved) {
+    document.getElementById('cookie-banner').style.display = 'block';
+  } else {
+    const consent = JSON.parse(saved);
+    if (!consent.analytics) window['ga-disable-G-657X132Z28'] = true;
+    document.getElementById('cookie-fab').style.display = 'block';
+  }
+}
+initCookieBanner();
+</script>
 </body>
 </html>

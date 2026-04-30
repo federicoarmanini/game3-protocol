@@ -203,6 +203,7 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
 <div class="event-banner" id="event-banner"></div>
 
 <div class="wallet-bar">
+
   <div class="wallet-status">
     <div class="wallet-dot" id="wallet-dot"></div>
     <span class="wallet-addr" id="wallet-addr">Not connected</span>
@@ -211,6 +212,7 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
     <span class="network-badge" id="network-badge" style="display:none"></span>
     <span id="token-balance" style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--dim);display:none"></span>
     <a href="index.html" class="home-btn">← HOME</a>
+    <a href="staking.html" class="home-btn" style="color:var(--purple);border-color:rgba(180,79,255,0.4);">⬡ STAKE</a>
     <button onclick="adminReset()" style="padding:0.4rem 0.8rem;background:rgba(255,51,85,0.1);
   border:1px solid rgba(255,51,85,0.3);color:var(--red);font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:700;border-radius:4px;cursor:pointer;opacity:0.4;" title="Admin Reset">⟳</button>
     <button class="connect-btn" id="connect-btn" onclick="connectWallet()">CONNECT WALLET</button>
@@ -242,7 +244,7 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
       <div class="stat-row"><span class="stat-name">Data prod/cons</span><span class="stat-val" id="stat-dprod">+1.5</span></div>
       <div class="stat-row"><span class="stat-name">Attacks received</span><span class="stat-val" id="stat-attacks">0</span></div>
       <div class="stat-row"><span class="stat-name">Raids launched</span><span class="stat-val" id="stat-raids">0</span></div>
-      <div class="stat-row"><span class="stat-name">Missions completate</span><span class="stat-val" id="stat-missions">0</span></div>
+      <div class="stat-row"><span class="stat-name">Missions completed </span><span class="stat-val" id="stat-missions">0</span></div>
     </div>
     <div class="panel-title" style="margin-top:1rem;">Node Level</div>
     <div style="padding:0.5rem 0">

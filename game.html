@@ -524,7 +524,7 @@ function tryBuild(idx) {
   for(const[res,amt]of Object.entries(bld.cost)){if((state.resources[res]||0)<amt){showNotif(`❌ Insufficient resources: ${res}`,'error');return;}}
   for(const[res,amt]of Object.entries(bld.cost))state.resources[res]-=amt;
   state.grid[idx]={type:bld.id,level:1,hp:100,maxHp:100};
-  addXP(20);addTicker(`✅ ${bld.name} costruito`);showNotif(`⚡ ${bld.name} built!`);
+  addXP(20);addTicker(`✅ ${bld.name} built`);showNotif(`⚡ ${bld.name} built!`);
   renderGrid();updateStats();updateHUD();checkMissions();
 }
 
@@ -627,11 +627,11 @@ function launchRaid() {
   if(success){
     state.resources.credits+=stolen;
     addTicker(`⚔ Raid successful! Stolen ${stolen} credits from enemy node`);
-    showNotif(`⚔ Raid riuscito! +${stolen} credits!`,'gold');
+    showNotif(`⚔ Raid successful! +${stolen} credits!`,'gold');
   } else {
     state.attacksReceived++;
     addTicker(`❌ Raid failed — enemy defense too high (${enemyDefense})`);
-    showNotif('❌ Raid fallito! Defense nemica superiore.','error');
+    showNotif('❌ Raid failed! Enemy defense too high.','error');
   }
   addXP(30);updateHUD();checkMissions();
 }
@@ -714,7 +714,7 @@ let gameTokenRate=0;
 
 // ── RESOURCE CAPS ─────────────────────────────────────────────
 function energyCap() {
-  // Cap base 300, +50 per ogni Vault costruito
+  // Cap base 300, +50 per ogni Vault built
   const vaults = state.grid.filter(c=>c&&c.type==='vault').length;
   return 300 + vaults * 100;
 }
@@ -818,7 +818,7 @@ function randomEvent() {
 
 function addXP(amount) {
   state.xp+=amount;
-  while(state.xp>=state.xpNext){state.xp-=state.xpNext;state.level++;state.xpNext=Math.floor(state.xpNext*1.5);showNotif(`🎉 Level ${state.level}!`,'gold');addTicker(`⬆ Nodo → Level ${state.level}`);}
+  while(state.xp>=state.xpNext){state.xp-=state.xpNext;state.level++;state.xpNext=Math.floor(state.xpNext*1.5);showNotif(`🎉 Level ${state.level}!`,'gold');addTicker(`⬆ Node → Level ${state.level}`);}
   const pct=(state.xp/state.xpNext*100).toFixed(0);
   document.getElementById('xp-bar').style.width=pct+'%';
   document.getElementById('xp-text').textContent=`${Math.floor(state.xp)} / ${state.xpNext}`;
@@ -842,7 +842,7 @@ function updateHUD() {
   const btn=document.getElementById('claim-btn');
   const canClaim=state.gameToken>=10000&&userAddr;
   btn.disabled=!canClaim;
-  if(!userAddr)btn.textContent='CONNECT WALLET PER CLAIM';
+  if(!userAddr)btn.textContent='CONNECT WALLET TO CLAIM';
   else if(state.gameToken<10000)btn.textContent=`CLAIM $NODE (${state.gameToken.toFixed(0)}/10.000)`;
   else btn.textContent=`CLAIM ${Math.floor(state.gameToken)} $NODE ON-CHAIN`;
 }
@@ -1020,7 +1020,7 @@ function renderLimitedMissions() {
       <span class="limited-badge">LIMITED</span>
       <div class="mission-name">${done ? '✅' : '○'} ${m.name}</div>
       <div class="mission-desc" style="font-size:0.75rem;color:var(--dim);margin:0.2rem 0">${m.desc}</div>
-      <div class="limited-timer">⏱ ${hh}h ${mm}m rimanenti</div>
+      <div class="limited-timer">⏱ ${hh}h ${mm}m remaining</div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:0.4rem">
         <div class="mission-reward" style="font-size:0.75rem;color:var(--neon);font-family:'Share Tech Mono',monospace">+${m.reward} ${m.rewardType}</div>
         ${done ? `<button class="btn btn-upgrade" style="font-size:0.65rem;padding:0.25rem 0.6rem" onclick="claimLimited('${m.id}')">CLAIM</button>` : ''}
@@ -1038,7 +1038,7 @@ function claimLimited(id) {
   state.resources[m.rewardType] = (state.resources[m.rewardType] || 0) + m.reward;
   addXP(60);
   showNotif(`⏱ Limited mission completed! +${m.reward} ${m.rewardType}`, 'gold');
-  addTicker(`⏱ ${m.name} completata! +${m.reward} ${m.rewardType}`);
+  addTicker(`⏱ ${m.name} completed! +${m.reward} ${m.rewardType}`);
   updateHUD();
   renderLimitedMissions();
 }
@@ -1179,8 +1179,6 @@ async function buyBoost(boostId, method) {
       return;
     }
   }
-
-  console.log('boostId:', boostId, 'polAmount:', polAmount, 'allPrices:', JSON.stringify(BOOST_PRICES_POL));
 
   try {
     showNotif('⏳ Confirm transaction in MetaMask...', 'info');

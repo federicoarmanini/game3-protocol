@@ -132,7 +132,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0.8
 .pvp-btn:disabled{opacity:0.4;cursor:not-allowed;}
 .pvp-cooldown{font-size:0.75rem;color:var(--dim);text-align:center;margin-top:0.4rem;font-family:'Share Tech Mono',monospace;}
 
-/* TORNEO */
+/* TOURNAMENT  */
 .tournament-section{margin-top:1rem;background:var(--card);border:1px solid rgba(255,215,0,0.2);border-radius:10px;padding:1rem;}
 .tournament-title{font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:0.5rem;}
 .tournament-timer{font-family:'Share Tech Mono',monospace;font-size:1rem;color:var(--gold);margin-bottom:0.5rem;}
@@ -293,7 +293,7 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
       <div class="pvp-cooldown" id="pvp-cooldown">Ready to attack</div>
     </div>
 
-    <!-- TORNEO -->
+    <!--  -->
     <div class="tournament-section">
       <div class="tournament-title">🏆 Weekly Tournament</div>
       <div class="tournament-timer" id="tournament-timer">--:--:--</div>
@@ -307,7 +307,7 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
     </div>
 
     
-    <!-- STREAK GIORNALIERE -->
+    <!-- DAILY STREAK -->
     <div class="streak-section">
       <div class="streak-title">🔥 Daily Streak</div>
       <div class="streak-days" id="streak-days"></div>
@@ -315,9 +315,9 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
       <button class="streak-claim-btn" id="streak-claim-btn" onclick="claimStreak()">CLAIM DAILY BONUS</button>
     </div>
 
-    <!-- MISSIONI A TEMPO LIMITATO -->
+    <!-- TIME LIMITED MISSIONS -->
     <div style="margin-top:1rem;">
-      <div class="panel-title">⏱ Missions Limitate</div>
+      <div class="panel-title">⏱ Missions limited</div>
       <div id="limited-missions"></div>
     </div>
 
@@ -332,28 +332,28 @@ z-index:201;animation:slideIn 0.3s ease;max-width:300px;pointer-events:none;}</s
   <div id="active-boost-display"></div>
   <div class="boost-grid">
     <div class="boost-item">
-      <div><div class="boost-name">⚡ Energy Rush</div><div class="boost-duration">1 ora — Energia +100%</div></div>
+      <div><div class="boost-name">⚡ Energy Rush</div><div class="boost-duration">1 hour — Energy +100%</div></div>
       <div class="boost-btns">
         <button class="boost-btn-card" onclick="buyBoost('energy_rush','card')">€0.99</button>
         <button class="boost-btn-crypto" onclick="buyBoost('energy_rush','crypto')">€0.89 POL</button>
       </div>
     </div>
     <div class="boost-item">
-      <div><div class="boost-name">💰 Token Surge</div><div class="boost-duration">1 ora — $NODE +200%</div></div>
+      <div><div class="boost-name">💰 Token Surge</div><div class="boost-duration">1 hour — $NODE +200%</div></div>
       <div class="boost-btns">
         <button class="boost-btn-card" onclick="buyBoost('token_surge','card')">€1.99</button>
         <button class="boost-btn-crypto" onclick="buyBoost('token_surge','crypto')">€1.79 POL</button>
       </div>
     </div>
     <div class="boost-item">
-      <div><div class="boost-name">🚀 Full Power</div><div class="boost-duration">6 ore — Tutto +150%</div></div>
+      <div><div class="boost-name">🚀 Full Power</div><div class="boost-duration">6 hours — All +150%</div></div>
       <div class="boost-btns">
         <button class="boost-btn-card" onclick="buyBoost('full_power','card')">€4.99</button>
         <button class="boost-btn-crypto" onclick="buyBoost('full_power','crypto')">€4.49 POL</button>
       </div>
     </div>
     <div class="boost-item">
-      <div><div class="boost-name">👑 Node Overdrive</div><div class="boost-duration">24 ore — Tutto +200%</div></div>
+      <div><div class="boost-name">👑 Node Overdrive</div><div class="boost-duration">24 hours — All +200%</div></div>
       <div class="boost-btns">
         <button class="boost-btn-card" onclick="buyBoost('node_overdrive','card')">€9.99</button>
         <button class="boost-btn-crypto" onclick="buyBoost('node_overdrive','crypto')">€8.99 POL</button>
@@ -483,7 +483,7 @@ const BUILDINGS=[
   {id:'quantum',  name:'Quantum Lab',        icon:'⚛️',  cost:{credits:500,energy:150,data:120},prod:{xp:5,game:0.2},     maxLevel:2},
 ];
 
-// ── MISSIONI ─────────────────────────────────────────────
+// ── MISSIONS ─────────────────────────────────────────────
 const MISSIONS=[
   {id:'m1',  name:'First Connection',    desc:'Build your first building',        reward:50,   rewardType:'credits', condition:()=>state.grid.filter(c=>c&&c.type!=='hq').length>=1,     done:false},
   {id:'m2',  name:'Energy Network',      desc:'Reach 90% energy capacity',            reward:100,  rewardType:'credits', condition:()=>state.resources.energy>=energyCap()*0.9,                           done:false},
@@ -582,7 +582,7 @@ function renderBuildMenu() {
 
 function selectBuild(id){state.selectedBuild=state.selectedBuild===id?null:id;state.selectedCell=null;renderBuildMenu();renderSelected();}
 
-// ── MISSIONI ─────────────────────────────────────────────
+// ── MISSIONS ─────────────────────────────────────────────
 function renderMissions() {
   document.getElementById('mission-list').innerHTML=MISSIONS.map(m=>{
     const ready=m.condition()&&!m.done;
@@ -609,7 +609,7 @@ function claimMission(id) {
 function checkMissions(){MISSIONS.forEach(m=>{if(!m.done&&m.condition())renderMissions();});}
 
 // ── PVP RAID ─────────────────────────────────────────────
-const PVP_COOLDOWN_SECONDS=300; // 5 minuti
+const PVP_COOLDOWN_SECONDS=300; // 5 minutes
 
 function launchRaid() {
   if(state.pvpCooldown>0){showNotif(`⏳ Cooldown: ${state.pvpCooldown}s`,'error');return;}
@@ -656,7 +656,7 @@ function updatePvpCooldown() {
     document.getElementById('pvp-btn').disabled=false;
   }
 }
-// ── EVENTI SPECIALI ───────────────────────────────────────
+// ── SPECIAL EVENTS ───────────────────────────────────────
 const SPECIAL_EVENTS=[
   {id:'surge',   name:'⚡ ENERGY SURGE',    desc:'Energy production x2 for 60s!',  type:'surge',   duration:60, effect:()=>{state.activeEvent='surge';showNotif('⚡ Energy Surge! Produzione x2 per 60s!','gold');}},
   {id:'blackout',name:'🔴 BLACKOUT',        desc:'Energy production halved!',    type:'blackout',duration:30, effect:()=>{state.activeEvent='blackout';showNotif('🔴 Blackout! Energy dimezzata per 30s.','error');}},
@@ -665,7 +665,7 @@ const SPECIAL_EVENTS=[
   {id:'bonus',   name:'💰 AIRDROP',         desc:'+100 Credits from the DAO!',        type:'surge',   duration:0,  effect:()=>{state.resources.credits+=100;showNotif('💰 DAO Airdrop! +100 Credits!','gold');}},
 ];
 
-let nextEventIn=300; // primo evento dopo 5 minuti
+let nextEventIn=300; // first event after 5 minutes
 
 function triggerRandomEvent() {
   const event=SPECIAL_EVENTS[Math.floor(Math.random()*SPECIAL_EVENTS.length)];
@@ -677,7 +677,7 @@ function triggerRandomEvent() {
   } else {
     addTicker(`⚡ EVENTO: ${event.name} — ${event.desc}`);
   }
-  nextEventIn=Math.floor(Math.random()*300)+180; // prossimo evento 3-8 minuti
+  nextEventIn=Math.floor(Math.random()*300)+180; // next event 3-8 minutes
 }
 
 function showEventBanner(event) {
@@ -688,7 +688,7 @@ function showEventBanner(event) {
   setTimeout(()=>{banner.style.display='none';state.activeEvent=null;},event.duration*1000);
 }
 
-// ── TORNEO ────────────────────────────────────────────────
+// ── TOURNAMENT  ────────────────────────────────────────────────
 function updateTournamentTimer() {
   const now=new Date();
   const nextMonday=new Date();
@@ -716,7 +716,7 @@ let gameTokenRate=0;
 
 // ── RESOURCE CAPS ─────────────────────────────────────────────
 function energyCap() {
-  // Cap base 300, +50 per ogni Vault built
+  // Cap base 300, +50 per each Vault built
   const vaults = state.grid.filter(c=>c&&c.type==='vault').length;
   return 300 + vaults * 100;
 }
@@ -733,16 +733,16 @@ function energyConsumption() {
   state.grid.forEach(cell => {
     if (!cell || cell.type === 'hq') return;
     const consumeMap = {
-      reactor: 0,       // produce energia, non ne consuma
-      server: 0.08,     // server consumano energia
-      turret: 0.12,     // torrette costose
-      miner: 0.20,      // miner sono voraci
+      reactor: 0,      
+      server: 0.08,    
+      turret: 0.12,     
+      miner: 0.20,      
       lab: 0.10,
       vault: 0.05,
       relay: 0.06,
-      drone: 0.18,      // droni consumano molto
+      drone: 0.18,      
       shield: 0.15,
-      quantum: 0.25,    // quantum lab costosissimo
+      quantum: 0.25,    
     };
     consume += (consumeMap[cell.type] || 0.05) * cell.level * 0.1;
   });
@@ -750,7 +750,7 @@ function energyConsumption() {
 }
 
 function dataConsumption() {
-  // Quantum lab e Lab consumano data continuamente
+  // Quantum lab and Lab consume data continuously 
   let consume = 0;
   state.grid.forEach(cell => {
     if (!cell) return;
@@ -768,7 +768,7 @@ function tick() {
   state.seconds++;
   if(state.seconds%60===0)state.day++;
 
-  // Evento countdown
+  // Countdown event
   nextEventIn--;
   if(nextEventIn<=0)triggerRandomEvent();
   if(state.eventTimer>0)state.eventTimer--;
@@ -1162,7 +1162,7 @@ async function buyBoost(boostId, method) {
     } catch(e) { showNotif('❌ Checkout error', 'error'); }
   
  } else {
-  // Pagamento in POL
+  // PAYMENT in POL
   if (!signer) {
     showNotif('❌ Connect wallet first', 'error');
     return;

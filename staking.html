@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NodeStrike — Staking</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+<style>
+:root {
+  --bg:#050810;--bg2:#0a0f1e;--card:#0c1220;
+  --border:rgba(0,212,255,0.12);--neon:#00ff88;--blue:#00d4ff;
+  --purple:#b44fff;--orange:#ff6b2b;--red:#ff3355;
+  --text:#d0e8ff;--dim:#5a7a99;--gold:#ffd700;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Rajdhani',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.04) 2px,rgba(0,0,0,0.04) 4px);pointer-events:none;z-index:999;}
+
+.wallet-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:0.6rem 1.5rem;display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;}
+.wallet-dot{width:8px;height:8px;border-radius:50%;background:var(--dim);}
+.wallet-dot.connected{background:var(--neon);box-shadow:0 0 8px var(--neon);}
+.wallet-addr{font-family:'Share Tech Mono',monospace;color:var(--dim);}
+.wallet-addr.connected{color:var(--neon);}
+.connect-btn{padding:0.4rem 1rem;background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.4);color:var(--neon);font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;transition:all 0.2s;}
+.connect-btn:hover{background:rgba(0,255,136,0.2);}
+.network-badge{padding:0.3rem 0.7rem;border-radius:4px;font-size:0.75rem;font-weight:600;background:rgba(130,71,229,0.2);border:1px solid rgba(130,71,229,0.4);color:#8247e5;display:none;}
+.home-btn{padding:0.4rem 1rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:var(--blue);font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;text-decoration:none;display:inline-block;}
+
+.page-header{padding:2rem 2rem 0;text-align:center;}
+.page-title{font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;background:linear-gradient(90deg,var(--neon),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.5rem;}
+.page-sub{font-size:1rem;color:var(--dim);margin-bottom:0.3rem;}
+.rate-badge{display:inline-block;padding:0.3rem 1rem;background:rgba(180,79,255,0.15);border:1px solid rgba(180,79,255,0.4);border-radius:100px;font-size:0.8rem;color:var(--purple);font-family:'Share Tech Mono',monospace;margin-top:0.5rem;}
+
+.main{max-width:900px;margin:2rem auto;padding:0 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;}
+.card-title{font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:700;letter-spacing:0.2em;color:var(--dim);text-transform:uppercase;margin-bottom:1.2rem;padding-bottom:0.6rem;border-bottom:1px solid var(--border);}
+
+.balance-row{display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.9rem;}
+.balance-label{color:var(--dim);}
+.balance-val{font-family:'Share Tech Mono',monospace;color:var(--text);}
+.balance-val.green{color:var(--neon);}
+.balance-val.purple{color:var(--purple);}
+
+.tier-grid{display:flex;flex-direction:column;gap:0.5rem;margin-top:0.5rem;}
+.tier{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.8rem 1rem;cursor:pointer;transition:all 0.2s;display:flex;justify-content:space-between;align-items:center;}
+.tier:hover{border-color:var(--purple);}
+.tier.selected{border-color:var(--purple);background:rgba(180,79,255,0.08);}
+.tier-name{font-family:'Orbitron',monospace;font-size:0.8rem;font-weight:700;}
+.tier-info{font-size:0.75rem;color:var(--dim);margin-top:0.2rem;}
+.tier-reward{font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--purple);}
+
+.input-group{margin-top:1rem;}
+.input-label{font-size:0.8rem;color:var(--dim);margin-bottom:0.4rem;display:block;}
+.input-field{width:100%;padding:0.7rem 1rem;background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'Share Tech Mono',monospace;font-size:0.9rem;outline:none;}
+.input-field:focus{border-color:var(--purple);}
+
+.action-btn{width:100%;margin-top:1rem;padding:0.8rem;border:none;border-radius:8px;font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:700;letter-spacing:0.05em;cursor:pointer;transition:all 0.2s;}
+.btn-stake{background:linear-gradient(135deg,var(--purple),var(--blue));color:var(--bg);}
+.btn-stake:hover{opacity:0.9;transform:translateY(-2px);}
+.btn-unstake{background:rgba(90,122,153,0.15);border:1px solid rgba(90,122,153,0.4);color:var(--dim);}
+.btn-unstake:hover{background:rgba(90,122,153,0.25);color:var(--text);}
+.btn-claim{background:linear-gradient(135deg,var(--neon),var(--blue));color:var(--bg);}
+.btn-claim:hover{opacity:0.9;transform:translateY(-2px);}
+.action-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+
+.pending-box{background:rgba(180,79,255,0.08);border:1px solid rgba(180,79,255,0.3);border-radius:8px;padding:1rem;margin-top:1rem;text-align:center;}
+.pending-num{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;color:var(--purple);}
+.pending-label{font-size:0.75rem;color:var(--dim);margin-top:0.2rem;}
+
+.info-box{background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);border-radius:8px;padding:1rem;margin-top:1rem;font-size:0.82rem;color:var(--dim);line-height:1.6;}
+.info-box strong{color:var(--blue);}
+
+.notif{position:fixed;top:80px;right:20px;background:var(--card);border:1px solid var(--neon);border-radius:8px;padding:0.8rem 1.2rem;font-size:0.85rem;color:var(--neon);z-index:200;animation:slideIn 0.3s ease;max-width:300px;}
+.notif.error{border-color:var(--red);color:var(--red);}
+.notif.info{border-color:var(--blue);color:var(--blue);}
+.notif.purple{border-color:var(--purple);color:var(--purple);}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+@media(max-width:700px){.main{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="wallet-bar">
+  <div style="display:flex;align-items:center;gap:0.6rem;">
+    <div class="wallet-dot" id="wallet-dot"></div>
+    <span class="wallet-addr" id="wallet-addr">Not connected</span>
+  </div>
+  <div style="display:flex;gap:0.8rem;align-items:center;">
+    <span class="network-badge" id="network-badge">Polygon</span>
+    <a href="index.html" class="home-btn">← HOME</a>
+    <a href="game.html" class="home-btn" style="color:var(--neon);border-color:rgba(0,255,136,0.4);">🎮 PLAY</a>
+    <button class="connect-btn" id="connect-btn" onclick="connectWallet()">CONNECT WALLET</button>
+  </div>
+</div>
+
+<div class="page-header">
+  <div class="page-title">⬡ NODE Staking</div>
+  <div class="page-sub">Stake $NODE to earn $STRIKE governance tokens</div>
+  <div class="rate-badge">20,000 $NODE → 1 $STRIKE / month</div>
+</div>
+
+<div class="main">
+
+  <!-- LEFT: BALANCES + STAKE -->
+  <div>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div class="card-title">Your Balances</div>
+      <div class="balance-row"><span class="balance-label">$NODE in wallet</span><span class="balance-val green" id="node-balance">—</span></div>
+      <div class="balance-row"><span class="balance-label">$NODE staked</span><span class="balance-val" id="node-staked">—</span></div>
+      <div class="balance-row"><span class="balance-label">$STRIKE in wallet</span><span class="balance-val purple" id="strike-balance">—</span></div>
+      <div class="balance-row" style="border:none;"><span class="balance-label">Current tier</span><span class="balance-val" id="current-tier">—</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Stake $NODE</div>
+      <p style="font-size:0.82rem;color:var(--dim);margin-bottom:1rem;">Select a tier and stake $NODE to start earning $STRIKE. Staking is free — unstake anytime.</p>
+
+      <div class="tier-grid">
+        <div class="tier" id="tier-0" onclick="selectTier(0)">
+          <div><div class="tier-name" style="color:var(--orange);">🥉 Bronze</div><div class="tier-info">Min. 20,000 $NODE</div></div>
+          <div class="tier-reward">1 $STRIKE/mo</div>
+        </div>
+        <div class="tier" id="tier-1" onclick="selectTier(1)">
+          <div><div class="tier-name" style="color:#c0c0c0;">🥈 Silver</div><div class="tier-info">Min. 100,000 $NODE</div></div>
+          <div class="tier-reward">6 $STRIKE/mo</div>
+        </div>
+        <div class="tier" id="tier-2" onclick="selectTier(2)">
+          <div><div class="tier-name" style="color:var(--gold);">🥇 Gold</div><div class="tier-info">Min. 500,000 $NODE</div></div>
+          <div class="tier-reward">35 $STRIKE/mo</div>
+        </div>
+        <div class="tier" id="tier-3" onclick="selectTier(3)">
+          <div><div class="tier-name" style="color:var(--blue);">💎 Diamond</div><div class="tier-info">Min. 2,000,000 $NODE</div></div>
+          <div class="tier-reward">160 $STRIKE/mo</div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label">Amount to stake ($NODE)</label>
+        <input type="number" class="input-field" id="stake-amount" placeholder="Enter amount..." min="20000">
+      </div>
+      <button class="action-btn btn-stake" id="stake-btn" onclick="stakeTokens()" disabled>STAKE $NODE</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: REWARDS + UNSTAKE -->
+  <div>
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div class="card-title">Pending Rewards</div>
+      <div class="pending-box">
+        <div class="pending-num" id="pending-strike">0.0000</div>
+        <div class="pending-label">$STRIKE available to claim</div>
+      </div>
+      <button class="action-btn btn-claim" id="claim-btn" onclick="claimReward()" disabled>CLAIM $STRIKE</button>
+
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div class="balance-row" style="border:none;"><span class="balance-label">Staked since</span><span class="balance-val" id="staked-since">—</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:1.5rem;">
+      <div class="card-title">Unstake</div>
+      <p style="font-size:0.82rem;color:var(--dim);margin-bottom:1rem;">Unstaking claims any pending $STRIKE rewards automatically before returning your $NODE.</p>
+      <button class="action-btn btn-unstake" id="unstake-btn" onclick="unstakeTokens()" disabled>UNSTAKE ALL $NODE</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">How it works</div>
+      <div class="info-box">
+        <strong>1.</strong> Approve $NODE spending, then stake any amount above the tier minimum.<br><br>
+        <strong>2.</strong> Rewards accrue every second based on your tier. Claim anytime after 24 hours.<br><br>
+        <strong>3.</strong> Unstake at any time — no lock period. Pending rewards are paid out automatically.<br><br>
+        <strong>$STRIKE</strong> is the NodeStrike governance token used for DAO voting and pre-IPO mining.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const NODE_TOKEN_ADDR   = '0x34b81BFC698935fB60Ab623EA0545956b26bd99F';
+const STRIKE_TOKEN_ADDR = '0x0bAA8A62795690009DF64AE70587189fE8aBE9A3';
+const STAKING_ADDR      = '0x2bf08aDd38988aB3F272d0701C3e677861CC968F';
+const POLYGON_CHAIN_ID  = '0x89';
+
+const ERC20_ABI = [
+  'function balanceOf(address) view returns (uint256)',
+  'function decimals() view returns (uint8)',
+  'function approve(address spender, uint256 amount) returns (bool)',
+  'function allowance(address owner, address spender) view returns (uint256)',
+];
+const STAKING_ABI = [
+  'function stake(uint8 tier, uint256 amount) external',
+  'function unstake() external',
+  'function claimReward() external',
+  'function pendingReward(address user) view returns (uint256)',
+  'function stakes(address) view returns (uint8 tier, uint256 nodeStaked, uint256 stakedAt, uint256 lastClaim, uint256 totalStrikeClaimed)',
+];
+
+const TIER_MINS = [
+  BigInt('20000') * BigInt(10**18),
+  BigInt('100000') * BigInt(10**18),
+  BigInt('500000') * BigInt(10**18),
+  BigInt('2000000') * BigInt(10**18),
+];
+const TIER_NAMES = ['Bronze', 'Silver', 'Gold', 'Diamond'];
+
+let provider, signer, userAddr;
+let nodeContract, strikeContract, stakingContract;
+let selectedTier = null;
+
+async function connectWallet() {
+  if (!window.ethereum) { showNotif('❌ MetaMask not found', 'error'); return; }
+  try {
+    const btn = document.getElementById('connect-btn');
+    btn.textContent = 'Connecting...'; btn.disabled = true;
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    userAddr = accounts[0];
+    provider = new ethers.BrowserProvider(window.ethereum);
+    signer = await provider.getSigner();
+    const network = await provider.getNetwork();
+    const chainId = '0x' + network.chainId.toString(16);
+    if (chainId !== POLYGON_CHAIN_ID) { showNotif('⚠️ Switch to Polygon', 'error'); await switchToPolygon(); }
+    nodeContract   = new ethers.Contract(NODE_TOKEN_ADDR,   ERC20_ABI,   signer);
+    strikeContract = new ethers.Contract(STRIKE_TOKEN_ADDR, ERC20_ABI,   signer);
+    stakingContract= new ethers.Contract(STAKING_ADDR,      STAKING_ABI, signer);
+    updateWalletUI();
+    await refreshData();
+    window.ethereum.on('accountsChanged', accs => { userAddr = accs[0]; updateWalletUI(); refreshData(); });
+    window.ethereum.on('chainChanged', () => location.reload());
+  } catch(e) { showNotif('❌ Connection rejected', 'error'); console.error(e); }
+  finally { document.getElementById('connect-btn').disabled = false; }
+}
+
+async function switchToPolygon() {
+  try { await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: POLYGON_CHAIN_ID }] }); }
+  catch(e) { if(e.code===4902) await window.ethereum.request({ method: 'wallet_addEthereumChain', params: [{ chainId: POLYGON_CHAIN_ID, chainName: 'Polygon Mainnet', nativeCurrency: { name:'POL', symbol:'POL', decimals:18 }, rpcUrls: ['https://polygon-rpc.com'], blockExplorerUrls: ['https://polygonscan.com'] }] }); }
+}
+
+function updateWalletUI() {
+  document.getElementById('wallet-dot').classList.add('connected');
+  const addr = document.getElementById('wallet-addr');
+  addr.classList.add('connected');
+  addr.textContent = userAddr.slice(0,6) + '...' + userAddr.slice(-4);
+  document.getElementById('network-badge').style.display = 'inline';
+  const btn = document.getElementById('connect-btn');
+  btn.textContent = 'CONNECTED'; btn.style.opacity = '0.5'; btn.style.cursor = 'default';
+  document.getElementById('stake-btn').disabled = false;
+}
+
+async function refreshData() {
+  if (!userAddr) return;
+  try {
+    const [nodeBal, strikeBal, stakeInfo, pending] = await Promise.all([
+      nodeContract.balanceOf(userAddr),
+      strikeContract.balanceOf(userAddr),
+      stakingContract.stakes(userAddr),
+      stakingContract.pendingReward(userAddr),
+    ]);
+    const nodeFmt   = parseFloat(ethers.formatEther(nodeBal)).toLocaleString(undefined, {maximumFractionDigits:2});
+    const strikeFmt = parseFloat(ethers.formatEther(strikeBal)).toFixed(4);
+    const stakedFmt = parseFloat(ethers.formatEther(stakeInfo.nodeStaked)).toLocaleString(undefined, {maximumFractionDigits:2});
+    const pendFmt   = parseFloat(ethers.formatEther(pending)).toFixed(4);
+
+    document.getElementById('node-balance').textContent   = nodeFmt + ' $NODE';
+    document.getElementById('strike-balance').textContent = strikeFmt + ' $STRIKE';
+    document.getElementById('node-staked').textContent    = stakedFmt + ' $NODE';
+    document.getElementById('pending-strike').textContent = pendFmt;
+    document.getElementById('current-tier').textContent   = stakeInfo.nodeStaked > 0n ? TIER_NAMES[stakeInfo.tier] : 'Not staking';
+
+    if (stakeInfo.stakedAt > 0n) {
+      const date = new Date(Number(stakeInfo.stakedAt) * 1000);
+      document.getElementById('staked-since').textContent = date.toLocaleDateString();
+      document.getElementById('unstake-btn').disabled = false;
+      document.getElementById('claim-btn').disabled = pending === 0n;
+    }
+  } catch(e) { console.error(e); }
+}
+
+function selectTier(t) {
+  selectedTier = t;
+  document.querySelectorAll('.tier').forEach((el, i) => {
+    el.classList.toggle('selected', i === t);
+  });
+  const minAmt = Number(TIER_MINS[t]) / 1e18;
+  document.getElementById('stake-amount').value = minAmt;
+  document.getElementById('stake-amount').min = minAmt;
+}
+
+async function stakeTokens() {
+  if (!userAddr) { showNotif('❌ Connect wallet first', 'error'); return; }
+  if (selectedTier === null) { showNotif('❌ Select a tier first', 'error'); return; }
+  const amountStr = document.getElementById('stake-amount').value;
+  if (!amountStr || parseFloat(amountStr) <= 0) { showNotif('❌ Enter an amount', 'error'); return; }
+  const amount = ethers.parseEther(amountStr);
+  if (amount < TIER_MINS[selectedTier]) {
+    showNotif(`❌ Minimum for this tier: ${Number(TIER_MINS[selectedTier])/1e18:,} $NODE`, 'error');
+    return;
+  }
+  const btn = document.getElementById('stake-btn');
+  btn.disabled = true; btn.textContent = 'Approving...';
+  try {
+    const allowance = await nodeContract.allowance(userAddr, STAKING_ADDR);
+    if (allowance < amount) {
+      const approveTx = await nodeContract.approve(STAKING_ADDR, amount);
+      showNotif('⏳ Approving $NODE...', 'info');
+      await approveTx.wait();
+    }
+    btn.textContent = 'Staking...';
+    showNotif('⏳ Confirm stake in MetaMask...', 'info');
+    const tx = await stakingContract.stake(selectedTier, amount);
+    await tx.wait();
+    showNotif(`✅ ${parseFloat(amountStr).toLocaleString()} $NODE staked!`, 'purple');
+    await refreshData();
+  } catch(e) {
+    if (e.code === 4001) showNotif('❌ Transaction cancelled', 'error');
+    else showNotif('❌ Stake failed: ' + (e.reason || e.message || 'Unknown'), 'error');
+    console.error(e);
+  } finally {
+    btn.disabled = false; btn.textContent = 'STAKE $NODE';
+  }
+}
+
+async function claimReward() {
+  if (!userAddr) return;
+  const btn = document.getElementById('claim-btn');
+  btn.disabled = true; btn.textContent = 'Claiming...';
+  try {
+    showNotif('⏳ Confirm claim in MetaMask...', 'info');
+    const tx = await stakingContract.claimReward();
+    await tx.wait();
+    showNotif('✅ $STRIKE claimed!', 'purple');
+    await refreshData();
+  } catch(e) {
+    if (e.code === 4001) showNotif('❌ Transaction cancelled', 'error');
+    else showNotif('❌ Claim failed: ' + (e.reason || e.message || 'Unknown'), 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'CLAIM $STRIKE';
+  }
+}
+
+async function unstakeTokens() {
+  if (!userAddr) return;
+  if (!confirm('Unstake all $NODE? Pending $STRIKE will be claimed automatically.')) return;
+  const btn = document.getElementById('unstake-btn');
+  btn.disabled = true; btn.textContent = 'Unstaking...';
+  try {
+    showNotif('⏳ Confirm unstake in MetaMask...', 'info');
+    const tx = await stakingContract.unstake();
+    await tx.wait();
+    showNotif('✅ $NODE returned to your wallet!', 'info');
+    await refreshData();
+  } catch(e) {
+    if (e.code === 4001) showNotif('❌ Transaction cancelled', 'error');
+    else showNotif('❌ Unstake failed: ' + (e.reason || e.message || 'Unknown'), 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'UNSTAKE ALL $NODE';
+  }
+}
+
+let notifTimer;
+function showNotif(msg, type='') {
+  const ex = document.querySelector('.notif'); if (ex) ex.remove();
+  const div = document.createElement('div');
+  div.className = 'notif' + (type ? ' '+type : '');
+  div.textContent = msg;
+  document.body.appendChild(div);
+  clearTimeout(notifTimer);
+  notifTimer = setTimeout(() => div.remove(), 3500);
+}
+
+setInterval(() => { if (userAddr) refreshData(); }, 30000);
+</script>
+</body>
+</html>

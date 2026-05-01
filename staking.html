@@ -371,6 +371,24 @@ function showNotif(msg, type='') {
 }
 
 setInterval(() => { if (userAddr) refreshData(); }, 30000);
+  // Auto-reconnect if already connected
+async function autoConnect() {
+  if (!window.ethereum) return;
+  try {
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+    if (accounts.length > 0) {
+      userAddr = accounts[0];
+      provider = new ethers.BrowserProvider(window.ethereum);
+      signer = await provider.getSigner();
+      nodeContract    = new ethers.Contract(NODE_TOKEN_ADDR,   ERC20_ABI,   signer);
+      strikeContract  = new ethers.Contract(STRIKE_TOKEN_ADDR, ERC20_ABI,   signer);
+      stakingContract = new ethers.Contract(STAKING_ADDR,      STAKING_ABI, signer);
+      updateWalletUI();
+      await refreshData();
+    }
+  } catch(e) { console.error(e); }
+}
+autoConnect();
 </script>
 </body>
 </html>

@@ -295,7 +295,7 @@ async function stakeTokens() {
   if (!amountStr || parseFloat(amountStr) <= 0) { showNotif('❌ Enter an amount', 'error'); return; }
   const amount = ethers.parseEther(amountStr);
   if (amount < TIER_MINS[selectedTier]) {
-    showNotif(`❌ Minimum for this tier: ${Number(TIER_MINS[selectedTier])/1e18} $NODE`, 'error');
+    showNotif(`❌ Minimum for this tier: ${(Number(TIER_MINS[selectedTier])/1e18).toLocaleString()} $NODE`, 'error');
     return;
   }
   const btn = document.getElementById('stake-btn');

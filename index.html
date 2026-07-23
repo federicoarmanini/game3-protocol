@@ -1,674 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta name="msvalidate.01" content="C728FB7CB6C7B19740B443725B69A227" />
-  <meta name="google-site-verification" content="jkrqAzNgq9rHjPOwRgAFVHfaevHqwqBSdEtKDwJdCoI" />
-  <meta name="description" content="NodeStrike — The first freemium GameFi ecosystem on Polygon. Play for free, earn $NODE, convert to USDC.">
-  <meta name="keywords" content="NodeStrike, GameFi, Play to Earn, Polygon, crypto game, nodestrike, NodeStrike">
-  <meta property="og:title" content="NodeStrike — Play. Earn. Own.">
-  <meta property="og:description" content="Freemium GameFi on Polygon Mainnet. Play for free and earn $NODE.">
-  <meta property="og:url" content="https://nodestrike.io">
-  <meta property="og:type" content="website">
-  <link rel="canonical" href="https://nodestrike.io">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-657X132Z28"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-657X132Z28');
-  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NodeStrike — Play. Earn. Own.</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-  :root {
-    --neon-green: #00ff88;
-    --neon-blue: #00d4ff;
-    --neon-purple: #b44fff;
-    --neon-orange: #ff6b2b;
-    --dark: #060811;
-    --dark2: #0d1120;
-    --dark3: #131929;
-    --card: #0f1825;
-    --text: #e8f0fe;
-    --text-dim: #7a8aaa;
-    --border: rgba(0,212,255,0.15);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Rajdhani', sans-serif; background: var(--dark); color: var(--text); overflow-x: hidden; }
-  body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px); pointer-events: none; z-index: 1000; }
-
-  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; background: rgba(6,8,17,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-  .nav-logo { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1.4rem; letter-spacing: 0.1em; background: linear-gradient(90deg, var(--neon-green), var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a { font-size: 0.9rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); text-decoration: none; transition: color 0.3s; }
-  .nav-links a:hover { color: var(--neon-green); }
-  .nav-cta { padding: 0.6rem 1.5rem; background: transparent; border: 1px solid var(--neon-green); color: var(--neon-green) !important; border-radius: 4px; font-size: 0.85rem !important; transition: all 0.3s !important; }
-  .nav-cta:hover { background: var(--neon-green) !important; color: var(--dark) !important; }
-
-  #hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; position: relative; padding: 8rem 2rem 4rem; overflow: hidden; }
-  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(0,212,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.05) 1px, transparent 1px); background-size: 60px 60px; animation: gridMove 20s linear infinite; }
-  @keyframes gridMove { 0% { transform: translateY(0); } 100% { transform: translateY(60px); } }
-  .hero-glow { position: absolute; width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(0,255,136,0.06) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); animation: pulse 4s ease-in-out infinite; }
-  @keyframes pulse { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; } }
-  .hero-content { position: relative; z-index: 2; max-width: 900px; }
-  .hero-badge { display: inline-block; padding: 0.4rem 1.2rem; border: 1px solid rgba(0,255,136,0.4); border-radius: 100px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--neon-green); margin-bottom: 2rem; animation: fadeDown 0.8s ease both; }
-  .hero-badge span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--neon-green); margin-right: 0.6rem; animation: blink 1.5s ease infinite; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
-  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-  h1 { font-family: 'Orbitron', monospace; font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; line-height: 1; letter-spacing: -0.02em; margin-bottom: 1.5rem; animation: fadeUp 0.8s 0.2s ease both; }
-  .h1-line1 { display: block; color: var(--text); }
-  .h1-line2 { display: block; background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200%; animation: gradientShift 3s ease infinite, fadeUp 0.8s 0.2s ease both; }
-  @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-  .hero-sub { font-size: 1.25rem; font-weight: 500; color: var(--text-dim); max-width: 600px; margin: 0 auto 3rem; line-height: 1.6; animation: fadeUp 0.8s 0.4s ease both; }
-  .hero-ctas { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; animation: fadeUp 0.8s 0.6s ease both; }
-  .btn-primary { padding: 1rem 2.5rem; background: linear-gradient(135deg, var(--neon-green), var(--neon-blue)); color: var(--dark); font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 0 30px rgba(0,255,136,0.3); }
-  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 50px rgba(0,255,136,0.5); }
-  .btn-secondary { padding: 1rem 2.5rem; background: transparent; color: var(--text); font-family: 'Orbitron', monospace; font-weight: 700; font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; cursor: pointer; text-decoration: none; transition: all 0.2s; }
-  .btn-secondary:hover { border-color: var(--neon-blue); color: var(--neon-blue); transform: translateY(-3px); }
-  .hero-stats { display: flex; gap: 4rem; justify-content: center; margin-top: 5rem; animation: fadeUp 0.8s 0.8s ease both; }
-  .stat { text-align: center; }
-  .stat-num { font-family: 'Orbitron', monospace; font-size: 2rem; font-weight: 900; color: var(--neon-green); }
-  .stat-label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-top: 0.3rem; }
-
-  section { padding: 7rem 4rem; }
-  .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: var(--neon-green); margin-bottom: 1rem; }
-  .section-title { font-family: 'Orbitron', monospace; font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; }
-  .section-sub { font-size: 1.1rem; color: var(--text-dim); max-width: 600px; line-height: 1.7; }
-
-  #how { background: var(--dark2); position: relative; overflow: hidden; }
-  #how::before { content: ''; position: absolute; right: -200px; top: -200px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(180,79,255,0.08) 0%, transparent 70%); }
-  .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 4rem; }
-  .how-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; position: relative; overflow: hidden; transition: border-color 0.3s, transform 0.3s; }
-  .how-card:hover { border-color: var(--neon-blue); transform: translateY(-6px); }
-  .how-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--neon-green), var(--neon-blue)); opacity: 0; transition: opacity 0.3s; }
-  .how-card:hover::before { opacity: 1; }
-  .how-num { font-family: 'Orbitron', monospace; font-size: 3rem; font-weight: 900; color: rgba(0,212,255,0.1); line-height: 1; margin-bottom: 1rem; }
-  .how-icon { font-size: 2rem; margin-bottom: 1rem; }
-  .how-title { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; color: var(--text); }
-  .how-desc { font-size: 0.95rem; color: var(--text-dim); line-height: 1.6; }
-
-  #tokenomics { background: var(--dark); }
-  .token-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 4rem; }
-  .token-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 2.5rem; position: relative; overflow: hidden; }
-  .token-card.primary { border-color: rgba(0,255,136,0.3); }
-  .token-card.secondary { border-color: rgba(180,79,255,0.3); }
-  .token-ticker { font-family: 'Orbitron', monospace; font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
-  .token-card.primary .token-ticker { color: var(--neon-green); }
-  .token-card.secondary .token-ticker { color: var(--neon-purple); }
-  .token-name { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 2rem; }
-  .token-rows { display: flex; flex-direction: column; gap: 1rem; }
-  .token-row { display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid var(--border); }
-  .token-row:last-child { border-bottom: none; }
-  .token-row-label { font-size: 0.9rem; color: var(--text-dim); font-weight: 500; }
-  .token-row-val { font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 700; color: var(--text); }
-  .allocation-bars { margin-top: 3rem; }
-  .alloc-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-  .alloc-label { font-size: 0.85rem; color: var(--text-dim); width: 180px; flex-shrink: 0; }
-  .alloc-bar-bg { flex: 1; height: 6px; background: rgba(255,255,255,0.05); border-radius: 100px; overflow: hidden; }
-  .alloc-bar { height: 100%; border-radius: 100px; transition: width 1s ease; }
-  .alloc-pct { font-family: 'Orbitron', monospace; font-size: 0.8rem; font-weight: 700; color: var(--text); width: 40px; text-align: right; }
-
-  #roadmap { background: var(--dark2); position: relative; }
-  .roadmap-line { position: absolute; left: 50%; top: 10rem; bottom: 4rem; width: 1px; background: linear-gradient(180deg, var(--neon-green), var(--neon-blue), var(--neon-purple)); transform: translateX(-50%); }
-  .roadmap-items { display: flex; flex-direction: column; gap: 3rem; margin-top: 4rem; position: relative; max-width: 900px; margin-left: auto; margin-right: auto; }
-  .roadmap-item { display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; gap: 2rem; }
-  .roadmap-item:nth-child(even) .roadmap-content { grid-column: 3; grid-row: 1; }
-  .roadmap-item:nth-child(even) .roadmap-empty { grid-column: 1; grid-row: 1; }
-  .roadmap-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--neon-green); background: var(--dark); margin: 0 auto; position: relative; z-index: 2; flex-shrink: 0; }
-  .roadmap-dot.done { background: var(--neon-green); box-shadow: 0 0 15px var(--neon-green); }
-  .roadmap-dot.active { background: var(--neon-blue); border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); animation: pulse-dot 2s ease infinite; }
-  @keyframes pulse-dot { 0%,100% { box-shadow: 0 0 15px var(--neon-blue); } 50% { box-shadow: 0 0 30px var(--neon-blue); } }
-  .roadmap-content { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem 2rem; transition: border-color 0.3s; }
-  .roadmap-content:hover { border-color: rgba(0,212,255,0.4); }
-  .roadmap-phase { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--neon-green); margin-bottom: 0.4rem; }
-  .roadmap-title { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; margin-bottom: 0.8rem; }
-  .roadmap-items-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
-  .roadmap-items-list li { font-size: 0.9rem; color: var(--text-dim); padding-left: 1rem; position: relative; }
-  .roadmap-items-list li::before { content: '›'; position: absolute; left: 0; color: var(--neon-blue); }
-
-  #contracts { background: var(--dark); }
-  .contracts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; margin-top: 3rem; }
-  .contract-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; transition: border-color 0.3s, transform 0.3s; }
-  .contract-card:hover { border-color: var(--neon-green); transform: translateY(-3px); }
-  .contract-name { font-family: 'Orbitron', monospace; font-size: 0.9rem; font-weight: 700; color: var(--neon-green); }
-  .contract-addr { font-family: monospace; font-size: 0.8rem; color: var(--text-dim); word-break: break-all; }
-  .contract-link { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 600; color: var(--neon-blue); text-decoration: none; letter-spacing: 0.05em; transition: color 0.2s; }
-  .contract-link:hover { color: var(--neon-green); }
-
-  #community { background: var(--dark2); text-align: center; }
-  .community-cards { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-top: 3rem; }
-  .community-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 3rem 4rem; text-decoration: none; color: var(--text); transition: all 0.3s; display: flex; flex-direction: column; align-items: center; gap: 1rem; min-width: 220px; }
-  .community-card:hover { transform: translateY(-8px); border-color: var(--neon-blue); box-shadow: 0 20px 60px rgba(0,212,255,0.1); }
-  .community-icon { font-size: 3rem; }
-  .community-name { font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700; }
-  .community-desc { font-size: 0.85rem; color: var(--text-dim); }
-
-  #whitepaper { background: var(--dark); text-align: center; position: relative; overflow: hidden; }
-  #whitepaper::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(0,255,136,0.05) 0%, transparent 70%); }
-  .wp-content { position: relative; z-index: 2; }
-  .wp-badge { display: inline-block; padding: 0.5rem 1.5rem; background: rgba(0,255,136,0.1); border: 1px solid rgba(0,255,136,0.3); border-radius: 100px; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--neon-green); margin-bottom: 2rem; }
-
-  footer { background: var(--dark2); border-top: 1px solid var(--border); padding: 3rem 4rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-  .footer-logo { font-family: 'Orbitron', monospace; font-weight: 900; font-size: 1.2rem; background: linear-gradient(90deg, var(--neon-green), var(--neon-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .footer-text { font-size: 0.85rem; color: var(--text-dim); }
-  .footer-links { display: flex; gap: 2rem; list-style: none; }
-  .footer-links a { font-size: 0.85rem; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
-  .footer-links a:hover { color: var(--neon-green); }
-
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { display: none; }
-    section { padding: 5rem 1.5rem; }
-    .token-grid { grid-template-columns: 1fr; }
-    .roadmap-line { display: none; }
-    .roadmap-item { grid-template-columns: 1fr; }
-    .roadmap-item:nth-child(even) .roadmap-content { grid-column: 1; }
-    .roadmap-dot { display: none; }
-    .hero-stats { gap: 2rem; flex-wrap: wrap; }
-    footer { flex-direction: column; text-align: center; }
-  }
+    :root {
+      --neon-green: #00ff88;
+      --neon-blue: #00d4ff;
+      --neon-purple: #b44fff;
+      --dark: #060811;
+      --card: #0f1825;
+    }
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--dark);
+      color: #e8f0fe;
+      margin: 0;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(6,8,17,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0,212,255,0.15);
+    }
+    .logo {
+      font-family: 'Orbitron', monospace;
+      font-weight: 900;
+      font-size: 1.5rem;
+      background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+    }
+    .hero h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 span {
+      background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .btn {
+      padding: 1rem 2.5rem;
+      font-family: 'Orbitron', monospace;
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+      color: #060811;
+      border: none;
+    }
+    .btn-secondary {
+      background: transparent;
+      color: #e8f0fe;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    section {
+      padding: 6rem 4rem;
+    }
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <div class="nav-logo">NodeStrike</div>
-  <ul class="nav-links">
-    <li><a href="#how">How it works</a></li>
-    <li><a href="#tokenomics">Tokenomics</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contracts">Contracts</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#community" class="nav-cta">Community</a></li>
-    <li><a href="staking.html">Staking</a></li>
-    <li><a href="game.html" class="nav-cta" style="background:var(--neon-green);color:var(--dark)!important;margin-left:0.5rem;">Play now</a></li>
-  </ul>
+  <div class="logo">NODESTRIKE</div>
+  <div>
+    <a href="game.html" class="btn btn-primary">Play Now</a>
+  </div>
 </nav>
 
 <!-- HERO -->
-<section id="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-content">
-    <div class="hero-badge"><span></span>Live on Polygon Mainnet</div>
-    <h1>
-      <span class="h1-line1">Play.</span>
-      <span class="h1-line2">Earn. Own.</span>
-    </h1>
-    <p class="hero-sub">The first freemium GameFi ecosystem with dual token, pre-IPO mining and direct stablecoin conversion. Play for free, earn $NODE, convert to USDC.</p>
-    <div class="hero-ctas">
-      <a href="game.html" class="btn-primary">Start Playing</a>
-      <a href="#whitepaper" class="btn-secondary">Read Whitepaper</a>
+<section class="hero">
+  <div style="max-width: 900px; position: relative; z-index: 2;">
+    <div style="display:inline-block; padding:0.4rem 1.2rem; border:1px solid rgba(0,255,136,0.4); border-radius:50px; font-size:0.85rem; margin-bottom:2rem;">
+      Live on Polygon Mainnet • Prestige System Now Live
     </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-num">500M</div>
-        <div class="stat-label">$NODE Supply</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">100M</div>
-        <div class="stat-label">$STRIKE Supply</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">10K</div>
-        <div class="stat-label">$NODE → 1 USDC</div>
-      </div>
-      <div class="stat">
-        <div class="stat-num">0%</div>
-        <div class="stat-label">Pay-to-win</div>
-      </div>
+    
+    <h1>
+      Play.<br>
+      <span>Earn. Own.</span>
+    </h1>
+    
+    <p style="font-size:1.3rem; max-width:620px; margin:0 auto 2.5rem; color:#a0b4d4;">
+      The most fun freemium GameFi on Polygon.<br>
+      Build your node, raid others, prestige for permanent power.
+    </p>
+
+    <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <a href="game.html" class="btn btn-primary">Start Playing</a>
+      <a href="#how" class="btn btn-secondary">How it Works</a>
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
-<section id="how">
-  <div class="section-label">Mechanics</div>
-  <h2 class="section-title">How it works</h2>
-  <p class="section-sub">A simple system: play, accumulate tokens, upgrade or convert to stablecoin. No mandatory purchases.</p>
-  <div class="how-grid">
-    <div class="how-card">
-      <div class="how-num">01</div>
-      <div class="how-icon">🎮</div>
-      <div class="how-title">Play for free</div>
-      <div class="how-desc">Access the game at no cost. Complete matches, missions and tournaments to earn $NODE every day.</div>
-    </div>
-    <div class="how-card">
-      <div class="how-num">02</div>
-      <div class="how-icon">💰</div>
-      <div class="how-title">Accumulate $NODE</div>
-      <div class="how-desc">Every in-game action rewards you. Daily streaks, tournament wins and referrals multiply your earnings.</div>
-    </div>
-    <div class="how-card">
-      <div class="how-num">03</div>
-      <div class="how-icon">⚡</div>
-      <div class="how-title">Upgrade or convert</div>
-      <div class="how-desc">Use $NODE for upgrades and boosts, or accumulate 10,000 to convert them to 1 USDC directly on-chain.</div>
-    </div>
-    <div class="how-card">
-      <div class="how-num">04</div>
-      <div class="how-icon">🏆</div>
-      <div class="how-title">Stake for $STRIKE</div>
-      <div class="how-desc">Stake your $NODE to earn $STRIKE, the governance token with access to pre-IPO mining.</div>
+<section id="how" style="background:#0a0f1e;">
+  <div style="max-width:1100px; margin:0 auto;">
+    <h2 class="section-title" style="text-align:center;">How it Works</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:2rem; margin-top:3rem;">
+      <div style="background:#0f1825; padding:2rem; border-radius:16px; border:1px solid rgba(0,212,255,0.15);">
+        <div style="font-size:2.5rem; margin-bottom:1rem;">🎮</div>
+        <h3 style="font-family:'Orbitron',monospace; margin-bottom:0.8rem;">Build & Manage</h3>
+        <p style="color:#a0b4d4; line-height:1.6;">Construct buildings on a 9x9 grid. Create synergies and optimize your production.</p>
+      </div>
+      <div style="background:#0f1825; padding:2rem; border-radius:16px; border:1px solid rgba(0,212,255,0.15);">
+        <div style="font-size:2.5rem; margin-bottom:1rem;">⚔️</div>
+        <h3 style="font-family:'Orbitron',monospace; margin-bottom:0.8rem;">Raid & Risk</h3>
+        <p style="color:#a0b4d4; line-height:1.6;">Scout enemy nodes and launch raids. High risk, high reward gameplay.</p>
+      </div>
+      <div style="background:#0f1825; padding:2rem; border-radius:16px; border:1px solid rgba(0,212,255,0.15);">
+        <div style="font-size:2.5rem; margin-bottom:1rem;">🌟</div>
+        <h3 style="font-family:'Orbitron',monospace; margin-bottom:0.8rem;">Prestige & Grow</h3>
+        <p style="color:#a0b4d4; line-height:1.6;">Reset your node to gain permanent multipliers. The real endgame loop.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- TOKENOMICS -->
-<section id="tokenomics">
-  <div class="section-label">Economy</div>
-  <h2 class="section-title">Tokenomics</h2>
-  <p class="section-sub">A dual-token model designed to be sustainable over time, with built-in deflationary mechanisms.</p>
-  <div class="token-grid">
-    <div class="token-card primary">
-      <div class="token-ticker">$NODE</div>
-      <div class="token-name">Utility Token</div>
-      <div class="token-rows">
-        <div class="token-row"><span class="token-row-label">Max supply</span><span class="token-row-val">500,000,000</span></div>
-        <div class="token-row"><span class="token-row-label">Standard</span><span class="token-row-val">ERC-20</span></div>
-        <div class="token-row"><span class="token-row-label">Blockchain</span><span class="token-row-val">Polygon</span></div>
-        <div class="token-row"><span class="token-row-label">Conversion</span><span class="token-row-val">10K → 1 USDC</span></div>
-        <div class="token-row"><span class="token-row-label">Burn on upgrade</span><span class="token-row-val">40%</span></div>
-      </div>
-    </div>
-    <div class="token-card secondary">
-      <div class="token-ticker">$STRIKE</div>
-      <div class="token-name">Governance Token</div>
-      <div class="token-rows">
-        <div class="token-row"><span class="token-row-label">Total supply</span><span class="token-row-val">100,000,000</span></div>
-        <div class="token-row"><span class="token-row-label">Standard</span><span class="token-row-val">ERC-20Votes</span></div>
-        <div class="token-row"><span class="token-row-label">Emission</span><span class="token-row-val">Fixed — no mint</span></div>
-        <div class="token-row"><span class="token-row-label">How to earn</span><span class="token-row-val">Staking $NODE</span></div>
-        <div class="token-row"><span class="token-row-label">Team vesting</span><span class="token-row-val">24 months</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="allocation-bars" style="margin-top: 3rem; max-width: 700px;">
-    <p class="section-label" style="margin-bottom: 1.5rem;">$STRIKE Allocation</p>
-    <div class="alloc-row"><span class="alloc-label">Community / P2E</span><div class="alloc-bar-bg"><div class="alloc-bar" style="width:35%; background: linear-gradient(90deg, #00ff88, #00d4ff);"></div></div><span class="alloc-pct">35%</span></div>
-    <div class="alloc-row"><span class="alloc-label">Pre-IPO Mining</span><div class="alloc-bar-bg"><div class="alloc-bar" style="width:20%; background: linear-gradient(90deg, #b44fff, #00d4ff);"></div></div><span class="alloc-pct">20%</span></div>
-    <div class="alloc-row"><span class="alloc-label">Treasury</span><div class="alloc-bar-bg"><div class="alloc-bar" style="width:15%; background: linear-gradient(90deg, #ff6b2b, #b44fff);"></div></div><span class="alloc-pct">15%</span></div>
-    <div class="alloc-row"><span class="alloc-label">Team</span><div class="alloc-bar-bg"><div class="alloc-bar" style="width:15%; background: linear-gradient(90deg, #00d4ff, #b44fff);"></div></div><span class="alloc-pct">15%</span></div>
-    <div class="alloc-row"><span class="alloc-label">Investors</span><div class="alloc-bar-bg"><div class="alloc-bar" style="width:10%; background: linear-gradient(90deg, #ff6b2b, #00d4ff);"></div></div><span class="alloc-pct">10%</span></div>
-    <div class="alloc-row"><span class="alloc-label">Advisors</span><div class="alloc-bar-bg"><div class="alloc-bar" style="width:5%; background: linear-gradient(90deg, #00ff88, #ff6b2b);"></div></div><span class="alloc-pct">5%</span></div>
-  </div>
+<!-- CTA -->
+<section style="text-align:center; background:#060811;">
+  <h2 class="section-title">Ready to build your empire?</h2>
+  <a href="game.html" class="btn btn-primary" style="font-size:1.1rem; padding:1.1rem 3rem;">Play Now — It's Free</a>
 </section>
-
-<!-- ROADMAP -->
-<section id="roadmap">
-  <div class="section-label">Timeline</div>
-  <h2 class="section-title">Roadmap</h2>
-  <p class="section-sub">From whitepaper to public launch — each phase built on the previous one.</p>
-  <div class="roadmap-line"></div>
-  <div class="roadmap-items">
-    <div class="roadmap-item">
-      <div class="roadmap-content">
-        <div class="roadmap-phase">Q1–Q2 2026 ✓</div>
-        <div class="roadmap-title">Foundation</div>
-        <ul class="roadmap-items-list">
-          <li>Tokenomics whitepaper</li>
-          <li>Smart contracts developed</li>
-          <li>40 unit tests passed</li>
-          <li>Deploy on Polygon Mainnet</li>
-        </ul>
-      </div>
-      <div class="roadmap-dot done"></div>
-      <div class="roadmap-empty"></div>
-    </div>
-    <div class="roadmap-item">
-      <div class="roadmap-empty"></div>
-      <div class="roadmap-dot active"></div>
-      <div class="roadmap-content">
-        <div class="roadmap-phase">Q3–Q4 2026 ◉ In progress</div>
-        <div class="roadmap-title">Alpha & Community</div>
-        <ul class="roadmap-items-list">
-          <li>Game MVP (closed alpha)</li>
-          <li>First 500 wallets whitelist</li>
-          <li>$NODE live on Mainnet</li>
-          <li>Discord & community launch</li>
-        </ul>
-      </div>
-    </div>
-    <div class="roadmap-item">
-      <div class="roadmap-content">
-        <div class="roadmap-phase">Q1 2027</div>
-        <div class="roadmap-title">Public Beta</div>
-        <ul class="roadmap-items-list">
-          <li>Open beta for everyone</li>
-          <li>External smart contract audit</li>
-          <li>KYC integration</li>
-          <li>NFT Marketplace</li>
-        </ul>
-      </div>
-      <div class="roadmap-dot"></div>
-      <div class="roadmap-empty"></div>
-    </div>
-    <div class="roadmap-item">
-      <div class="roadmap-empty"></div>
-      <div class="roadmap-dot"></div>
-      <div class="roadmap-content">
-        <div class="roadmap-phase">Q2–Q4 2027</div>
-        <div class="roadmap-title">Launch & Token</div>
-        <ul class="roadmap-items-list">
-          <li>Stablecoin bridge live</li>
-          <li>Seed round investors</li>
-          <li>Minor CEX listing</li>
-          <li>DAO governance active</li>
-        </ul>
-      </div>
-    </div>
-    <div class="roadmap-item">
-      <div class="roadmap-content">
-        <div class="roadmap-phase">2028</div>
-        <div class="roadmap-title">IPO & Expansion</div>
-        <ul class="roadmap-items-list">
-          <li>Public token sale</li>
-          <li>Major DEX listing</li>
-          <li>DAO fully operational</li>
-          <li>NodeStrike Season 2</li>
-        </ul>
-      </div>
-      <div class="roadmap-dot"></div>
-      <div class="roadmap-empty"></div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTRACTS -->
-<section id="contracts">
-  <div class="section-label">On-Chain</div>
-  <h2 class="section-title">Verified Contracts</h2>
-  <p class="section-sub">All contracts are open-source, verified and public on Polygonscan.</p>
-  <div class="contracts-grid">
-    <div class="contract-card">
-      <div class="contract-name">NodeToken ($NODE)</div>
-      <div class="contract-addr">0x34b81BFC698935fB60Ab623EA0545956b26bd99F</div>
-      <a href="https://polygonscan.com/address/0x34b81BFC698935fB60Ab623EA0545956b26bd99F#code" target="_blank" class="contract-link">View on Polygonscan →</a>
-    </div>
-    <div class="contract-card">
-      <div class="contract-name">StrikeToken ($STRIKE)</div>
-      <div class="contract-addr">0x0bAA8A62795690009DF64AE70587189fE8aBE9A3</div>
-      <a href="https://polygonscan.com/address/0x0bAA8A62795690009DF64AE70587189fE8aBE9A3#code" target="_blank" class="contract-link">View on Polygonscan →</a>
-    </div>
-    <div class="contract-card">
-      <div class="contract-name">GameRewards</div>
-      <div class="contract-addr">0xA1b3f83d9868787040c1c1B6E56393c7091CAb28</div>
-      <a href="https://polygonscan.com/address/0xA1b3f83d9868787040c1c1B6E56393c7091CAb28#code" target="_blank" class="contract-link">View on Polygonscan →</a>
-    </div>
-    <div class="contract-card">
-      <div class="contract-name">StablecoinBridge</div>
-      <div class="contract-addr">0xD561d4E4872C007c57C168e56C7e46Ae45e12daC</div>
-      <a href="https://polygonscan.com/address/0xD561d4E4872C007c57C168e56C7e46Ae45e12daC#code" target="_blank" class="contract-link">View on Polygonscan →</a>
-    </div>
-    <div class="contract-card">
-      <div class="contract-name">NodeStaking</div>
-      <div class="contract-addr">0x2bf08aDd38988aB3F272d0701C3e677861CC968F</div>
-      <a href="https://polygonscan.com/address/0x2bf08aDd38988aB3F272d0701C3e677861CC968F#code" target="_blank" class="contract-link">View on Polygonscan →</a>
-    </div>
-  </div>
-</section>
-<!-- ABOUT US -->
-<section id="about" style="background:var(--dark);">
-  <div class="section-label">Mission</div>
-  <h2 class="section-title">About </h2>
-  <p class="section-sub" style="max-width:700px;">NodeStrike was born from a simple idea: GameFi should be accessible to everyone, not just those who can afford to invest upfront.</p>
-  <div style="max-width:700px;margin-top:2rem;display:flex;flex-direction:column;gap:1.5rem;">
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:2rem;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;color:var(--neon-green);margin-bottom:1rem;">🎯 Our Vision</div>
-      <p style="font-size:0.95rem;color:var(--text-dim);line-height:1.7;">We believe the future of gaming lies at the intersection of entertainment and ownership. Every player deserves the right to earn real value from their time and skill — without paywalls, without gatekeeping.</p>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:2rem;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;color:var(--neon-blue);margin-bottom:1rem;">⛓ Built on Polygon</div>
-      <p style="font-size:0.95rem;color:var(--text-dim);line-height:1.7;">NodeStrike runs entirely on Polygon Mainnet — fast, low-cost, and environmentally friendly. Every $NODE token is minted on-chain, every transaction is transparent and verifiable by anyone.</p>
-    </div>
-    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:2rem;">
-      <div style="font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:700;color:var(--neon-purple);margin-bottom:1rem;">🚀 Where We're Going</div>
-      <p style="font-size:0.95rem;color:var(--text-dim);line-height:1.7;">NodeStrike is in active development. Smart contracts are live and verified on Polygon. The game is playable today. What comes next — staking, NFT marketplace, DAO governance — is being built in the open, one commit at a time.</p>
-    </div>
-  </div>
-</section>  
-
-<!-- COMMUNITY -->
-<section id="community">
-  <div class="section-label">Community</div>
-  <h2 class="section-title">Join the community</h2>
-  <p class="section-sub" style="margin: 0 auto;">Join the official channels, stay updated on developments and participate in DAO decisions.</p>
-  <div class="community-cards">
-    <a href="#" class="community-card">
-      <div class="community-icon">💬</div>
-      <div class="community-name">Discord</div>
-      <div class="community-desc">Chat, support and announcements</div>
-    </a>
-    <a href="#" class="community-card">
-      <div class="community-icon">✈️</div>
-      <div class="community-name">Telegram</div>
-      <div class="community-desc">Real-time updates</div>
-    </a>
-    <a href="#" class="community-card">
-      <div class="community-icon">🐦</div>
-      <div class="community-name">Twitter / X</div>
-      <div class="community-desc">News and partnerships</div>
-    </a>
-  </div>
-</section>
-
-<!-- WHITEPAPER -->
-<section id="whitepaper">
-  <div class="wp-content">
-    <div class="wp-badge">Official Document</div>
-    <h2 class="section-title" style="font-size: clamp(2rem, 5vw, 3.5rem);">Read the Whitepaper</h2>
-    <p class="section-sub" style="margin: 1.5rem auto 3rem; max-width: 500px;">Complete tokenomics, game mechanics, risk analysis and detailed roadmap. Everything you need to know about NodeStrike.</p>
-    <a href="NodeStrike_Whitepaper.docx" download class="btn-primary">Download Whitepaper v1.0</a>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">NodeStrike</div>
-  <div class="footer-text">© 2026 NodeStrike. Deployed on Polygon Mainnet.</div>
-  <ul class="footer-links">
-    <li><a href="#how">How it works</a></li>
-    <li><a href="#contracts">Contracts</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#whitepaper">Whitepaper</a></li>
-  </ul>
-</footer>
-
-<!-- GDPR COOKIE BANNER -->
-<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0a0f1e;border-top:1px solid rgba(0,212,255,0.2);padding:1.5rem 2rem;font-family:'Rajdhani',sans-serif;">
-  <div style="max-width:900px;margin:0 auto;">
-    <div style="font-family:'Orbitron',monospace;font-size:0.85rem;color:#00ff88;margin-bottom:0.5rem;letter-spacing:0.1em;">🍪 COOKIE SETTINGS</div>
-    <p style="font-size:0.85rem;color:#7a8aaa;margin-bottom:1.2rem;line-height:1.5;">We use cookies to operate this website and improve your experience. Toggle each category below. <strong style="color:#e8f0fe">Technical cookies</strong> are always active as they are necessary for the site to function.</p>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.8rem;margin-bottom:1.5rem;">
-
-      <div style="background:rgba(0,255,136,0.05);border:1px solid rgba(0,255,136,0.2);border-radius:8px;padding:0.8rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
-          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Technical</span>
-          <span style="font-size:0.7rem;color:#00ff88;font-family:'Orbitron',monospace;">ALWAYS ON</span>
-        </div>
-        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Essential for navigation and security. Cannot be disabled.</p>
-      </div>
-
-      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.8rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
-          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Preferences</span>
-          <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
-            <input type="checkbox" id="pref-toggle" style="opacity:0;width:0;height:0;" onchange="updateToggle(this,'pref')">
-            <span id="pref-slider" style="position:absolute;inset:0;background:#333;border-radius:20px;transition:0.3s;"></span>
-            <span id="pref-knob" style="position:absolute;left:2px;bottom:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.3s;"></span>
-          </label>
-        </div>
-        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Remember language, theme and display preferences.</p>
-      </div>
-
-      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.8rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
-          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Analytics</span>
-          <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
-            <input type="checkbox" id="analytics-toggle" style="opacity:0;width:0;height:0;" onchange="updateToggle(this,'analytics')">
-            <span id="analytics-slider" style="position:absolute;inset:0;background:#333;border-radius:20px;transition:0.3s;"></span>
-            <span id="analytics-knob" style="position:absolute;left:2px;bottom:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.3s;"></span>
-          </label>
-        </div>
-        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Google Analytics — understand how users interact with the site.</p>
-      </div>
-
-      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.8rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
-          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Marketing</span>
-          <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
-            <input type="checkbox" id="marketing-toggle" style="opacity:0;width:0;height:0;" onchange="updateToggle(this,'marketing')">
-            <span id="marketing-slider" style="position:absolute;inset:0;background:#333;border-radius:20px;transition:0.3s;"></span>
-            <span id="marketing-knob" style="position:absolute;left:2px;bottom:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.3s;"></span>
-          </label>
-        </div>
-        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Personalized content and promotional communications.</p>
-      </div>
-
-      <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:0.8rem;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.4rem;">
-          <span style="font-size:0.8rem;font-weight:600;color:#e8f0fe;">Profiling</span>
-          <label style="position:relative;display:inline-block;width:36px;height:20px;cursor:pointer;">
-            <input type="checkbox" id="profiling-toggle" style="opacity:0;width:0;height:0;" onchange="updateToggle(this,'profiling')">
-            <span id="profiling-slider" style="position:absolute;inset:0;background:#333;border-radius:20px;transition:0.3s;"></span>
-            <span id="profiling-knob" style="position:absolute;left:2px;bottom:2px;width:16px;height:16px;background:#fff;border-radius:50%;transition:0.3s;"></span>
-          </label>
-        </div>
-        <p style="font-size:0.72rem;color:#7a8aaa;margin:0;line-height:1.4;">Build profiles to show targeted content based on behaviour.</p>
-      </div>
-
-    </div>
-
-    <div style="display:flex;gap:0.8rem;flex-wrap:wrap;align-items:center;">
-      <button onclick="saveCookies('none')" style="padding:0.5rem 1.2rem;background:transparent;border:1px solid rgba(255,255,255,0.2);color:#7a8aaa;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">REJECT ALL</button>
-      <button onclick="saveCookies('custom')" style="padding:0.5rem 1.2rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">SAVE PREFERENCES</button>
-      <button onclick="saveCookies('all')" style="padding:0.5rem 1.2rem;background:linear-gradient(135deg,#00ff88,#00d4ff);border:none;color:#060811;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:4px;cursor:pointer;letter-spacing:0.05em;">ACCEPT ALL</button>
-      <button onclick="showPrivacyModal()" style="padding:0.5rem 1rem;background:transparent;border:none;color:#5a7a99;font-family:'Rajdhani',sans-serif;font-size:0.8rem;cursor:pointer;text-decoration:underline;">Privacy Policy</button>
-    </div>
-  </div>
-</div>
-
-<!-- FLOATING COOKIE BUTTON -->
-<button id="cookie-fab" onclick="reopenBanner()" style="display:none;position:fixed;bottom:20px;right:20px;z-index:9998;background:#0a0f1e;border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Orbitron',monospace;font-size:0.65rem;font-weight:700;border-radius:50px;padding:0.5rem 1rem;cursor:pointer;letter-spacing:0.05em;">🍪 COOKIES</button>
-
-<!-- PRIVACY MODAL -->
-<div id="privacy-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.85);overflow-y:auto;padding:2rem 1rem;">
-  <div style="max-width:800px;margin:0 auto;background:#0a0f1e;border:1px solid rgba(0,212,255,0.2);border-radius:12px;padding:2rem;">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;border-bottom:1px solid rgba(0,212,255,0.1);padding-bottom:1rem;">
-      <div style="font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;color:#00ff88;">Privacy Policy & Cookie Notice</div>
-      <button onclick="closePrivacyModal()" style="background:transparent;border:none;color:#5a7a99;font-size:1.5rem;cursor:pointer;line-height:1;">×</button>
-    </div>
-    <div style="font-size:0.85rem;color:#7a8aaa;line-height:1.7;">
-
-      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">1. Data Controller</p>
-      <p style="margin-bottom:1rem;">NodeStrike — nodestrike.io. For any privacy-related request, contact: <span style="color:#00d4ff;">privacy@nodestrike.io</span></p>
-
-      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">2. Cookies used</p>
-      <table style="width:100%;font-size:0.8rem;border-collapse:collapse;margin-bottom:1rem;">
-        <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
-          <th style="text-align:left;padding:0.5rem;color:#e8f0fe;">Name</th>
-          <th style="text-align:left;padding:0.5rem;color:#e8f0fe;">Category</th>
-          <th style="text-align:left;padding:0.5rem;color:#e8f0fe;">Purpose</th>
-          <th style="text-align:left;padding:0.5rem;color:#e8f0fe;">Duration</th>
-        </tr>
-        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-          <td style="padding:0.5rem;">cookieConsent</td><td style="padding:0.5rem;">Technical</td><td style="padding:0.5rem;">Saves your cookie choices</td><td style="padding:0.5rem;">1 year</td>
-        </tr>
-        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-          <td style="padding:0.5rem;">cybergrid</td><td style="padding:0.5rem;">Technical</td><td style="padding:0.5rem;">Saves game state locally</td><td style="padding:0.5rem;">Session</td>
-        </tr>
-        <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
-          <td style="padding:0.5rem;">_ga, _gid</td><td style="padding:0.5rem;">Analytics</td><td style="padding:0.5rem;">Google Analytics — traffic analysis</td><td style="padding:0.5rem;">2 years / 24h</td>
-        </tr>
-        <tr>
-          <td style="padding:0.5rem;">streak</td><td style="padding:0.5rem;">Preferences</td><td style="padding:0.5rem;">Saves daily streak progress</td><td style="padding:0.5rem;">Persistent</td>
-        </tr>
-      </table>
-
-      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">3. Your rights (GDPR Arts. 13–22)</p>
-      <p style="margin-bottom:1rem;">Under the GDPR (EU 2016/679) and the Italian Privacy Code (D.Lgs. 196/2003 as amended by D.Lgs. 101/2018), you have the right to: <strong style="color:#e8f0fe;">access</strong> your data (Art. 15), <strong style="color:#e8f0fe;">rectify</strong> inaccurate data (Art. 16), request <strong style="color:#e8f0fe;">erasure</strong> (Art. 17), <strong style="color:#e8f0fe;">restrict</strong> processing (Art. 18), <strong style="color:#e8f0fe;">data portability</strong> (Art. 20), and <strong style="color:#e8f0fe;">object</strong> to processing (Art. 21). You may also withdraw consent at any time without affecting prior lawful processing.</p>
-
-      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">4. Legal basis</p>
-      <p style="margin-bottom:1rem;">Technical cookies: legitimate interest (Art. 6(1)(f)). All other cookies: your explicit consent (Art. 6(1)(a)), as required by the Italian Data Protection Authority (Garante) Cookie Guidelines 2021 and the ePrivacy Directive 2002/58/EC.</p>
-
-      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">5. Third parties</p>
-      <p style="margin-bottom:1rem;">Google Analytics (Google LLC, USA) — data processed under Standard Contractual Clauses (SCCs). Stripe (Stripe Inc., USA) — payment processing under SCCs. Alchemy (Alchemy Insights Inc.) — blockchain RPC provider.</p>
-
-      <p style="color:#e8f0fe;font-weight:600;margin-bottom:0.3rem;">6. Complaints</p>
-      <p style="margin-bottom:0;">You have the right to lodge a complaint with the Italian Data Protection Authority (Garante per la Protezione dei Dati Personali) at <span style="color:#00d4ff;">www.garanteprivacy.it</span> or with the supervisory authority of your country of residence.</p>
-    </div>
-    <div style="margin-top:1.5rem;text-align:center;">
-      <button onclick="closePrivacyModal()" style="padding:0.6rem 2rem;background:linear-gradient(135deg,#00ff88,#00d4ff);border:none;color:#060811;font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;border-radius:4px;cursor:pointer;">CLOSE</button>
-    </div>
-  </div>
-</div>
-
-<script>
-function updateToggle(checkbox, id) {
-  const slider = document.getElementById(id+'-slider');
-  const knob = document.getElementById(id+'-knob');
-  if (checkbox.checked) {
-    slider.style.background = '#00ff88';
-    knob.style.transform = 'translateX(16px)';
-  } else {
-    slider.style.background = '#333';
-    knob.style.transform = 'translateX(0)';
-  }
-}
-
-function saveCookies(mode) {
-  const consent = {
-    timestamp: new Date().toISOString(),
-    technical: true,
-    preferences: mode === 'all' || (mode === 'custom' && document.getElementById('pref-toggle').checked),
-    analytics: mode === 'all' || (mode === 'custom' && document.getElementById('analytics-toggle').checked),
-    marketing: mode === 'all' || (mode === 'custom' && document.getElementById('marketing-toggle').checked),
-    profiling: mode === 'all' || (mode === 'custom' && document.getElementById('profiling-toggle').checked),
-  };
-  localStorage.setItem('cookieConsent', JSON.stringify(consent));
-  if (!consent.analytics) window['ga-disable-G-657X132Z28'] = true;
-  document.getElementById('cookie-banner').style.display = 'none';
-  document.getElementById('cookie-fab').style.display = 'block';
-}
-
-function reopenBanner() {
-  document.getElementById('cookie-banner').style.display = 'block';
-  document.getElementById('cookie-fab').style.display = 'none';
-  const saved = JSON.parse(localStorage.getItem('cookieConsent') || '{}');
-  ['pref','analytics','marketing','profiling'].forEach(id => {
-    const key = id === 'pref' ? 'preferences' : id;
-    const cb = document.getElementById(id+'-toggle');
-    if (saved[key]) { cb.checked = true; updateToggle(cb, id); }
-  });
-}
-
-function showPrivacyModal() {
-  document.getElementById('privacy-modal').style.display = 'block';
-}
-
-function closePrivacyModal() {
-  document.getElementById('privacy-modal').style.display = 'none';
-}
-
-function initCookieBanner() {
-  const saved = localStorage.getItem('cookieConsent');
-  if (!saved) {
-    document.getElementById('cookie-banner').style.display = 'block';
-  } else {
-    const consent = JSON.parse(saved);
-    if (!consent.analytics) window['ga-disable-G-657X132Z28'] = true;
-    document.getElementById('cookie-fab').style.display = 'block';
-  }
-}
-initCookieBanner();
-</script>
 
 </body>
 </html>

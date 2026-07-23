@@ -34,7 +34,7 @@
 </head>
 <body>
 
-<!-- Wallet Bar -->
+<!-- Wallet -->
 <div class="wallet-bar">
   <div><span id="wallet-addr">Not connected</span></div>
   <div style="display:flex;gap:0.8rem;align-items:center;">
@@ -56,7 +56,7 @@
 </header>
 
 <div class="layout">
-  <!-- Left Panel -->
+  <!-- Left -->
   <div class="left-panel">
     <div class="panel-title">Buildings</div>
     <div class="build-grid" id="build-menu"></div>
@@ -71,9 +71,14 @@
         <div id="xp-bar" style="height:100%;background:linear-gradient(90deg,var(--neon),var(--blue));width:0%;"></div>
       </div>
     </div>
+    
+    <div style="margin-top:1rem;font-size:0.8rem;color:var(--gold);">
+      Prestige: <span id="prestige-level">0</span> 
+      <span style="color:var(--neon);">×<span id="prestige-multi">1.00</span></span>
+    </div>
   </div>
 
-  <!-- Game Area -->
+  <!-- Center -->
   <div class="game-area" style="display:flex;flex-direction:column;">
     <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:1rem;">
       <div id="grid"></div>
@@ -83,7 +88,7 @@
     </div>
   </div>
 
-  <!-- Right Panel -->
+  <!-- Right -->
   <div class="right-panel">
     <div class="panel-title">Selection</div>
     <div id="selected-info" style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem;min-height:100px;margin-bottom:1rem;"></div>
@@ -110,7 +115,7 @@
 </div>
 
 <script>
-// ==================== GAME COMPLETO OTTIMIZZATO ====================
+// ==================== GAME COMPLETO + PIÙ DIVERTENTE ====================
 const GRID_SIZE = 9;
 let state = {
   grid: Array(GRID_SIZE * GRID_SIZE).fill(null),
@@ -126,41 +131,45 @@ let state = {
 const center = Math.floor(GRID_SIZE / 2) * GRID_SIZE + Math.floor(GRID_SIZE / 2);
 state.grid[center] = { type: 'hq', level: 1, hp: 100, maxHp: 100 };
 
-// Prestige System
+// Prestige
 let prestigeLevel = parseInt(localStorage.getItem('prestigeLevel') || '0');
-let prestigeMultiplier = 1 + (prestigeLevel * 0.12);
+let prestigeMultiplier = 1 + (prestigeLevel * 0.15);
+
+function updatePrestigeUI() {
+  document.getElementById('prestige-level').textContent = prestigeLevel;
+  document.getElementById('prestige-multi').textContent = prestigeMultiplier.toFixed(2);
+}
 
 function prestigeReset() {
   if (state.level < 8) {
     showNotif("Reach Level 8 to Prestige", "error");
     return;
   }
-  if (!confirm(`Reset your node for Prestige ${prestigeLevel + 1}? You will get permanent bonuses!`)) return;
+  if (!confirm(`Reset your node for Prestige ${prestigeLevel + 1}?`)) return;
 
   prestigeLevel++;
-  prestigeMultiplier = 1 + (prestigeLevel * 0.12);
+  prestigeMultiplier = 1 + (prestigeLevel * 0.15);
   localStorage.setItem('prestigeLevel', prestigeLevel);
 
   state.grid = Array(GRID_SIZE * GRID_SIZE).fill(null);
   state.grid[center] = { type: 'hq', level: 1, hp: 100, maxHp: 100 };
-  state.resources = { energy: 250, data: 180, credits: 350, defense: 40 };
+  state.resources = { energy: 250, data: 180, credits: 400, defense: 50 };
   state.gameToken = 0;
   state.level = 1;
   state.xp = 0;
   state.xpNext = 100;
   state.raidsLaunched = 0;
 
-  showNotif(`🌟 Prestige ${prestigeLevel} activated! +${(prestigeLevel * 12)}% permanent bonus`, "gold");
+  showNotif(`🌟 Prestige ${prestigeLevel} activated! +${(prestigeLevel * 15)}% permanent bonus`, "gold");
   renderGrid();
   updateHUD();
-  updateStats();
+  updatePrestigeUI();
 }
 
-// Simple notification
+// Notifiche
 function showNotif(msg, type = "") {
-  const existing = document.querySelector('.notif');
-  if (existing) existing.remove();
-
+  const ex = document.querySelector('.notif');
+  if (ex) ex.remove();
   const div = document.createElement('div');
   div.className = `notif ${type}`;
   div.textContent = msg;
@@ -168,7 +177,7 @@ function showNotif(msg, type = "") {
   setTimeout(() => div.remove(), 3200);
 }
 
-// Render Grid
+// Grid
 function renderGrid() {
   const gridEl = document.getElementById('grid');
   gridEl.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 56px)`;
@@ -193,30 +202,28 @@ function renderGrid() {
 }
 
 function onCellClick(idx) {
-  // Semplice selezione per ora
   state.selectedCell = idx;
   renderSelected();
 }
 
 function renderSelected() {
   const panel = document.getElementById('selected-info');
-  if (!state.selectedCell && state.selectedCell !== 0) {
-    panel.innerHTML = `<div style="text-align:center;color:var(--dim);padding:1rem;">Click a cell to build or select</div>`;
+  if (state.selectedCell == null) {
+    panel.innerHTML = `<div style="text-align:center;color:var(--dim);padding:1rem;">Click a cell</div>`;
     return;
   }
   const cell = state.grid[state.selectedCell];
   if (!cell) {
-    panel.innerHTML = `<div style="text-align:center;color:var(--dim);padding:1rem;">Empty cell - Build something here</div>`;
+    panel.innerHTML = `<div style="text-align:center;color:var(--dim);padding:1rem;">Empty cell</div>`;
     return;
   }
   panel.innerHTML = `
-    <div style="font-size:1.8rem;margin-bottom:0.5rem;">${cell.type === 'hq' ? '🏛️' : '⚡'}</div>
-    <div style="font-weight:700;">${cell.type.toUpperCase()} - Level ${cell.level}</div>
-    <div style="margin-top:0.8rem;font-size:0.85rem;color:var(--dim);">HP: ${cell.hp || 100}/${cell.maxHp || 100}</div>
+    <div style="font-size:2rem;margin-bottom:0.4rem;">${cell.type === 'hq' ? '🏛️' : '⚡'}</div>
+    <div style="font-weight:700;">${cell.type} Lv ${cell.level}</div>
   `;
 }
 
-// Update HUD
+// HUD
 function updateHUD() {
   document.getElementById('res-energy').textContent = Math.floor(state.resources.energy);
   document.getElementById('res-data').textContent = Math.floor(state.resources.data);
@@ -230,17 +237,17 @@ function updateHUD() {
   document.getElementById('xp-text').textContent = `${Math.floor(state.xp)} / ${state.xpNext}`;
 }
 
-// Improved Raid with Risk
+// Raid migliorato
 function launchRaid() {
-  const attackPower = 60; // base attack power
-  const enemyDefense = Math.floor(Math.random() * 110) + 35;
+  const attackPower = 70;
+  const enemyDefense = Math.floor(Math.random() * 120) + 40;
 
-  if (attackPower > enemyDefense * 0.75) {
-    const stolen = Math.floor(Math.random() * 70) + 25;
+  if (attackPower > enemyDefense * 0.8) {
+    const stolen = Math.floor(Math.random() * 80) + 30;
     state.resources.credits += stolen;
     showNotif(`⚔ Raid successful! +${stolen} credits`, "gold");
   } else {
-    const damage = Math.floor(Math.random() * 30) + 12;
+    const damage = Math.floor(Math.random() * 35) + 15;
     state.resources.defense = Math.max(0, state.resources.defense - damage);
     showNotif(`❌ Raid failed! Lost ${damage} defense`, "error");
   }
@@ -248,11 +255,11 @@ function launchRaid() {
   updateHUD();
 }
 
-// Simple production tick
+// Tick
 function tick() {
   state.seconds++;
-  state.resources.credits += 0.6;
-  state.gameToken += 0.03 * prestigeMultiplier;
+  state.resources.credits += 0.7 * prestigeMultiplier;
+  state.gameToken += 0.04 * prestigeMultiplier;
   updateHUD();
 }
 
@@ -260,13 +267,13 @@ function tick() {
 function init() {
   renderGrid();
   updateHUD();
+  updatePrestigeUI();
 
-  // Build menu semplice
   const menu = document.getElementById('build-menu');
   menu.innerHTML = `
     <div class="btn" style="margin:0.3rem;text-align:center;" onclick="buildBuilding('reactor')">⚡ Reactor</div>
     <div class="btn" style="margin:0.3rem;text-align:center;" onclick="buildBuilding('server')">💾 Server</div>
-    <div class="btn" style="margin:0.3rem;text-align:center;" onclick="buildBuilding('drone')">🚁 Drone Bay</div>
+    <div class="btn" style="margin:0.3rem;text-align:center;" onclick="buildBuilding('drone')">🚁 Drone</div>
   `;
 
   setInterval(tick, 600);
@@ -274,13 +281,12 @@ function init() {
 }
 
 function buildBuilding(type) {
-  // Semplice build per ora
-  const emptyIndex = state.grid.findIndex(c => !c);
-  if (emptyIndex === -1) {
-    showNotif("No empty space!", "error");
+  const empty = state.grid.findIndex(c => !c);
+  if (empty === -1) {
+    showNotif("No space left!", "error");
     return;
   }
-  state.grid[emptyIndex] = { type: type, level: 1, hp: 100, maxHp: 100 };
+  state.grid[empty] = { type, level: 1, hp: 100, maxHp: 100 };
   showNotif(`Built ${type}!`, "gold");
   renderGrid();
   updateHUD();

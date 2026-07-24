@@ -116,7 +116,7 @@
 </div>
 
 <script>
-// ==================== CLASH OF CLANS STYLE VERSION ====================
+ 
 const GRID_SIZE = 9;
 
 const BUILDINGS = {
@@ -189,7 +189,7 @@ function showNotif(msg, type = "") {
   setTimeout(() => div.remove(), 3000);
 }
 
-// ============ GRID ============
+// GRID 
 function renderGrid() {
   const gridEl = document.getElementById('grid');
   gridEl.style.gridTemplateColumns = `repeat(${GRID_SIZE}, 58px)`;
@@ -225,7 +225,7 @@ function tryBuild(idx) {
   const b = BUILDINGS[type];
   if (!b || type === "hq") return;
 
-  // Controlla costi
+  // Checks costs
   for (const [res, amount] of Object.entries(b.cost)) {
     if ((state.resources[res] || 0) < amount) {
       showNotif(`Not enough ${res}!`, "error");
@@ -233,7 +233,7 @@ function tryBuild(idx) {
     }
   }
 
-  // Paga
+  // Pays
   for (const [res, amount] of Object.entries(b.cost)) {
     state.resources[res] -= amount;
   }
@@ -321,7 +321,7 @@ function upgradeBuilding(idx) {
   updateHUD();
 }
 
-// ============ BUILD MENU ============
+// BUILD MENU
 function renderBuildMenu() {
   const menu = document.getElementById('build-menu');
   menu.innerHTML = "";
@@ -346,7 +346,7 @@ function renderBuildMenu() {
   });
 }
 
-// ============ HUD & TICK ============
+// HUD & TICK
 function updateHUD() {
   document.getElementById('res-energy').textContent = Math.floor(state.resources.energy);
   document.getElementById('res-data').textContent = Math.floor(state.resources.data);
@@ -398,7 +398,7 @@ function addXP(amount) {
   }
 }
 
-// RAID CON COSTO BASATO SUL TH 
+// RAID WITH COST BASED ON TH 
 let enemyDefense = 0;
 let hasScouted = false;
 
@@ -448,13 +448,13 @@ function launchRaid() {
 
   const cost = getRaidCost();
 
-  // Controlla risorse
+  // Checks resources
   if (state.resources.credits < cost.credits || state.resources.energy < cost.energy) {
     showNotif("Not enough resources to launch raid!", "error");
     return;
   }
 
-  // Paga il costo
+  // Pays the cost
   state.resources.credits -= cost.credits;
   state.resources.energy -= cost.energy;
 
@@ -480,7 +480,7 @@ function launchRaid() {
   updateHUD();
 }
 
-// ============ INIT ============
+//  INIT 
 function init() {
   renderGrid();
   renderBuildMenu();

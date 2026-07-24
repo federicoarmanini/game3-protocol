@@ -116,7 +116,7 @@
 </div>
 
 <script>
- 
+const BACKEND_URL = "https://nodestrike-backend.onrender.com";
 const GRID_SIZE = 9;
 
 const BUILDINGS = {
@@ -479,6 +479,93 @@ function launchRaid() {
   document.getElementById('raid-info').innerHTML = "Scout first";
   updateHUD();
 }
+// BACKEND CONNECTION 
+
+async function savePlayer() {
+  if (!window.userAddress) return;
+
+  try {
+    await fetch(`${BACKEND_URL}/api/player/save`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        address: window.userAddress,
+        state: {
+          grid: state.grid,
+          resources: state.resources,
+          gameToken: state.gameToken,
+          level: state.level,
+          xp: state.xp,
+          xpNext: state.xpNext,
+          seconds: state.seconds,
+          raidsLaunched: state.raidsLaunched
+        }
+      })
+    });
+  } catch (err) {
+    console.error("Save failed:", err);
+  }
+}
+async function connectWallet() {
+  if (typeof window.ethereum === "undefined") {
+    showNotif("Please install MetaMask!", "error");
+    return;
+  }
+
+  try {
+    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+    const address = accounts[0];
+
+    window.userAddress = address;
+
+    // Mostra l'indirizzo nella barra
+    document.getElementById("wallet-addr").textContent = 
+      address.slice(0, 6) + "..." + address.slice(-4);
+
+    document.getElementById("connect-btn").textContent = "CONNECTED";
+
+    // Carica i progressi dal backend
+    await loadPlayer();
+
+    showNotif("Wallet connected!", "gold");
+  } catch (err) {
+    console.error(err);
+    showNotif("Connection failed", "error");
+  }
+}
+  
+async function loadPlayer() {
+  if (!window.userAddress) return;
+
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/player/load`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ address: window.userAddress })
+    });
+
+    const data = await res.json();
+
+    if (data.exists && data.state) {
+      if (data.state.grid) state.grid = data.state.grid;
+      if (data.state.resources) state.resources = data.state.resources;
+      if (data.state.gameToken) state.gameToken = data.state.gameToken;
+      if (data.state.level) state.level = data.state.level;
+      if (data.state.xp) state.xp = data.state.xp;
+      if (data.state.xpNext) state.xpNext = data.state.xpNext;
+
+      if (data.offlineTokens > 0) {
+        showNotif(`+${data.offlineTokens.toFixed(2)} $NODE offline!`, "gold");
+      }
+
+      renderGrid();
+      updateHUD();
+      showNotif("Progress loaded!", "gold");
+    }
+  } catch (err) {
+    console.error("Load failed:", err);
+  }
+}
 
 //  INIT 
 function init() {
@@ -487,6 +574,7 @@ function init() {
   updateHUD();
   updatePrestigeUI();
   setInterval(tick, 500);
+  setInterval(savePlayer, 30000); 
 }
 
 init();
